@@ -1,4 +1,4 @@
-module github.com/nickclyde/snippetbox
+module github.com/skylight-hq/phinvads-go
 
 go 1.22.5
 

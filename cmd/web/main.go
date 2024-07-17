@@ -9,7 +9,7 @@ import (
 	"os"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
-	"github.com/nickclyde/snippetbox/internal/models"
+	"github.com/skylight-hq/phinvads-go/internal/models"
 )
 
 type application struct {
