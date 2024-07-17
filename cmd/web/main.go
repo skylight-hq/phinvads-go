@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"flag"
 	"fmt"
@@ -9,12 +10,12 @@ import (
 	"os"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
-	"github.com/skylight-hq/phinvads-go/internal/models"
 )
 
 type application struct {
-	logger   *slog.Logger
-	snippets *models.SnippetModel
+	logger *slog.Logger
+	db     *sql.DB
+	ctx    context.Context
 }
 
 func main() {
@@ -31,7 +32,9 @@ func main() {
 	}
 	defer db.Close()
 
-	app := &application{logger, &models.SnippetModel{DB: db}}
+	ctx := context.Background()
+
+	app := &application{logger, db, ctx}
 
 	logger.Info("starting server", slog.String("addr", *addr))
 
