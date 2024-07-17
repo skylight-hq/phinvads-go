@@ -19,7 +19,7 @@ type application struct {
 
 func main() {
 	addr := flag.String("addr", "localhost:4000", "HTTP network address")
-	dsn := flag.String("dsn", "postgresql://nick@localhost:5432/snippetbox", "PostgreSQL data source name")
+	dsn := flag.String("dsn", "postgresql://localhost:5432/phinvads", "PostgreSQL data source name")
 	flag.Parse()
 
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
