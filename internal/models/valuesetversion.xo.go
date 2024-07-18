@@ -5,18 +5,19 @@ package models
 import (
 	"context"
 	"database/sql"
+	"time"
 )
 
 // ValueSetVersion represents a row from 'public.value_set_version'.
 type ValueSetVersion struct {
 	ID                            string         `json:"id"`                            // id
-	Valuesetoid                   sql.NullString `json:"valuesetoid"`                   // valuesetoid
-	Versionnumber                 sql.NullInt64  `json:"versionnumber"`                 // versionnumber
-	Description                   sql.NullString `json:"description"`                   // description
-	Status                        sql.NullString `json:"status"`                        // status
+	Valuesetoid                   string         `json:"valuesetoid"`                   // valuesetoid
+	Versionnumber                 int            `json:"versionnumber"`                 // versionnumber
+	Description                   string         `json:"description"`                   // description
+	Status                        string         `json:"status"`                        // status
 	Assigningauthoritytext        sql.NullString `json:"assigningauthoritytext"`        // assigningauthoritytext
 	Notetext                      sql.NullString `json:"notetext"`                      // notetext
-	Statusdate                    sql.NullTime   `json:"statusdate"`                    // statusdate
+	Statusdate                    time.Time      `json:"statusdate"`                    // statusdate
 	Assigningauthorityreleasedate sql.NullTime   `json:"assigningauthorityreleasedate"` // assigningauthorityreleasedate
 	Effectivedate                 sql.NullTime   `json:"effectivedate"`                 // effectivedate
 	Expirydate                    sql.NullTime   `json:"expirydate"`                    // expirydate
@@ -156,7 +157,7 @@ func ValueSetVersionByID(ctx context.Context, db DB, id string) (*ValueSetVersio
 // ValueSetVersionByValuesetoid retrieves a row from 'public.value_set_version' as a [ValueSetVersion].
 //
 // Generated from index 'value_set_version_valuesetoid_idx'.
-func ValueSetVersionByValuesetoid(ctx context.Context, db DB, valuesetoid sql.NullString) ([]*ValueSetVersion, error) {
+func ValueSetVersionByValuesetoid(ctx context.Context, db DB, valuesetoid string) ([]*ValueSetVersion, error) {
 	// query
 	const sqlstr = `SELECT ` +
 		`id, valuesetoid, versionnumber, description, status, assigningauthoritytext, notetext, statusdate, assigningauthorityreleasedate, effectivedate, expirydate ` +
@@ -191,5 +192,5 @@ func ValueSetVersionByValuesetoid(ctx context.Context, db DB, valuesetoid sql.Nu
 //
 // Generated from foreign key 'value_set_version_valuesetoid_fkey'.
 func (vsv *ValueSetVersion) ValueSet(ctx context.Context, db DB) (*ValueSet, error) {
-	return ValueSetByOid(ctx, db, vsv.Valuesetoid.String)
+	return ValueSetByOid(ctx, db, vsv.Valuesetoid)
 }

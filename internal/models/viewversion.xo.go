@@ -4,17 +4,17 @@ package models
 
 import (
 	"context"
-	"database/sql"
+	"time"
 )
 
 // ViewVersion represents a row from 'public.view_version'.
 type ViewVersion struct {
-	ID            string         `json:"id"`            // id
-	Viewid        sql.NullString `json:"viewid"`        // viewid
-	Versionnumber sql.NullInt64  `json:"versionnumber"` // versionnumber
-	Reason        sql.NullString `json:"reason"`        // reason
-	Status        sql.NullString `json:"status"`        // status
-	Statusdate    sql.NullTime   `json:"statusdate"`    // statusdate
+	ID            string    `json:"id"`            // id
+	Viewid        string    `json:"viewid"`        // viewid
+	Versionnumber int       `json:"versionnumber"` // versionnumber
+	Reason        string    `json:"reason"`        // reason
+	Status        string    `json:"status"`        // status
+	Statusdate    time.Time `json:"statusdate"`    // statusdate
 	// xo fields
 	_exists, _deleted bool
 }
@@ -151,7 +151,7 @@ func ViewVersionByID(ctx context.Context, db DB, id string) (*ViewVersion, error
 // ViewVersionByViewid retrieves a row from 'public.view_version' as a [ViewVersion].
 //
 // Generated from index 'view_version_viewid_idx'.
-func ViewVersionByViewid(ctx context.Context, db DB, viewid sql.NullString) ([]*ViewVersion, error) {
+func ViewVersionByViewid(ctx context.Context, db DB, viewid string) ([]*ViewVersion, error) {
 	// query
 	const sqlstr = `SELECT ` +
 		`id, viewid, versionnumber, reason, status, statusdate ` +
@@ -186,5 +186,5 @@ func ViewVersionByViewid(ctx context.Context, db DB, viewid sql.NullString) ([]*
 //
 // Generated from foreign key 'view_version_viewid_fkey'.
 func (vv *ViewVersion) View(ctx context.Context, db DB) (*View, error) {
-	return ViewByID(ctx, db, vv.Viewid.String)
+	return ViewByID(ctx, db, vv.Viewid)
 }

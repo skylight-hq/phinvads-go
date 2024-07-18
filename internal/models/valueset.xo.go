@@ -5,22 +5,21 @@ package models
 import (
 	"context"
 	"database/sql"
+	"time"
 )
 
 // ValueSet represents a row from 'public.value_set'.
 type ValueSet struct {
-	Oid                      string         `json:"oid"`                      // oid
-	ID                       sql.NullString `json:"id"`                       // id
-	Name                     sql.NullString `json:"name"`                     // name
-	Code                     sql.NullString `json:"code"`                     // code
-	Status                   sql.NullString `json:"status"`                   // status
-	Definitiontext           sql.NullString `json:"definitiontext"`           // definitiontext
-	Scopenotetext            sql.NullString `json:"scopenotetext"`            // scopenotetext
-	Assigningauthorityid     sql.NullString `json:"assigningauthorityid"`     // assigningauthorityid
-	Legacyflag               sql.NullBool   `json:"legacyflag"`               // legacyflag
-	Statusdate               sql.NullTime   `json:"statusdate"`               // statusdate
-	Valuesetcreateddate      sql.NullTime   `json:"valuesetcreateddate"`      // valuesetcreateddate
-	Valuesetlastrevisiondate sql.NullTime   `json:"valuesetlastrevisiondate"` // valuesetlastrevisiondate
+	Oid                  string         `json:"oid"`                  // oid
+	ID                   string         `json:"id"`                   // id
+	Name                 string         `json:"name"`                 // name
+	Code                 string         `json:"code"`                 // code
+	Status               string         `json:"status"`               // status
+	Definitiontext       sql.NullString `json:"definitiontext"`       // definitiontext
+	Scopenotetext        sql.NullString `json:"scopenotetext"`        // scopenotetext
+	Assigningauthorityid string         `json:"assigningauthorityid"` // assigningauthorityid
+	Legacyflag           bool           `json:"legacyflag"`           // legacyflag
+	Statusdate           time.Time      `json:"statusdate"`           // statusdate
 	// xo fields
 	_exists, _deleted bool
 }
@@ -46,13 +45,13 @@ func (vs *ValueSet) Insert(ctx context.Context, db DB) error {
 	}
 	// insert (manual)
 	const sqlstr = `INSERT INTO public.value_set (` +
-		`oid, id, name, code, status, definitiontext, scopenotetext, assigningauthorityid, legacyflag, statusdate, valuesetcreateddate, valuesetlastrevisiondate` +
+		`oid, id, name, code, status, definitiontext, scopenotetext, assigningauthorityid, legacyflag, statusdate` +
 		`) VALUES (` +
-		`$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12` +
+		`$1, $2, $3, $4, $5, $6, $7, $8, $9, $10` +
 		`)`
 	// run
-	logf(sqlstr, vs.Oid, vs.ID, vs.Name, vs.Code, vs.Status, vs.Definitiontext, vs.Scopenotetext, vs.Assigningauthorityid, vs.Legacyflag, vs.Statusdate, vs.Valuesetcreateddate, vs.Valuesetlastrevisiondate)
-	if _, err := db.ExecContext(ctx, sqlstr, vs.Oid, vs.ID, vs.Name, vs.Code, vs.Status, vs.Definitiontext, vs.Scopenotetext, vs.Assigningauthorityid, vs.Legacyflag, vs.Statusdate, vs.Valuesetcreateddate, vs.Valuesetlastrevisiondate); err != nil {
+	logf(sqlstr, vs.Oid, vs.ID, vs.Name, vs.Code, vs.Status, vs.Definitiontext, vs.Scopenotetext, vs.Assigningauthorityid, vs.Legacyflag, vs.Statusdate)
+	if _, err := db.ExecContext(ctx, sqlstr, vs.Oid, vs.ID, vs.Name, vs.Code, vs.Status, vs.Definitiontext, vs.Scopenotetext, vs.Assigningauthorityid, vs.Legacyflag, vs.Statusdate); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -70,11 +69,11 @@ func (vs *ValueSet) Update(ctx context.Context, db DB) error {
 	}
 	// update with composite primary key
 	const sqlstr = `UPDATE public.value_set SET ` +
-		`id = $1, name = $2, code = $3, status = $4, definitiontext = $5, scopenotetext = $6, assigningauthorityid = $7, legacyflag = $8, statusdate = $9, valuesetcreateddate = $10, valuesetlastrevisiondate = $11 ` +
-		`WHERE oid = $12`
+		`id = $1, name = $2, code = $3, status = $4, definitiontext = $5, scopenotetext = $6, assigningauthorityid = $7, legacyflag = $8, statusdate = $9 ` +
+		`WHERE oid = $10`
 	// run
-	logf(sqlstr, vs.ID, vs.Name, vs.Code, vs.Status, vs.Definitiontext, vs.Scopenotetext, vs.Assigningauthorityid, vs.Legacyflag, vs.Statusdate, vs.Valuesetcreateddate, vs.Valuesetlastrevisiondate, vs.Oid)
-	if _, err := db.ExecContext(ctx, sqlstr, vs.ID, vs.Name, vs.Code, vs.Status, vs.Definitiontext, vs.Scopenotetext, vs.Assigningauthorityid, vs.Legacyflag, vs.Statusdate, vs.Valuesetcreateddate, vs.Valuesetlastrevisiondate, vs.Oid); err != nil {
+	logf(sqlstr, vs.ID, vs.Name, vs.Code, vs.Status, vs.Definitiontext, vs.Scopenotetext, vs.Assigningauthorityid, vs.Legacyflag, vs.Statusdate, vs.Oid)
+	if _, err := db.ExecContext(ctx, sqlstr, vs.ID, vs.Name, vs.Code, vs.Status, vs.Definitiontext, vs.Scopenotetext, vs.Assigningauthorityid, vs.Legacyflag, vs.Statusdate, vs.Oid); err != nil {
 		return logerror(err)
 	}
 	return nil
@@ -96,16 +95,16 @@ func (vs *ValueSet) Upsert(ctx context.Context, db DB) error {
 	}
 	// upsert
 	const sqlstr = `INSERT INTO public.value_set (` +
-		`oid, id, name, code, status, definitiontext, scopenotetext, assigningauthorityid, legacyflag, statusdate, valuesetcreateddate, valuesetlastrevisiondate` +
+		`oid, id, name, code, status, definitiontext, scopenotetext, assigningauthorityid, legacyflag, statusdate` +
 		`) VALUES (` +
-		`$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12` +
+		`$1, $2, $3, $4, $5, $6, $7, $8, $9, $10` +
 		`)` +
 		` ON CONFLICT (oid) DO ` +
 		`UPDATE SET ` +
-		`id = EXCLUDED.id, name = EXCLUDED.name, code = EXCLUDED.code, status = EXCLUDED.status, definitiontext = EXCLUDED.definitiontext, scopenotetext = EXCLUDED.scopenotetext, assigningauthorityid = EXCLUDED.assigningauthorityid, legacyflag = EXCLUDED.legacyflag, statusdate = EXCLUDED.statusdate, valuesetcreateddate = EXCLUDED.valuesetcreateddate, valuesetlastrevisiondate = EXCLUDED.valuesetlastrevisiondate `
+		`id = EXCLUDED.id, name = EXCLUDED.name, code = EXCLUDED.code, status = EXCLUDED.status, definitiontext = EXCLUDED.definitiontext, scopenotetext = EXCLUDED.scopenotetext, assigningauthorityid = EXCLUDED.assigningauthorityid, legacyflag = EXCLUDED.legacyflag, statusdate = EXCLUDED.statusdate `
 	// run
-	logf(sqlstr, vs.Oid, vs.ID, vs.Name, vs.Code, vs.Status, vs.Definitiontext, vs.Scopenotetext, vs.Assigningauthorityid, vs.Legacyflag, vs.Statusdate, vs.Valuesetcreateddate, vs.Valuesetlastrevisiondate)
-	if _, err := db.ExecContext(ctx, sqlstr, vs.Oid, vs.ID, vs.Name, vs.Code, vs.Status, vs.Definitiontext, vs.Scopenotetext, vs.Assigningauthorityid, vs.Legacyflag, vs.Statusdate, vs.Valuesetcreateddate, vs.Valuesetlastrevisiondate); err != nil {
+	logf(sqlstr, vs.Oid, vs.ID, vs.Name, vs.Code, vs.Status, vs.Definitiontext, vs.Scopenotetext, vs.Assigningauthorityid, vs.Legacyflag, vs.Statusdate)
+	if _, err := db.ExecContext(ctx, sqlstr, vs.Oid, vs.ID, vs.Name, vs.Code, vs.Status, vs.Definitiontext, vs.Scopenotetext, vs.Assigningauthorityid, vs.Legacyflag, vs.Statusdate); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -137,10 +136,10 @@ func (vs *ValueSet) Delete(ctx context.Context, db DB) error {
 // ValueSetByID retrieves a row from 'public.value_set' as a [ValueSet].
 //
 // Generated from index 'value_set_id_key'.
-func ValueSetByID(ctx context.Context, db DB, id sql.NullString) (*ValueSet, error) {
+func ValueSetByID(ctx context.Context, db DB, id string) (*ValueSet, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`oid, id, name, code, status, definitiontext, scopenotetext, assigningauthorityid, legacyflag, statusdate, valuesetcreateddate, valuesetlastrevisiondate ` +
+		`oid, id, name, code, status, definitiontext, scopenotetext, assigningauthorityid, legacyflag, statusdate ` +
 		`FROM public.value_set ` +
 		`WHERE id = $1`
 	// run
@@ -148,7 +147,7 @@ func ValueSetByID(ctx context.Context, db DB, id sql.NullString) (*ValueSet, err
 	vs := ValueSet{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&vs.Oid, &vs.ID, &vs.Name, &vs.Code, &vs.Status, &vs.Definitiontext, &vs.Scopenotetext, &vs.Assigningauthorityid, &vs.Legacyflag, &vs.Statusdate, &vs.Valuesetcreateddate, &vs.Valuesetlastrevisiondate); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&vs.Oid, &vs.ID, &vs.Name, &vs.Code, &vs.Status, &vs.Definitiontext, &vs.Scopenotetext, &vs.Assigningauthorityid, &vs.Legacyflag, &vs.Statusdate); err != nil {
 		return nil, logerror(err)
 	}
 	return &vs, nil
@@ -160,7 +159,7 @@ func ValueSetByID(ctx context.Context, db DB, id sql.NullString) (*ValueSet, err
 func ValueSetByOid(ctx context.Context, db DB, oid string) (*ValueSet, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`oid, id, name, code, status, definitiontext, scopenotetext, assigningauthorityid, legacyflag, statusdate, valuesetcreateddate, valuesetlastrevisiondate ` +
+		`oid, id, name, code, status, definitiontext, scopenotetext, assigningauthorityid, legacyflag, statusdate ` +
 		`FROM public.value_set ` +
 		`WHERE oid = $1`
 	// run
@@ -168,7 +167,7 @@ func ValueSetByOid(ctx context.Context, db DB, oid string) (*ValueSet, error) {
 	vs := ValueSet{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, oid).Scan(&vs.Oid, &vs.ID, &vs.Name, &vs.Code, &vs.Status, &vs.Definitiontext, &vs.Scopenotetext, &vs.Assigningauthorityid, &vs.Legacyflag, &vs.Statusdate, &vs.Valuesetcreateddate, &vs.Valuesetlastrevisiondate); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, oid).Scan(&vs.Oid, &vs.ID, &vs.Name, &vs.Code, &vs.Status, &vs.Definitiontext, &vs.Scopenotetext, &vs.Assigningauthorityid, &vs.Legacyflag, &vs.Statusdate); err != nil {
 		return nil, logerror(err)
 	}
 	return &vs, nil

@@ -5,16 +5,17 @@ package models
 import (
 	"context"
 	"database/sql"
+	"time"
 )
 
 // View represents a row from 'public.view'.
 type View struct {
-	Name            sql.NullString `json:"name"`            // name
+	Name            string         `json:"name"`            // name
 	ID              string         `json:"id"`              // id
-	Descriptiontext sql.NullString `json:"descriptiontext"` // descriptiontext
-	Status          sql.NullString `json:"status"`          // status
+	Descriptiontext string         `json:"descriptiontext"` // descriptiontext
+	Status          string         `json:"status"`          // status
 	Viewnotes       sql.NullString `json:"viewnotes"`       // viewnotes
-	Statusdate      sql.NullTime   `json:"statusdate"`      // statusdate
+	Statusdate      time.Time      `json:"statusdate"`      // statusdate
 	// xo fields
 	_exists, _deleted bool
 }

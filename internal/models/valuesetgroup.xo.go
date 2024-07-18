@@ -5,16 +5,17 @@ package models
 import (
 	"context"
 	"database/sql"
+	"time"
 )
 
 // ValueSetGroup represents a row from 'public.value_set_group'.
 type ValueSetGroup struct {
 	ID              string         `json:"id"`              // id
-	Name            sql.NullString `json:"name"`            // name
-	Descriptiontext sql.NullString `json:"descriptiontext"` // descriptiontext
-	Status          sql.NullString `json:"status"`          // status
+	Name            string         `json:"name"`            // name
+	Descriptiontext string         `json:"descriptiontext"` // descriptiontext
+	Status          string         `json:"status"`          // status
 	Groupnotes      sql.NullString `json:"groupnotes"`      // groupnotes
-	Statusdate      sql.NullTime   `json:"statusdate"`      // statusdate
+	Statusdate      time.Time      `json:"statusdate"`      // statusdate
 	// xo fields
 	_exists, _deleted bool
 }

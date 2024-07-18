@@ -5,22 +5,22 @@ package models
 import (
 	"context"
 	"database/sql"
+	"time"
 )
 
 // ValueSetConcept represents a row from 'public.value_set_concept'.
 type ValueSetConcept struct {
 	ID                      string         `json:"id"`                      // id
-	Codesystemoid           sql.NullString `json:"codesystemoid"`           // codesystemoid
-	Valuesetversionid       sql.NullString `json:"valuesetversionid"`       // valuesetversionid
-	Conceptcode             sql.NullString `json:"conceptcode"`             // conceptcode
-	Scopenotetext           sql.NullString `json:"scopenotetext"`           // scopenotetext
-	Status                  sql.NullString `json:"status"`                  // status
+	Codesystemoid           string         `json:"codesystemoid"`           // codesystemoid
+	Valuesetversionid       string         `json:"valuesetversionid"`       // valuesetversionid
+	Conceptcode             string         `json:"conceptcode"`             // conceptcode
+	Status                  string         `json:"status"`                  // status
 	Cdcpreferreddesignation sql.NullString `json:"cdcpreferreddesignation"` // cdcpreferreddesignation
 	Preferredalternatecode  sql.NullString `json:"preferredalternatecode"`  // preferredalternatecode
 	Definitiontext          sql.NullString `json:"definitiontext"`          // definitiontext
-	Codesystemconceptname   sql.NullString `json:"codesystemconceptname"`   // codesystemconceptname
+	Codesystemconceptname   string         `json:"codesystemconceptname"`   // codesystemconceptname
 	Sequence                sql.NullString `json:"sequence"`                // sequence
-	Statusdate              sql.NullTime   `json:"statusdate"`              // statusdate
+	Statusdate              time.Time      `json:"statusdate"`              // statusdate
 	// xo fields
 	_exists, _deleted bool
 }
@@ -46,13 +46,13 @@ func (vsc *ValueSetConcept) Insert(ctx context.Context, db DB) error {
 	}
 	// insert (manual)
 	const sqlstr = `INSERT INTO public.value_set_concept (` +
-		`id, codesystemoid, valuesetversionid, conceptcode, scopenotetext, status, cdcpreferreddesignation, preferredalternatecode, definitiontext, codesystemconceptname, sequence, statusdate` +
+		`id, codesystemoid, valuesetversionid, conceptcode, status, cdcpreferreddesignation, preferredalternatecode, definitiontext, codesystemconceptname, sequence, statusdate` +
 		`) VALUES (` +
-		`$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12` +
+		`$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11` +
 		`)`
 	// run
-	logf(sqlstr, vsc.ID, vsc.Codesystemoid, vsc.Valuesetversionid, vsc.Conceptcode, vsc.Scopenotetext, vsc.Status, vsc.Cdcpreferreddesignation, vsc.Preferredalternatecode, vsc.Definitiontext, vsc.Codesystemconceptname, vsc.Sequence, vsc.Statusdate)
-	if _, err := db.ExecContext(ctx, sqlstr, vsc.ID, vsc.Codesystemoid, vsc.Valuesetversionid, vsc.Conceptcode, vsc.Scopenotetext, vsc.Status, vsc.Cdcpreferreddesignation, vsc.Preferredalternatecode, vsc.Definitiontext, vsc.Codesystemconceptname, vsc.Sequence, vsc.Statusdate); err != nil {
+	logf(sqlstr, vsc.ID, vsc.Codesystemoid, vsc.Valuesetversionid, vsc.Conceptcode, vsc.Status, vsc.Cdcpreferreddesignation, vsc.Preferredalternatecode, vsc.Definitiontext, vsc.Codesystemconceptname, vsc.Sequence, vsc.Statusdate)
+	if _, err := db.ExecContext(ctx, sqlstr, vsc.ID, vsc.Codesystemoid, vsc.Valuesetversionid, vsc.Conceptcode, vsc.Status, vsc.Cdcpreferreddesignation, vsc.Preferredalternatecode, vsc.Definitiontext, vsc.Codesystemconceptname, vsc.Sequence, vsc.Statusdate); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -70,11 +70,11 @@ func (vsc *ValueSetConcept) Update(ctx context.Context, db DB) error {
 	}
 	// update with composite primary key
 	const sqlstr = `UPDATE public.value_set_concept SET ` +
-		`codesystemoid = $1, valuesetversionid = $2, conceptcode = $3, scopenotetext = $4, status = $5, cdcpreferreddesignation = $6, preferredalternatecode = $7, definitiontext = $8, codesystemconceptname = $9, sequence = $10, statusdate = $11 ` +
-		`WHERE id = $12`
+		`codesystemoid = $1, valuesetversionid = $2, conceptcode = $3, status = $4, cdcpreferreddesignation = $5, preferredalternatecode = $6, definitiontext = $7, codesystemconceptname = $8, sequence = $9, statusdate = $10 ` +
+		`WHERE id = $11`
 	// run
-	logf(sqlstr, vsc.Codesystemoid, vsc.Valuesetversionid, vsc.Conceptcode, vsc.Scopenotetext, vsc.Status, vsc.Cdcpreferreddesignation, vsc.Preferredalternatecode, vsc.Definitiontext, vsc.Codesystemconceptname, vsc.Sequence, vsc.Statusdate, vsc.ID)
-	if _, err := db.ExecContext(ctx, sqlstr, vsc.Codesystemoid, vsc.Valuesetversionid, vsc.Conceptcode, vsc.Scopenotetext, vsc.Status, vsc.Cdcpreferreddesignation, vsc.Preferredalternatecode, vsc.Definitiontext, vsc.Codesystemconceptname, vsc.Sequence, vsc.Statusdate, vsc.ID); err != nil {
+	logf(sqlstr, vsc.Codesystemoid, vsc.Valuesetversionid, vsc.Conceptcode, vsc.Status, vsc.Cdcpreferreddesignation, vsc.Preferredalternatecode, vsc.Definitiontext, vsc.Codesystemconceptname, vsc.Sequence, vsc.Statusdate, vsc.ID)
+	if _, err := db.ExecContext(ctx, sqlstr, vsc.Codesystemoid, vsc.Valuesetversionid, vsc.Conceptcode, vsc.Status, vsc.Cdcpreferreddesignation, vsc.Preferredalternatecode, vsc.Definitiontext, vsc.Codesystemconceptname, vsc.Sequence, vsc.Statusdate, vsc.ID); err != nil {
 		return logerror(err)
 	}
 	return nil
@@ -96,16 +96,16 @@ func (vsc *ValueSetConcept) Upsert(ctx context.Context, db DB) error {
 	}
 	// upsert
 	const sqlstr = `INSERT INTO public.value_set_concept (` +
-		`id, codesystemoid, valuesetversionid, conceptcode, scopenotetext, status, cdcpreferreddesignation, preferredalternatecode, definitiontext, codesystemconceptname, sequence, statusdate` +
+		`id, codesystemoid, valuesetversionid, conceptcode, status, cdcpreferreddesignation, preferredalternatecode, definitiontext, codesystemconceptname, sequence, statusdate` +
 		`) VALUES (` +
-		`$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12` +
+		`$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11` +
 		`)` +
 		` ON CONFLICT (id) DO ` +
 		`UPDATE SET ` +
-		`codesystemoid = EXCLUDED.codesystemoid, valuesetversionid = EXCLUDED.valuesetversionid, conceptcode = EXCLUDED.conceptcode, scopenotetext = EXCLUDED.scopenotetext, status = EXCLUDED.status, cdcpreferreddesignation = EXCLUDED.cdcpreferreddesignation, preferredalternatecode = EXCLUDED.preferredalternatecode, definitiontext = EXCLUDED.definitiontext, codesystemconceptname = EXCLUDED.codesystemconceptname, sequence = EXCLUDED.sequence, statusdate = EXCLUDED.statusdate `
+		`codesystemoid = EXCLUDED.codesystemoid, valuesetversionid = EXCLUDED.valuesetversionid, conceptcode = EXCLUDED.conceptcode, status = EXCLUDED.status, cdcpreferreddesignation = EXCLUDED.cdcpreferreddesignation, preferredalternatecode = EXCLUDED.preferredalternatecode, definitiontext = EXCLUDED.definitiontext, codesystemconceptname = EXCLUDED.codesystemconceptname, sequence = EXCLUDED.sequence, statusdate = EXCLUDED.statusdate `
 	// run
-	logf(sqlstr, vsc.ID, vsc.Codesystemoid, vsc.Valuesetversionid, vsc.Conceptcode, vsc.Scopenotetext, vsc.Status, vsc.Cdcpreferreddesignation, vsc.Preferredalternatecode, vsc.Definitiontext, vsc.Codesystemconceptname, vsc.Sequence, vsc.Statusdate)
-	if _, err := db.ExecContext(ctx, sqlstr, vsc.ID, vsc.Codesystemoid, vsc.Valuesetversionid, vsc.Conceptcode, vsc.Scopenotetext, vsc.Status, vsc.Cdcpreferreddesignation, vsc.Preferredalternatecode, vsc.Definitiontext, vsc.Codesystemconceptname, vsc.Sequence, vsc.Statusdate); err != nil {
+	logf(sqlstr, vsc.ID, vsc.Codesystemoid, vsc.Valuesetversionid, vsc.Conceptcode, vsc.Status, vsc.Cdcpreferreddesignation, vsc.Preferredalternatecode, vsc.Definitiontext, vsc.Codesystemconceptname, vsc.Sequence, vsc.Statusdate)
+	if _, err := db.ExecContext(ctx, sqlstr, vsc.ID, vsc.Codesystemoid, vsc.Valuesetversionid, vsc.Conceptcode, vsc.Status, vsc.Cdcpreferreddesignation, vsc.Preferredalternatecode, vsc.Definitiontext, vsc.Codesystemconceptname, vsc.Sequence, vsc.Statusdate); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -137,10 +137,10 @@ func (vsc *ValueSetConcept) Delete(ctx context.Context, db DB) error {
 // ValueSetConceptByCodesystemoid retrieves a row from 'public.value_set_concept' as a [ValueSetConcept].
 //
 // Generated from index 'value_set_concept_codesystemoid_idx'.
-func ValueSetConceptByCodesystemoid(ctx context.Context, db DB, codesystemoid sql.NullString) ([]*ValueSetConcept, error) {
+func ValueSetConceptByCodesystemoid(ctx context.Context, db DB, codesystemoid string) ([]*ValueSetConcept, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, codesystemoid, valuesetversionid, conceptcode, scopenotetext, status, cdcpreferreddesignation, preferredalternatecode, definitiontext, codesystemconceptname, sequence, statusdate ` +
+		`id, codesystemoid, valuesetversionid, conceptcode, status, cdcpreferreddesignation, preferredalternatecode, definitiontext, codesystemconceptname, sequence, statusdate ` +
 		`FROM public.value_set_concept ` +
 		`WHERE codesystemoid = $1`
 	// run
@@ -157,7 +157,7 @@ func ValueSetConceptByCodesystemoid(ctx context.Context, db DB, codesystemoid sq
 			_exists: true,
 		}
 		// scan
-		if err := rows.Scan(&vsc.ID, &vsc.Codesystemoid, &vsc.Valuesetversionid, &vsc.Conceptcode, &vsc.Scopenotetext, &vsc.Status, &vsc.Cdcpreferreddesignation, &vsc.Preferredalternatecode, &vsc.Definitiontext, &vsc.Codesystemconceptname, &vsc.Sequence, &vsc.Statusdate); err != nil {
+		if err := rows.Scan(&vsc.ID, &vsc.Codesystemoid, &vsc.Valuesetversionid, &vsc.Conceptcode, &vsc.Status, &vsc.Cdcpreferreddesignation, &vsc.Preferredalternatecode, &vsc.Definitiontext, &vsc.Codesystemconceptname, &vsc.Sequence, &vsc.Statusdate); err != nil {
 			return nil, logerror(err)
 		}
 		res = append(res, &vsc)
@@ -174,7 +174,7 @@ func ValueSetConceptByCodesystemoid(ctx context.Context, db DB, codesystemoid sq
 func ValueSetConceptByID(ctx context.Context, db DB, id string) (*ValueSetConcept, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, codesystemoid, valuesetversionid, conceptcode, scopenotetext, status, cdcpreferreddesignation, preferredalternatecode, definitiontext, codesystemconceptname, sequence, statusdate ` +
+		`id, codesystemoid, valuesetversionid, conceptcode, status, cdcpreferreddesignation, preferredalternatecode, definitiontext, codesystemconceptname, sequence, statusdate ` +
 		`FROM public.value_set_concept ` +
 		`WHERE id = $1`
 	// run
@@ -182,7 +182,7 @@ func ValueSetConceptByID(ctx context.Context, db DB, id string) (*ValueSetConcep
 	vsc := ValueSetConcept{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&vsc.ID, &vsc.Codesystemoid, &vsc.Valuesetversionid, &vsc.Conceptcode, &vsc.Scopenotetext, &vsc.Status, &vsc.Cdcpreferreddesignation, &vsc.Preferredalternatecode, &vsc.Definitiontext, &vsc.Codesystemconceptname, &vsc.Sequence, &vsc.Statusdate); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&vsc.ID, &vsc.Codesystemoid, &vsc.Valuesetversionid, &vsc.Conceptcode, &vsc.Status, &vsc.Cdcpreferreddesignation, &vsc.Preferredalternatecode, &vsc.Definitiontext, &vsc.Codesystemconceptname, &vsc.Sequence, &vsc.Statusdate); err != nil {
 		return nil, logerror(err)
 	}
 	return &vsc, nil
@@ -191,10 +191,10 @@ func ValueSetConceptByID(ctx context.Context, db DB, id string) (*ValueSetConcep
 // ValueSetConceptByValuesetversionid retrieves a row from 'public.value_set_concept' as a [ValueSetConcept].
 //
 // Generated from index 'value_set_concept_valuesetversionid_idx'.
-func ValueSetConceptByValuesetversionid(ctx context.Context, db DB, valuesetversionid sql.NullString) ([]*ValueSetConcept, error) {
+func ValueSetConceptByValuesetversionid(ctx context.Context, db DB, valuesetversionid string) ([]*ValueSetConcept, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, codesystemoid, valuesetversionid, conceptcode, scopenotetext, status, cdcpreferreddesignation, preferredalternatecode, definitiontext, codesystemconceptname, sequence, statusdate ` +
+		`id, codesystemoid, valuesetversionid, conceptcode, status, cdcpreferreddesignation, preferredalternatecode, definitiontext, codesystemconceptname, sequence, statusdate ` +
 		`FROM public.value_set_concept ` +
 		`WHERE valuesetversionid = $1`
 	// run
@@ -211,7 +211,7 @@ func ValueSetConceptByValuesetversionid(ctx context.Context, db DB, valuesetvers
 			_exists: true,
 		}
 		// scan
-		if err := rows.Scan(&vsc.ID, &vsc.Codesystemoid, &vsc.Valuesetversionid, &vsc.Conceptcode, &vsc.Scopenotetext, &vsc.Status, &vsc.Cdcpreferreddesignation, &vsc.Preferredalternatecode, &vsc.Definitiontext, &vsc.Codesystemconceptname, &vsc.Sequence, &vsc.Statusdate); err != nil {
+		if err := rows.Scan(&vsc.ID, &vsc.Codesystemoid, &vsc.Valuesetversionid, &vsc.Conceptcode, &vsc.Status, &vsc.Cdcpreferreddesignation, &vsc.Preferredalternatecode, &vsc.Definitiontext, &vsc.Codesystemconceptname, &vsc.Sequence, &vsc.Statusdate); err != nil {
 			return nil, logerror(err)
 		}
 		res = append(res, &vsc)
@@ -226,12 +226,12 @@ func ValueSetConceptByValuesetversionid(ctx context.Context, db DB, valuesetvers
 //
 // Generated from foreign key 'value_set_concept_codesystemoid_fkey'.
 func (vsc *ValueSetConcept) CodeSystem(ctx context.Context, db DB) (*CodeSystem, error) {
-	return CodeSystemByOid(ctx, db, vsc.Codesystemoid.String)
+	return CodeSystemByOid(ctx, db, vsc.Codesystemoid)
 }
 
 // ValueSetVersion returns the ValueSetVersion associated with the [ValueSetConcept]'s (Valuesetversionid).
 //
 // Generated from foreign key 'value_set_concept_valuesetversionid_fkey'.
 func (vsc *ValueSetConcept) ValueSetVersion(ctx context.Context, db DB) (*ValueSetVersion, error) {
-	return ValueSetVersionByID(ctx, db, vsc.Valuesetversionid.String)
+	return ValueSetVersionByID(ctx, db, vsc.Valuesetversionid)
 }

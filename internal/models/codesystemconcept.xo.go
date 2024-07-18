@@ -5,29 +5,28 @@ package models
 import (
 	"context"
 	"database/sql"
+	"time"
 )
 
 // CodeSystemConcept represents a row from 'public.code_system_concept'.
 type CodeSystemConcept struct {
 	ID                              string         `json:"id"`                              // id
-	Name                            sql.NullString `json:"name"`                            // name
-	Codesystemoid                   sql.NullString `json:"codesystemoid"`                   // codesystemoid
-	Conceptcode                     sql.NullString `json:"conceptcode"`                     // conceptcode
-	Sdopreferreddesignation         sql.NullString `json:"sdopreferreddesignation"`         // sdopreferreddesignation
+	Name                            string         `json:"name"`                            // name
+	Codesystemoid                   string         `json:"codesystemoid"`                   // codesystemoid
+	Conceptcode                     string         `json:"conceptcode"`                     // conceptcode
+	Sdopreferreddesignation         string         `json:"sdopreferreddesignation"`         // sdopreferreddesignation
 	Definitiontext                  sql.NullString `json:"definitiontext"`                  // definitiontext
 	Precoordinatedflag              sql.NullBool   `json:"precoordinatedflag"`              // precoordinatedflag
-	Precoordinatedconceptnote       sql.NullString `json:"precoordinatedconceptnote"`       // precoordinatedconceptnote
-	Status                          sql.NullString `json:"status"`                          // status
+	Status                          string         `json:"status"`                          // status
 	Sdoconceptstatus                sql.NullString `json:"sdoconceptstatus"`                // sdoconceptstatus
 	Supersededbycodesystemconceptid sql.NullString `json:"supersededbycodesystemconceptid"` // supersededbycodesystemconceptid
 	Umlscui                         sql.NullString `json:"umlscui"`                         // umlscui
 	Umlsaui                         sql.NullString `json:"umlsaui"`                         // umlsaui
-	Isrootflag                      sql.NullBool   `json:"isrootflag"`                      // isrootflag
-	Isconceptflag                   sql.NullBool   `json:"isconceptflag"`                   // isconceptflag
-	Sequence                        sql.NullString `json:"sequence"`                        // sequence
+	Isrootflag                      bool           `json:"isrootflag"`                      // isrootflag
+	Isconceptflag                   bool           `json:"isconceptflag"`                   // isconceptflag
 	Sdoconceptcreateddate           sql.NullTime   `json:"sdoconceptcreateddate"`           // sdoconceptcreateddate
 	Sdoconceptrevisiondate          sql.NullTime   `json:"sdoconceptrevisiondate"`          // sdoconceptrevisiondate
-	Statusdate                      sql.NullTime   `json:"statusdate"`                      // statusdate
+	Statusdate                      time.Time      `json:"statusdate"`                      // statusdate
 	Sdoconceptstatusdate            sql.NullTime   `json:"sdoconceptstatusdate"`            // sdoconceptstatusdate
 	// xo fields
 	_exists, _deleted bool
@@ -54,13 +53,13 @@ func (csc *CodeSystemConcept) Insert(ctx context.Context, db DB) error {
 	}
 	// insert (manual)
 	const sqlstr = `INSERT INTO public.code_system_concept (` +
-		`id, name, codesystemoid, conceptcode, sdopreferreddesignation, definitiontext, precoordinatedflag, precoordinatedconceptnote, status, sdoconceptstatus, supersededbycodesystemconceptid, umlscui, umlsaui, isrootflag, isconceptflag, sequence, sdoconceptcreateddate, sdoconceptrevisiondate, statusdate, sdoconceptstatusdate` +
+		`id, name, codesystemoid, conceptcode, sdopreferreddesignation, definitiontext, precoordinatedflag, status, sdoconceptstatus, supersededbycodesystemconceptid, umlscui, umlsaui, isrootflag, isconceptflag, sdoconceptcreateddate, sdoconceptrevisiondate, statusdate, sdoconceptstatusdate` +
 		`) VALUES (` +
-		`$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20` +
+		`$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18` +
 		`)`
 	// run
-	logf(sqlstr, csc.ID, csc.Name, csc.Codesystemoid, csc.Conceptcode, csc.Sdopreferreddesignation, csc.Definitiontext, csc.Precoordinatedflag, csc.Precoordinatedconceptnote, csc.Status, csc.Sdoconceptstatus, csc.Supersededbycodesystemconceptid, csc.Umlscui, csc.Umlsaui, csc.Isrootflag, csc.Isconceptflag, csc.Sequence, csc.Sdoconceptcreateddate, csc.Sdoconceptrevisiondate, csc.Statusdate, csc.Sdoconceptstatusdate)
-	if _, err := db.ExecContext(ctx, sqlstr, csc.ID, csc.Name, csc.Codesystemoid, csc.Conceptcode, csc.Sdopreferreddesignation, csc.Definitiontext, csc.Precoordinatedflag, csc.Precoordinatedconceptnote, csc.Status, csc.Sdoconceptstatus, csc.Supersededbycodesystemconceptid, csc.Umlscui, csc.Umlsaui, csc.Isrootflag, csc.Isconceptflag, csc.Sequence, csc.Sdoconceptcreateddate, csc.Sdoconceptrevisiondate, csc.Statusdate, csc.Sdoconceptstatusdate); err != nil {
+	logf(sqlstr, csc.ID, csc.Name, csc.Codesystemoid, csc.Conceptcode, csc.Sdopreferreddesignation, csc.Definitiontext, csc.Precoordinatedflag, csc.Status, csc.Sdoconceptstatus, csc.Supersededbycodesystemconceptid, csc.Umlscui, csc.Umlsaui, csc.Isrootflag, csc.Isconceptflag, csc.Sdoconceptcreateddate, csc.Sdoconceptrevisiondate, csc.Statusdate, csc.Sdoconceptstatusdate)
+	if _, err := db.ExecContext(ctx, sqlstr, csc.ID, csc.Name, csc.Codesystemoid, csc.Conceptcode, csc.Sdopreferreddesignation, csc.Definitiontext, csc.Precoordinatedflag, csc.Status, csc.Sdoconceptstatus, csc.Supersededbycodesystemconceptid, csc.Umlscui, csc.Umlsaui, csc.Isrootflag, csc.Isconceptflag, csc.Sdoconceptcreateddate, csc.Sdoconceptrevisiondate, csc.Statusdate, csc.Sdoconceptstatusdate); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -78,11 +77,11 @@ func (csc *CodeSystemConcept) Update(ctx context.Context, db DB) error {
 	}
 	// update with composite primary key
 	const sqlstr = `UPDATE public.code_system_concept SET ` +
-		`name = $1, codesystemoid = $2, conceptcode = $3, sdopreferreddesignation = $4, definitiontext = $5, precoordinatedflag = $6, precoordinatedconceptnote = $7, status = $8, sdoconceptstatus = $9, supersededbycodesystemconceptid = $10, umlscui = $11, umlsaui = $12, isrootflag = $13, isconceptflag = $14, sequence = $15, sdoconceptcreateddate = $16, sdoconceptrevisiondate = $17, statusdate = $18, sdoconceptstatusdate = $19 ` +
-		`WHERE id = $20`
+		`name = $1, codesystemoid = $2, conceptcode = $3, sdopreferreddesignation = $4, definitiontext = $5, precoordinatedflag = $6, status = $7, sdoconceptstatus = $8, supersededbycodesystemconceptid = $9, umlscui = $10, umlsaui = $11, isrootflag = $12, isconceptflag = $13, sdoconceptcreateddate = $14, sdoconceptrevisiondate = $15, statusdate = $16, sdoconceptstatusdate = $17 ` +
+		`WHERE id = $18`
 	// run
-	logf(sqlstr, csc.Name, csc.Codesystemoid, csc.Conceptcode, csc.Sdopreferreddesignation, csc.Definitiontext, csc.Precoordinatedflag, csc.Precoordinatedconceptnote, csc.Status, csc.Sdoconceptstatus, csc.Supersededbycodesystemconceptid, csc.Umlscui, csc.Umlsaui, csc.Isrootflag, csc.Isconceptflag, csc.Sequence, csc.Sdoconceptcreateddate, csc.Sdoconceptrevisiondate, csc.Statusdate, csc.Sdoconceptstatusdate, csc.ID)
-	if _, err := db.ExecContext(ctx, sqlstr, csc.Name, csc.Codesystemoid, csc.Conceptcode, csc.Sdopreferreddesignation, csc.Definitiontext, csc.Precoordinatedflag, csc.Precoordinatedconceptnote, csc.Status, csc.Sdoconceptstatus, csc.Supersededbycodesystemconceptid, csc.Umlscui, csc.Umlsaui, csc.Isrootflag, csc.Isconceptflag, csc.Sequence, csc.Sdoconceptcreateddate, csc.Sdoconceptrevisiondate, csc.Statusdate, csc.Sdoconceptstatusdate, csc.ID); err != nil {
+	logf(sqlstr, csc.Name, csc.Codesystemoid, csc.Conceptcode, csc.Sdopreferreddesignation, csc.Definitiontext, csc.Precoordinatedflag, csc.Status, csc.Sdoconceptstatus, csc.Supersededbycodesystemconceptid, csc.Umlscui, csc.Umlsaui, csc.Isrootflag, csc.Isconceptflag, csc.Sdoconceptcreateddate, csc.Sdoconceptrevisiondate, csc.Statusdate, csc.Sdoconceptstatusdate, csc.ID)
+	if _, err := db.ExecContext(ctx, sqlstr, csc.Name, csc.Codesystemoid, csc.Conceptcode, csc.Sdopreferreddesignation, csc.Definitiontext, csc.Precoordinatedflag, csc.Status, csc.Sdoconceptstatus, csc.Supersededbycodesystemconceptid, csc.Umlscui, csc.Umlsaui, csc.Isrootflag, csc.Isconceptflag, csc.Sdoconceptcreateddate, csc.Sdoconceptrevisiondate, csc.Statusdate, csc.Sdoconceptstatusdate, csc.ID); err != nil {
 		return logerror(err)
 	}
 	return nil
@@ -104,16 +103,16 @@ func (csc *CodeSystemConcept) Upsert(ctx context.Context, db DB) error {
 	}
 	// upsert
 	const sqlstr = `INSERT INTO public.code_system_concept (` +
-		`id, name, codesystemoid, conceptcode, sdopreferreddesignation, definitiontext, precoordinatedflag, precoordinatedconceptnote, status, sdoconceptstatus, supersededbycodesystemconceptid, umlscui, umlsaui, isrootflag, isconceptflag, sequence, sdoconceptcreateddate, sdoconceptrevisiondate, statusdate, sdoconceptstatusdate` +
+		`id, name, codesystemoid, conceptcode, sdopreferreddesignation, definitiontext, precoordinatedflag, status, sdoconceptstatus, supersededbycodesystemconceptid, umlscui, umlsaui, isrootflag, isconceptflag, sdoconceptcreateddate, sdoconceptrevisiondate, statusdate, sdoconceptstatusdate` +
 		`) VALUES (` +
-		`$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20` +
+		`$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18` +
 		`)` +
 		` ON CONFLICT (id) DO ` +
 		`UPDATE SET ` +
-		`name = EXCLUDED.name, codesystemoid = EXCLUDED.codesystemoid, conceptcode = EXCLUDED.conceptcode, sdopreferreddesignation = EXCLUDED.sdopreferreddesignation, definitiontext = EXCLUDED.definitiontext, precoordinatedflag = EXCLUDED.precoordinatedflag, precoordinatedconceptnote = EXCLUDED.precoordinatedconceptnote, status = EXCLUDED.status, sdoconceptstatus = EXCLUDED.sdoconceptstatus, supersededbycodesystemconceptid = EXCLUDED.supersededbycodesystemconceptid, umlscui = EXCLUDED.umlscui, umlsaui = EXCLUDED.umlsaui, isrootflag = EXCLUDED.isrootflag, isconceptflag = EXCLUDED.isconceptflag, sequence = EXCLUDED.sequence, sdoconceptcreateddate = EXCLUDED.sdoconceptcreateddate, sdoconceptrevisiondate = EXCLUDED.sdoconceptrevisiondate, statusdate = EXCLUDED.statusdate, sdoconceptstatusdate = EXCLUDED.sdoconceptstatusdate `
+		`name = EXCLUDED.name, codesystemoid = EXCLUDED.codesystemoid, conceptcode = EXCLUDED.conceptcode, sdopreferreddesignation = EXCLUDED.sdopreferreddesignation, definitiontext = EXCLUDED.definitiontext, precoordinatedflag = EXCLUDED.precoordinatedflag, status = EXCLUDED.status, sdoconceptstatus = EXCLUDED.sdoconceptstatus, supersededbycodesystemconceptid = EXCLUDED.supersededbycodesystemconceptid, umlscui = EXCLUDED.umlscui, umlsaui = EXCLUDED.umlsaui, isrootflag = EXCLUDED.isrootflag, isconceptflag = EXCLUDED.isconceptflag, sdoconceptcreateddate = EXCLUDED.sdoconceptcreateddate, sdoconceptrevisiondate = EXCLUDED.sdoconceptrevisiondate, statusdate = EXCLUDED.statusdate, sdoconceptstatusdate = EXCLUDED.sdoconceptstatusdate `
 	// run
-	logf(sqlstr, csc.ID, csc.Name, csc.Codesystemoid, csc.Conceptcode, csc.Sdopreferreddesignation, csc.Definitiontext, csc.Precoordinatedflag, csc.Precoordinatedconceptnote, csc.Status, csc.Sdoconceptstatus, csc.Supersededbycodesystemconceptid, csc.Umlscui, csc.Umlsaui, csc.Isrootflag, csc.Isconceptflag, csc.Sequence, csc.Sdoconceptcreateddate, csc.Sdoconceptrevisiondate, csc.Statusdate, csc.Sdoconceptstatusdate)
-	if _, err := db.ExecContext(ctx, sqlstr, csc.ID, csc.Name, csc.Codesystemoid, csc.Conceptcode, csc.Sdopreferreddesignation, csc.Definitiontext, csc.Precoordinatedflag, csc.Precoordinatedconceptnote, csc.Status, csc.Sdoconceptstatus, csc.Supersededbycodesystemconceptid, csc.Umlscui, csc.Umlsaui, csc.Isrootflag, csc.Isconceptflag, csc.Sequence, csc.Sdoconceptcreateddate, csc.Sdoconceptrevisiondate, csc.Statusdate, csc.Sdoconceptstatusdate); err != nil {
+	logf(sqlstr, csc.ID, csc.Name, csc.Codesystemoid, csc.Conceptcode, csc.Sdopreferreddesignation, csc.Definitiontext, csc.Precoordinatedflag, csc.Status, csc.Sdoconceptstatus, csc.Supersededbycodesystemconceptid, csc.Umlscui, csc.Umlsaui, csc.Isrootflag, csc.Isconceptflag, csc.Sdoconceptcreateddate, csc.Sdoconceptrevisiondate, csc.Statusdate, csc.Sdoconceptstatusdate)
+	if _, err := db.ExecContext(ctx, sqlstr, csc.ID, csc.Name, csc.Codesystemoid, csc.Conceptcode, csc.Sdopreferreddesignation, csc.Definitiontext, csc.Precoordinatedflag, csc.Status, csc.Sdoconceptstatus, csc.Supersededbycodesystemconceptid, csc.Umlscui, csc.Umlsaui, csc.Isrootflag, csc.Isconceptflag, csc.Sdoconceptcreateddate, csc.Sdoconceptrevisiondate, csc.Statusdate, csc.Sdoconceptstatusdate); err != nil {
 		return logerror(err)
 	}
 	// set exists
@@ -145,10 +144,10 @@ func (csc *CodeSystemConcept) Delete(ctx context.Context, db DB) error {
 // CodeSystemConceptByCodesystemoid retrieves a row from 'public.code_system_concept' as a [CodeSystemConcept].
 //
 // Generated from index 'code_system_concept_codesystemoid_idx'.
-func CodeSystemConceptByCodesystemoid(ctx context.Context, db DB, codesystemoid sql.NullString) ([]*CodeSystemConcept, error) {
+func CodeSystemConceptByCodesystemoid(ctx context.Context, db DB, codesystemoid string) ([]*CodeSystemConcept, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, name, codesystemoid, conceptcode, sdopreferreddesignation, definitiontext, precoordinatedflag, precoordinatedconceptnote, status, sdoconceptstatus, supersededbycodesystemconceptid, umlscui, umlsaui, isrootflag, isconceptflag, sequence, sdoconceptcreateddate, sdoconceptrevisiondate, statusdate, sdoconceptstatusdate ` +
+		`id, name, codesystemoid, conceptcode, sdopreferreddesignation, definitiontext, precoordinatedflag, status, sdoconceptstatus, supersededbycodesystemconceptid, umlscui, umlsaui, isrootflag, isconceptflag, sdoconceptcreateddate, sdoconceptrevisiondate, statusdate, sdoconceptstatusdate ` +
 		`FROM public.code_system_concept ` +
 		`WHERE codesystemoid = $1`
 	// run
@@ -165,7 +164,7 @@ func CodeSystemConceptByCodesystemoid(ctx context.Context, db DB, codesystemoid 
 			_exists: true,
 		}
 		// scan
-		if err := rows.Scan(&csc.ID, &csc.Name, &csc.Codesystemoid, &csc.Conceptcode, &csc.Sdopreferreddesignation, &csc.Definitiontext, &csc.Precoordinatedflag, &csc.Precoordinatedconceptnote, &csc.Status, &csc.Sdoconceptstatus, &csc.Supersededbycodesystemconceptid, &csc.Umlscui, &csc.Umlsaui, &csc.Isrootflag, &csc.Isconceptflag, &csc.Sequence, &csc.Sdoconceptcreateddate, &csc.Sdoconceptrevisiondate, &csc.Statusdate, &csc.Sdoconceptstatusdate); err != nil {
+		if err := rows.Scan(&csc.ID, &csc.Name, &csc.Codesystemoid, &csc.Conceptcode, &csc.Sdopreferreddesignation, &csc.Definitiontext, &csc.Precoordinatedflag, &csc.Status, &csc.Sdoconceptstatus, &csc.Supersededbycodesystemconceptid, &csc.Umlscui, &csc.Umlsaui, &csc.Isrootflag, &csc.Isconceptflag, &csc.Sdoconceptcreateddate, &csc.Sdoconceptrevisiondate, &csc.Statusdate, &csc.Sdoconceptstatusdate); err != nil {
 			return nil, logerror(err)
 		}
 		res = append(res, &csc)
@@ -182,7 +181,7 @@ func CodeSystemConceptByCodesystemoid(ctx context.Context, db DB, codesystemoid 
 func CodeSystemConceptByID(ctx context.Context, db DB, id string) (*CodeSystemConcept, error) {
 	// query
 	const sqlstr = `SELECT ` +
-		`id, name, codesystemoid, conceptcode, sdopreferreddesignation, definitiontext, precoordinatedflag, precoordinatedconceptnote, status, sdoconceptstatus, supersededbycodesystemconceptid, umlscui, umlsaui, isrootflag, isconceptflag, sequence, sdoconceptcreateddate, sdoconceptrevisiondate, statusdate, sdoconceptstatusdate ` +
+		`id, name, codesystemoid, conceptcode, sdopreferreddesignation, definitiontext, precoordinatedflag, status, sdoconceptstatus, supersededbycodesystemconceptid, umlscui, umlsaui, isrootflag, isconceptflag, sdoconceptcreateddate, sdoconceptrevisiondate, statusdate, sdoconceptstatusdate ` +
 		`FROM public.code_system_concept ` +
 		`WHERE id = $1`
 	// run
@@ -190,7 +189,7 @@ func CodeSystemConceptByID(ctx context.Context, db DB, id string) (*CodeSystemCo
 	csc := CodeSystemConcept{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&csc.ID, &csc.Name, &csc.Codesystemoid, &csc.Conceptcode, &csc.Sdopreferreddesignation, &csc.Definitiontext, &csc.Precoordinatedflag, &csc.Precoordinatedconceptnote, &csc.Status, &csc.Sdoconceptstatus, &csc.Supersededbycodesystemconceptid, &csc.Umlscui, &csc.Umlsaui, &csc.Isrootflag, &csc.Isconceptflag, &csc.Sequence, &csc.Sdoconceptcreateddate, &csc.Sdoconceptrevisiondate, &csc.Statusdate, &csc.Sdoconceptstatusdate); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&csc.ID, &csc.Name, &csc.Codesystemoid, &csc.Conceptcode, &csc.Sdopreferreddesignation, &csc.Definitiontext, &csc.Precoordinatedflag, &csc.Status, &csc.Sdoconceptstatus, &csc.Supersededbycodesystemconceptid, &csc.Umlscui, &csc.Umlsaui, &csc.Isrootflag, &csc.Isconceptflag, &csc.Sdoconceptcreateddate, &csc.Sdoconceptrevisiondate, &csc.Statusdate, &csc.Sdoconceptstatusdate); err != nil {
 		return nil, logerror(err)
 	}
 	return &csc, nil
@@ -200,5 +199,5 @@ func CodeSystemConceptByID(ctx context.Context, db DB, id string) (*CodeSystemCo
 //
 // Generated from foreign key 'code_system_concept_codesystemoid_fkey'.
 func (csc *CodeSystemConcept) CodeSystem(ctx context.Context, db DB) (*CodeSystem, error) {
-	return CodeSystemByOid(ctx, db, csc.Codesystemoid.String)
+	return CodeSystemByOid(ctx, db, csc.Codesystemoid)
 }
