@@ -34,6 +34,7 @@ type CodeSystem struct {
 	Distributionsourcereleasedate sql.NullTime   `json:"distributionsourcereleasedate"` // distributionsourcereleasedate
 	Sdocreatedate                 sql.NullTime   `json:"sdocreatedate"`                 // sdocreatedate
 	Lastrevisiondate              time.Time      `json:"lastrevisiondate"`              // lastrevisiondate
+	Sdoreleasedate				  sql.NullTime 	 `json:"sdoreleasedate"` 				// sdoreleasedate
 	// xo fields
 	_exists, _deleted bool
 }
