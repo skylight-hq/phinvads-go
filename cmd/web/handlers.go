@@ -30,3 +30,23 @@ func (app *application) getAllCodeSystems(w http.ResponseWriter, r *http.Request
 
 	json.NewEncoder(w).Encode(codeSystems)
 }
+
+func (app *application) getCodeSystemByOID(w http.ResponseWriter, r *http.Request) {
+	ctx := context.Background()
+
+	oid := r.PathValue("oid")
+
+	codeSystems, err := models.CodeSystemByOid(ctx, app.db, oid)
+	if err != nil {
+		if errors.Is(err, models.ErrDoesNotExist) {
+			http.NotFound(w, r)
+		} else {
+			app.serverError(w, r, err)
+		}
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	json.NewEncoder(w).Encode(codeSystems)
+}
