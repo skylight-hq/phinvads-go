@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"net/http"
@@ -13,7 +14,9 @@ func (app *application) healthcheck(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getAllCodeSystems(w http.ResponseWriter, r *http.Request) {
-	codeSystems, err := models.GetAllCodeSystems(app.ctx, app.db)
+	ctx := context.Background()
+
+	codeSystems, err := models.GetAllCodeSystems(ctx, app.db)
 	if err != nil {
 		if errors.Is(err, models.ErrDoesNotExist) {
 			http.NotFound(w, r)
