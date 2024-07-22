@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"encoding/json"
 	"errors"
@@ -169,4 +170,22 @@ func (app *application) getCodeSystemConceptByID(w http.ResponseWriter, r *http.
 	w.Header().Set("Content-Type", "application/json")
 
 	json.NewEncoder(w).Encode(codeSystemConcept)
+}
+
+func (app *application) getAllValueSets(w http.ResponseWriter, r *http.Request) {
+	ctx := context.Background()
+
+	codeSystems, err := models.GetAllValueSets(ctx, app.db)
+	if err != nil {
+		if errors.Is(err, models.ErrDoesNotExist) {
+			http.NotFound(w, r)
+		} else {
+			app.serverError(w, r, err)
+		}
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	json.NewEncoder(w).Encode(codeSystems)
 }

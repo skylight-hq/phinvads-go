@@ -172,3 +172,24 @@ func ValueSetByOid(ctx context.Context, db DB, oid string) (*ValueSet, error) {
 	}
 	return &vs, nil
 }
+// All retrieves all rows from 'public.value_set'
+func GetAllValueSets(ctx context.Context, db DB) (*[]ValueSet, error) {
+	const sqlstr = `SELECT * FROM public.value_set`
+	logf(sqlstr)
+	valueSets := []ValueSet{}
+	rows, err := db.QueryContext(ctx, sqlstr)
+	if err != nil {
+		return nil, logerror(err)
+	}
+	for rows.Next() {
+		vs := ValueSet{
+			_exists: true,
+		}
+		err := rows.Scan(&vs.Oid, &vs.ID, &vs.Name, &vs.Code, &vs.Status, &vs.Definitiontext, &vs.Scopenotetext, &vs.Assigningauthorityid, &vs.Legacyflag, &vs.Statusdate)
+		if err != nil {
+			return nil, logerror(err)
+		}
+		valueSets = append(valueSets, vs)
+	}
+	return &valueSets, nil
+}
