@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"database/sql"
 	"flag"
 	"fmt"
@@ -15,7 +14,6 @@ import (
 type application struct {
 	logger *slog.Logger
 	db     *sql.DB
-	ctx    context.Context
 }
 
 func main() {
@@ -32,9 +30,7 @@ func main() {
 	}
 	defer db.Close()
 
-	ctx := context.Background()
-
-	app := &application{logger, db, ctx}
+	app := &application{logger, db}
 
 	logger.Info("starting server", slog.String("addr", *addr))
 
