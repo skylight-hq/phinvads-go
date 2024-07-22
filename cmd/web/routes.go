@@ -1,14 +1,20 @@
 package main
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/justinas/alice"
+)
 
 // The routes() method returns a servemux containing our application routes.
-func (app *application) routes() *http.ServeMux {
+func (app *application) routes() http.Handler {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("GET /api", app.healthcheck)
 	mux.HandleFunc("GET /api/code-systems", app.getAllCodeSystems)
 	mux.HandleFunc("GET /api/code-systems/{oid}", app.getCodeSystemByOID)
 
-	return mux
+	standard := alice.New(app.recoverPanic, app.logRequest, commonHeaders)
+
+	return standard.Then(mux)
 }
