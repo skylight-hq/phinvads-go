@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"database/sql"
 	"encoding/json"
 	"errors"
@@ -16,9 +15,7 @@ func (app *application) healthcheck(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getAllCodeSystems(w http.ResponseWriter, r *http.Request) {
-	ctx := context.Background()
-
-	codeSystems, err := models.GetAllCodeSystems(ctx, app.db)
+	codeSystems, err := models.GetAllCodeSystems(r.Context(), app.db)
 	if err != nil {
 		if errors.Is(err, models.ErrDoesNotExist) {
 			http.NotFound(w, r)
@@ -34,11 +31,9 @@ func (app *application) getAllCodeSystems(w http.ResponseWriter, r *http.Request
 }
 
 func (app *application) getCodeSystemByOID(w http.ResponseWriter, r *http.Request) {
-	ctx := context.Background()
-
 	oid := r.PathValue("oid")
 
-	codeSystems, err := models.CodeSystemByOid(ctx, app.db, oid)
+	codeSystem, err := models.CodeSystemByOid(r.Context(), app.db, oid)
 	if err != nil {
 		if errors.Is(err, models.ErrDoesNotExist) {
 			http.NotFound(w, r)
@@ -53,5 +48,84 @@ func (app *application) getCodeSystemByOID(w http.ResponseWriter, r *http.Reques
 
 	w.Header().Set("Content-Type", "application/json")
 
-	json.NewEncoder(w).Encode(codeSystems)
+	json.NewEncoder(w).Encode(codeSystem)
+}
+
+func (app *application) getAllViews(w http.ResponseWriter, r *http.Request) {
+	views, err := models.GetAllViews(r.Context(), app.db)
+	if err != nil {
+		if errors.Is(err, models.ErrDoesNotExist) {
+			http.NotFound(w, r)
+		} else {
+			app.serverError(w, r, err)
+		}
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	json.NewEncoder(w).Encode(views)
+}
+
+func (app *application) getViewByID(w http.ResponseWriter, r *http.Request) {
+	id := r.PathValue("id")
+
+	view, err := models.ViewByID(r.Context(), app.db, id)
+	if err != nil {
+		if errors.Is(err, models.ErrDoesNotExist) {
+			http.NotFound(w, r)
+		} else if errors.Is(err, sql.ErrNoRows) {
+			errorString := fmt.Sprintf("Error: Code System %s not found", id)
+			http.Error(w, errorString, http.StatusNotFound)
+		} else {
+			app.serverError(w, r, err)
+		}
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	json.NewEncoder(w).Encode(view)
+}
+
+func (app *application) getViewVersionByID(w http.ResponseWriter, r *http.Request) {
+	id := r.PathValue("id")
+
+	viewVersion, err := models.ViewVersionByID(r.Context(), app.db, id)
+	if err != nil {
+		if errors.Is(err, models.ErrDoesNotExist) {
+			http.NotFound(w, r)
+		} else if errors.Is(err, sql.ErrNoRows) {
+			errorString := fmt.Sprintf("Error: Code System %s not found", id)
+			http.Error(w, errorString, http.StatusNotFound)
+		} else {
+			app.serverError(w, r, err)
+		}
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	json.NewEncoder(w).Encode(viewVersion)
+}
+
+func (app *application) getViewVersionsByViewID(w http.ResponseWriter, r *http.Request) {
+	viewId := r.PathValue("viewId")
+
+	viewVersions, err := models.ViewVersionByViewid(r.Context(), app.db, viewId)
+	if err != nil {
+		if errors.Is(err, models.ErrDoesNotExist) {
+			http.NotFound(w, r)
+		} else if errors.Is(err, sql.ErrNoRows) {
+			errorString := fmt.Sprintf("Error: Code System %s not found", viewId)
+			http.Error(w, errorString, http.StatusNotFound)
+		} else {
+			app.serverError(w, r, err)
+		}
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	json.NewEncoder(w).Encode(viewVersions)
 }

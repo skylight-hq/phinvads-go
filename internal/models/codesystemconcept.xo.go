@@ -33,22 +33,22 @@ type CodeSystemConcept struct {
 }
 
 // Exists returns true when the [CodeSystemConcept] exists in the database.
-func (csc *CodeSystemConcept) Exists() bool {
-	return csc._exists
+func (viewc *CodeSystemConcept) Exists() bool {
+	return viewc._exists
 }
 
 // Deleted returns true when the [CodeSystemConcept] has been marked for deletion
 // from the database.
-func (csc *CodeSystemConcept) Deleted() bool {
-	return csc._deleted
+func (viewc *CodeSystemConcept) Deleted() bool {
+	return viewc._deleted
 }
 
 // Insert inserts the [CodeSystemConcept] to the database.
-func (csc *CodeSystemConcept) Insert(ctx context.Context, db DB) error {
+func (viewc *CodeSystemConcept) Insert(ctx context.Context, db DB) error {
 	switch {
-	case csc._exists: // already exists
+	case viewc._exists: // already exists
 		return logerror(&ErrInsertFailed{ErrAlreadyExists})
-	case csc._deleted: // deleted
+	case viewc._deleted: // deleted
 		return logerror(&ErrInsertFailed{ErrMarkedForDeletion})
 	}
 	// insert (manual)
@@ -58,21 +58,21 @@ func (csc *CodeSystemConcept) Insert(ctx context.Context, db DB) error {
 		`$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18` +
 		`)`
 	// run
-	logf(sqlstr, csc.ID, csc.Name, csc.Codesystemoid, csc.Conceptcode, csc.Sdopreferreddesignation, csc.Definitiontext, csc.Precoordinatedflag, csc.Status, csc.Sdoconceptstatus, csc.Supersededbycodesystemconceptid, csc.Umlscui, csc.Umlsaui, csc.Isrootflag, csc.Isconceptflag, csc.Sdoconceptcreateddate, csc.Sdoconceptrevisiondate, csc.Statusdate, csc.Sdoconceptstatusdate)
-	if _, err := db.ExecContext(ctx, sqlstr, csc.ID, csc.Name, csc.Codesystemoid, csc.Conceptcode, csc.Sdopreferreddesignation, csc.Definitiontext, csc.Precoordinatedflag, csc.Status, csc.Sdoconceptstatus, csc.Supersededbycodesystemconceptid, csc.Umlscui, csc.Umlsaui, csc.Isrootflag, csc.Isconceptflag, csc.Sdoconceptcreateddate, csc.Sdoconceptrevisiondate, csc.Statusdate, csc.Sdoconceptstatusdate); err != nil {
+	logf(sqlstr, viewc.ID, viewc.Name, viewc.Codesystemoid, viewc.Conceptcode, viewc.Sdopreferreddesignation, viewc.Definitiontext, viewc.Precoordinatedflag, viewc.Status, viewc.Sdoconceptstatus, viewc.Supersededbycodesystemconceptid, viewc.Umlscui, viewc.Umlsaui, viewc.Isrootflag, viewc.Isconceptflag, viewc.Sdoconceptcreateddate, viewc.Sdoconceptrevisiondate, viewc.Statusdate, viewc.Sdoconceptstatusdate)
+	if _, err := db.ExecContext(ctx, sqlstr, viewc.ID, viewc.Name, viewc.Codesystemoid, viewc.Conceptcode, viewc.Sdopreferreddesignation, viewc.Definitiontext, viewc.Precoordinatedflag, viewc.Status, viewc.Sdoconceptstatus, viewc.Supersededbycodesystemconceptid, viewc.Umlscui, viewc.Umlsaui, viewc.Isrootflag, viewc.Isconceptflag, viewc.Sdoconceptcreateddate, viewc.Sdoconceptrevisiondate, viewc.Statusdate, viewc.Sdoconceptstatusdate); err != nil {
 		return logerror(err)
 	}
 	// set exists
-	csc._exists = true
+	viewc._exists = true
 	return nil
 }
 
 // Update updates a [CodeSystemConcept] in the database.
-func (csc *CodeSystemConcept) Update(ctx context.Context, db DB) error {
+func (viewc *CodeSystemConcept) Update(ctx context.Context, db DB) error {
 	switch {
-	case !csc._exists: // doesn't exist
+	case !viewc._exists: // doesn't exist
 		return logerror(&ErrUpdateFailed{ErrDoesNotExist})
-	case csc._deleted: // deleted
+	case viewc._deleted: // deleted
 		return logerror(&ErrUpdateFailed{ErrMarkedForDeletion})
 	}
 	// update with composite primary key
@@ -80,25 +80,25 @@ func (csc *CodeSystemConcept) Update(ctx context.Context, db DB) error {
 		`name = $1, codesystemoid = $2, conceptcode = $3, sdopreferreddesignation = $4, definitiontext = $5, precoordinatedflag = $6, status = $7, sdoconceptstatus = $8, supersededbycodesystemconceptid = $9, umlscui = $10, umlsaui = $11, isrootflag = $12, isconceptflag = $13, sdoconceptcreateddate = $14, sdoconceptrevisiondate = $15, statusdate = $16, sdoconceptstatusdate = $17 ` +
 		`WHERE id = $18`
 	// run
-	logf(sqlstr, csc.Name, csc.Codesystemoid, csc.Conceptcode, csc.Sdopreferreddesignation, csc.Definitiontext, csc.Precoordinatedflag, csc.Status, csc.Sdoconceptstatus, csc.Supersededbycodesystemconceptid, csc.Umlscui, csc.Umlsaui, csc.Isrootflag, csc.Isconceptflag, csc.Sdoconceptcreateddate, csc.Sdoconceptrevisiondate, csc.Statusdate, csc.Sdoconceptstatusdate, csc.ID)
-	if _, err := db.ExecContext(ctx, sqlstr, csc.Name, csc.Codesystemoid, csc.Conceptcode, csc.Sdopreferreddesignation, csc.Definitiontext, csc.Precoordinatedflag, csc.Status, csc.Sdoconceptstatus, csc.Supersededbycodesystemconceptid, csc.Umlscui, csc.Umlsaui, csc.Isrootflag, csc.Isconceptflag, csc.Sdoconceptcreateddate, csc.Sdoconceptrevisiondate, csc.Statusdate, csc.Sdoconceptstatusdate, csc.ID); err != nil {
+	logf(sqlstr, viewc.Name, viewc.Codesystemoid, viewc.Conceptcode, viewc.Sdopreferreddesignation, viewc.Definitiontext, viewc.Precoordinatedflag, viewc.Status, viewc.Sdoconceptstatus, viewc.Supersededbycodesystemconceptid, viewc.Umlscui, viewc.Umlsaui, viewc.Isrootflag, viewc.Isconceptflag, viewc.Sdoconceptcreateddate, viewc.Sdoconceptrevisiondate, viewc.Statusdate, viewc.Sdoconceptstatusdate, viewc.ID)
+	if _, err := db.ExecContext(ctx, sqlstr, viewc.Name, viewc.Codesystemoid, viewc.Conceptcode, viewc.Sdopreferreddesignation, viewc.Definitiontext, viewc.Precoordinatedflag, viewc.Status, viewc.Sdoconceptstatus, viewc.Supersededbycodesystemconceptid, viewc.Umlscui, viewc.Umlsaui, viewc.Isrootflag, viewc.Isconceptflag, viewc.Sdoconceptcreateddate, viewc.Sdoconceptrevisiondate, viewc.Statusdate, viewc.Sdoconceptstatusdate, viewc.ID); err != nil {
 		return logerror(err)
 	}
 	return nil
 }
 
 // Save saves the [CodeSystemConcept] to the database.
-func (csc *CodeSystemConcept) Save(ctx context.Context, db DB) error {
-	if csc.Exists() {
-		return csc.Update(ctx, db)
+func (viewc *CodeSystemConcept) Save(ctx context.Context, db DB) error {
+	if viewc.Exists() {
+		return viewc.Update(ctx, db)
 	}
-	return csc.Insert(ctx, db)
+	return viewc.Insert(ctx, db)
 }
 
 // Upsert performs an upsert for [CodeSystemConcept].
-func (csc *CodeSystemConcept) Upsert(ctx context.Context, db DB) error {
+func (viewc *CodeSystemConcept) Upsert(ctx context.Context, db DB) error {
 	switch {
-	case csc._deleted: // deleted
+	case viewc._deleted: // deleted
 		return logerror(&ErrUpsertFailed{ErrMarkedForDeletion})
 	}
 	// upsert
@@ -111,33 +111,33 @@ func (csc *CodeSystemConcept) Upsert(ctx context.Context, db DB) error {
 		`UPDATE SET ` +
 		`name = EXCLUDED.name, codesystemoid = EXCLUDED.codesystemoid, conceptcode = EXCLUDED.conceptcode, sdopreferreddesignation = EXCLUDED.sdopreferreddesignation, definitiontext = EXCLUDED.definitiontext, precoordinatedflag = EXCLUDED.precoordinatedflag, status = EXCLUDED.status, sdoconceptstatus = EXCLUDED.sdoconceptstatus, supersededbycodesystemconceptid = EXCLUDED.supersededbycodesystemconceptid, umlscui = EXCLUDED.umlscui, umlsaui = EXCLUDED.umlsaui, isrootflag = EXCLUDED.isrootflag, isconceptflag = EXCLUDED.isconceptflag, sdoconceptcreateddate = EXCLUDED.sdoconceptcreateddate, sdoconceptrevisiondate = EXCLUDED.sdoconceptrevisiondate, statusdate = EXCLUDED.statusdate, sdoconceptstatusdate = EXCLUDED.sdoconceptstatusdate `
 	// run
-	logf(sqlstr, csc.ID, csc.Name, csc.Codesystemoid, csc.Conceptcode, csc.Sdopreferreddesignation, csc.Definitiontext, csc.Precoordinatedflag, csc.Status, csc.Sdoconceptstatus, csc.Supersededbycodesystemconceptid, csc.Umlscui, csc.Umlsaui, csc.Isrootflag, csc.Isconceptflag, csc.Sdoconceptcreateddate, csc.Sdoconceptrevisiondate, csc.Statusdate, csc.Sdoconceptstatusdate)
-	if _, err := db.ExecContext(ctx, sqlstr, csc.ID, csc.Name, csc.Codesystemoid, csc.Conceptcode, csc.Sdopreferreddesignation, csc.Definitiontext, csc.Precoordinatedflag, csc.Status, csc.Sdoconceptstatus, csc.Supersededbycodesystemconceptid, csc.Umlscui, csc.Umlsaui, csc.Isrootflag, csc.Isconceptflag, csc.Sdoconceptcreateddate, csc.Sdoconceptrevisiondate, csc.Statusdate, csc.Sdoconceptstatusdate); err != nil {
+	logf(sqlstr, viewc.ID, viewc.Name, viewc.Codesystemoid, viewc.Conceptcode, viewc.Sdopreferreddesignation, viewc.Definitiontext, viewc.Precoordinatedflag, viewc.Status, viewc.Sdoconceptstatus, viewc.Supersededbycodesystemconceptid, viewc.Umlscui, viewc.Umlsaui, viewc.Isrootflag, viewc.Isconceptflag, viewc.Sdoconceptcreateddate, viewc.Sdoconceptrevisiondate, viewc.Statusdate, viewc.Sdoconceptstatusdate)
+	if _, err := db.ExecContext(ctx, sqlstr, viewc.ID, viewc.Name, viewc.Codesystemoid, viewc.Conceptcode, viewc.Sdopreferreddesignation, viewc.Definitiontext, viewc.Precoordinatedflag, viewc.Status, viewc.Sdoconceptstatus, viewc.Supersededbycodesystemconceptid, viewc.Umlscui, viewc.Umlsaui, viewc.Isrootflag, viewc.Isconceptflag, viewc.Sdoconceptcreateddate, viewc.Sdoconceptrevisiondate, viewc.Statusdate, viewc.Sdoconceptstatusdate); err != nil {
 		return logerror(err)
 	}
 	// set exists
-	csc._exists = true
+	viewc._exists = true
 	return nil
 }
 
 // Delete deletes the [CodeSystemConcept] from the database.
-func (csc *CodeSystemConcept) Delete(ctx context.Context, db DB) error {
+func (viewc *CodeSystemConcept) Delete(ctx context.Context, db DB) error {
 	switch {
-	case !csc._exists: // doesn't exist
+	case !viewc._exists: // doesn't exist
 		return nil
-	case csc._deleted: // deleted
+	case viewc._deleted: // deleted
 		return nil
 	}
 	// delete with single primary key
 	const sqlstr = `DELETE FROM public.code_system_concept ` +
 		`WHERE id = $1`
 	// run
-	logf(sqlstr, csc.ID)
-	if _, err := db.ExecContext(ctx, sqlstr, csc.ID); err != nil {
+	logf(sqlstr, viewc.ID)
+	if _, err := db.ExecContext(ctx, sqlstr, viewc.ID); err != nil {
 		return logerror(err)
 	}
 	// set deleted
-	csc._deleted = true
+	viewc._deleted = true
 	return nil
 }
 
@@ -160,14 +160,14 @@ func CodeSystemConceptByCodesystemoid(ctx context.Context, db DB, codesystemoid 
 	// process
 	var res []*CodeSystemConcept
 	for rows.Next() {
-		csc := CodeSystemConcept{
+		viewc := CodeSystemConcept{
 			_exists: true,
 		}
 		// scan
-		if err := rows.Scan(&csc.ID, &csc.Name, &csc.Codesystemoid, &csc.Conceptcode, &csc.Sdopreferreddesignation, &csc.Definitiontext, &csc.Precoordinatedflag, &csc.Status, &csc.Sdoconceptstatus, &csc.Supersededbycodesystemconceptid, &csc.Umlscui, &csc.Umlsaui, &csc.Isrootflag, &csc.Isconceptflag, &csc.Sdoconceptcreateddate, &csc.Sdoconceptrevisiondate, &csc.Statusdate, &csc.Sdoconceptstatusdate); err != nil {
+		if err := rows.Scan(&viewc.ID, &viewc.Name, &viewc.Codesystemoid, &viewc.Conceptcode, &viewc.Sdopreferreddesignation, &viewc.Definitiontext, &viewc.Precoordinatedflag, &viewc.Status, &viewc.Sdoconceptstatus, &viewc.Supersededbycodesystemconceptid, &viewc.Umlscui, &viewc.Umlsaui, &viewc.Isrootflag, &viewc.Isconceptflag, &viewc.Sdoconceptcreateddate, &viewc.Sdoconceptrevisiondate, &viewc.Statusdate, &viewc.Sdoconceptstatusdate); err != nil {
 			return nil, logerror(err)
 		}
-		res = append(res, &csc)
+		res = append(res, &viewc)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, logerror(err)
@@ -186,18 +186,18 @@ func CodeSystemConceptByID(ctx context.Context, db DB, id string) (*CodeSystemCo
 		`WHERE id = $1`
 	// run
 	logf(sqlstr, id)
-	csc := CodeSystemConcept{
+	viewc := CodeSystemConcept{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&csc.ID, &csc.Name, &csc.Codesystemoid, &csc.Conceptcode, &csc.Sdopreferreddesignation, &csc.Definitiontext, &csc.Precoordinatedflag, &csc.Status, &csc.Sdoconceptstatus, &csc.Supersededbycodesystemconceptid, &csc.Umlscui, &csc.Umlsaui, &csc.Isrootflag, &csc.Isconceptflag, &csc.Sdoconceptcreateddate, &csc.Sdoconceptrevisiondate, &csc.Statusdate, &csc.Sdoconceptstatusdate); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&viewc.ID, &viewc.Name, &viewc.Codesystemoid, &viewc.Conceptcode, &viewc.Sdopreferreddesignation, &viewc.Definitiontext, &viewc.Precoordinatedflag, &viewc.Status, &viewc.Sdoconceptstatus, &viewc.Supersededbycodesystemconceptid, &viewc.Umlscui, &viewc.Umlsaui, &viewc.Isrootflag, &viewc.Isconceptflag, &viewc.Sdoconceptcreateddate, &viewc.Sdoconceptrevisiondate, &viewc.Statusdate, &viewc.Sdoconceptstatusdate); err != nil {
 		return nil, logerror(err)
 	}
-	return &csc, nil
+	return &viewc, nil
 }
 
 // CodeSystem returns the CodeSystem associated with the [CodeSystemConcept]'s (Codesystemoid).
 //
 // Generated from foreign key 'code_system_concept_codesystemoid_fkey'.
-func (csc *CodeSystemConcept) CodeSystem(ctx context.Context, db DB) (*CodeSystem, error) {
-	return CodeSystemByOid(ctx, db, csc.Codesystemoid)
+func (viewc *CodeSystemConcept) CodeSystem(ctx context.Context, db DB) (*CodeSystem, error) {
+	return CodeSystemByOid(ctx, db, viewc.Codesystemoid)
 }
