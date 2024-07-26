@@ -39,22 +39,22 @@ type CodeSystem struct {
 }
 
 // Exists returns true when the [CodeSystem] exists in the database.
-func (view *CodeSystem) Exists() bool {
-	return view._exists
+func (cs *CodeSystem) Exists() bool {
+	return cs._exists
 }
 
 // Deleted returns true when the [CodeSystem] has been marked for deletion
 // from the database.
-func (view *CodeSystem) Deleted() bool {
-	return view._deleted
+func (cs *CodeSystem) Deleted() bool {
+	return cs._deleted
 }
 
 // Insert inserts the [CodeSystem] to the database.
-func (view *CodeSystem) Insert(ctx context.Context, db DB) error {
+func (cs *CodeSystem) Insert(ctx context.Context, db DB) error {
 	switch {
-	case view._exists: // already exists
+	case cs._exists: // already exists
 		return logerror(&ErrInsertFailed{ErrAlreadyExists})
-	case view._deleted: // deleted
+	case cs._deleted: // deleted
 		return logerror(&ErrInsertFailed{ErrMarkedForDeletion})
 	}
 	// insert (manual)
@@ -64,21 +64,21 @@ func (view *CodeSystem) Insert(ctx context.Context, db DB) error {
 		`$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23` +
 		`)`
 	// run
-	logf(sqlstr, view.Oid, view.ID, view.Name, view.Definitiontext, view.Status, view.Version, view.Versiondescription, view.Assigningauthorityversionname, view.Distributionsourceversionname, view.Distributionsourceid, view.Assigningauthorityid, view.Codesystemcode, view.Sourceurl, view.Hl70396identifier, view.Legacyflag, view.Statusdate, view.Acquireddate, view.Effectivedate, view.Expirydate, view.Assigningauthorityreleasedate, view.Distributionsourcereleasedate, view.Sdocreatedate, view.Lastrevisiondate)
-	if _, err := db.ExecContext(ctx, sqlstr, view.Oid, view.ID, view.Name, view.Definitiontext, view.Status, view.Version, view.Versiondescription, view.Assigningauthorityversionname, view.Distributionsourceversionname, view.Distributionsourceid, view.Assigningauthorityid, view.Codesystemcode, view.Sourceurl, view.Hl70396identifier, view.Legacyflag, view.Statusdate, view.Acquireddate, view.Effectivedate, view.Expirydate, view.Assigningauthorityreleasedate, view.Distributionsourcereleasedate, view.Sdocreatedate, view.Lastrevisiondate); err != nil {
+	logf(sqlstr, cs.Oid, cs.ID, cs.Name, cs.Definitiontext, cs.Status, cs.Version, cs.Versiondescription, cs.Assigningauthorityversionname, cs.Distributionsourceversionname, cs.Distributionsourceid, cs.Assigningauthorityid, cs.Codesystemcode, cs.Sourceurl, cs.Hl70396identifier, cs.Legacyflag, cs.Statusdate, cs.Acquireddate, cs.Effectivedate, cs.Expirydate, cs.Assigningauthorityreleasedate, cs.Distributionsourcereleasedate, cs.Sdocreatedate, cs.Lastrevisiondate)
+	if _, err := db.ExecContext(ctx, sqlstr, cs.Oid, cs.ID, cs.Name, cs.Definitiontext, cs.Status, cs.Version, cs.Versiondescription, cs.Assigningauthorityversionname, cs.Distributionsourceversionname, cs.Distributionsourceid, cs.Assigningauthorityid, cs.Codesystemcode, cs.Sourceurl, cs.Hl70396identifier, cs.Legacyflag, cs.Statusdate, cs.Acquireddate, cs.Effectivedate, cs.Expirydate, cs.Assigningauthorityreleasedate, cs.Distributionsourcereleasedate, cs.Sdocreatedate, cs.Lastrevisiondate); err != nil {
 		return logerror(err)
 	}
 	// set exists
-	view._exists = true
+	cs._exists = true
 	return nil
 }
 
 // Update updates a [CodeSystem] in the database.
-func (view *CodeSystem) Update(ctx context.Context, db DB) error {
+func (cs *CodeSystem) Update(ctx context.Context, db DB) error {
 	switch {
-	case !view._exists: // doesn't exist
+	case !cs._exists: // doesn't exist
 		return logerror(&ErrUpdateFailed{ErrDoesNotExist})
-	case view._deleted: // deleted
+	case cs._deleted: // deleted
 		return logerror(&ErrUpdateFailed{ErrMarkedForDeletion})
 	}
 	// update with composite primary key
@@ -86,25 +86,25 @@ func (view *CodeSystem) Update(ctx context.Context, db DB) error {
 		`id = $1, name = $2, definitiontext = $3, status = $4, version = $5, versiondescription = $6, assigningauthorityversionname = $7, distributionsourceversionname = $8, distributionsourceid = $9, assigningauthorityid = $10, codesystemcode = $11, sourceurl = $12, hl70396identifier = $13, legacyflag = $14, statusdate = $15, acquireddate = $16, effectivedate = $17, expirydate = $18, assigningauthorityreleasedate = $19, distributionsourcereleasedate = $20, sdocreatedate = $21, lastrevisiondate = $22 ` +
 		`WHERE oid = $23`
 	// run
-	logf(sqlstr, view.ID, view.Name, view.Definitiontext, view.Status, view.Version, view.Versiondescription, view.Assigningauthorityversionname, view.Distributionsourceversionname, view.Distributionsourceid, view.Assigningauthorityid, view.Codesystemcode, view.Sourceurl, view.Hl70396identifier, view.Legacyflag, view.Statusdate, view.Acquireddate, view.Effectivedate, view.Expirydate, view.Assigningauthorityreleasedate, view.Distributionsourcereleasedate, view.Sdocreatedate, view.Lastrevisiondate, view.Oid)
-	if _, err := db.ExecContext(ctx, sqlstr, view.ID, view.Name, view.Definitiontext, view.Status, view.Version, view.Versiondescription, view.Assigningauthorityversionname, view.Distributionsourceversionname, view.Distributionsourceid, view.Assigningauthorityid, view.Codesystemcode, view.Sourceurl, view.Hl70396identifier, view.Legacyflag, view.Statusdate, view.Acquireddate, view.Effectivedate, view.Expirydate, view.Assigningauthorityreleasedate, view.Distributionsourcereleasedate, view.Sdocreatedate, view.Lastrevisiondate, view.Oid); err != nil {
+	logf(sqlstr, cs.ID, cs.Name, cs.Definitiontext, cs.Status, cs.Version, cs.Versiondescription, cs.Assigningauthorityversionname, cs.Distributionsourceversionname, cs.Distributionsourceid, cs.Assigningauthorityid, cs.Codesystemcode, cs.Sourceurl, cs.Hl70396identifier, cs.Legacyflag, cs.Statusdate, cs.Acquireddate, cs.Effectivedate, cs.Expirydate, cs.Assigningauthorityreleasedate, cs.Distributionsourcereleasedate, cs.Sdocreatedate, cs.Lastrevisiondate, cs.Oid)
+	if _, err := db.ExecContext(ctx, sqlstr, cs.ID, cs.Name, cs.Definitiontext, cs.Status, cs.Version, cs.Versiondescription, cs.Assigningauthorityversionname, cs.Distributionsourceversionname, cs.Distributionsourceid, cs.Assigningauthorityid, cs.Codesystemcode, cs.Sourceurl, cs.Hl70396identifier, cs.Legacyflag, cs.Statusdate, cs.Acquireddate, cs.Effectivedate, cs.Expirydate, cs.Assigningauthorityreleasedate, cs.Distributionsourcereleasedate, cs.Sdocreatedate, cs.Lastrevisiondate, cs.Oid); err != nil {
 		return logerror(err)
 	}
 	return nil
 }
 
 // Save saves the [CodeSystem] to the database.
-func (view *CodeSystem) Save(ctx context.Context, db DB) error {
-	if view.Exists() {
-		return view.Update(ctx, db)
+func (cs *CodeSystem) Save(ctx context.Context, db DB) error {
+	if cs.Exists() {
+		return cs.Update(ctx, db)
 	}
-	return view.Insert(ctx, db)
+	return cs.Insert(ctx, db)
 }
 
 // Upsert performs an upsert for [CodeSystem].
-func (view *CodeSystem) Upsert(ctx context.Context, db DB) error {
+func (cs *CodeSystem) Upsert(ctx context.Context, db DB) error {
 	switch {
-	case view._deleted: // deleted
+	case cs._deleted: // deleted
 		return logerror(&ErrUpsertFailed{ErrMarkedForDeletion})
 	}
 	// upsert
@@ -117,33 +117,33 @@ func (view *CodeSystem) Upsert(ctx context.Context, db DB) error {
 		`UPDATE SET ` +
 		`id = EXCLUDED.id, name = EXCLUDED.name, definitiontext = EXCLUDED.definitiontext, status = EXCLUDED.status, version = EXCLUDED.version, versiondescription = EXCLUDED.versiondescription, assigningauthorityversionname = EXCLUDED.assigningauthorityversionname, distributionsourceversionname = EXCLUDED.distributionsourceversionname, distributionsourceid = EXCLUDED.distributionsourceid, assigningauthorityid = EXCLUDED.assigningauthorityid, codesystemcode = EXCLUDED.codesystemcode, sourceurl = EXCLUDED.sourceurl, hl70396identifier = EXCLUDED.hl70396identifier, legacyflag = EXCLUDED.legacyflag, statusdate = EXCLUDED.statusdate, acquireddate = EXCLUDED.acquireddate, effectivedate = EXCLUDED.effectivedate, expirydate = EXCLUDED.expirydate, assigningauthorityreleasedate = EXCLUDED.assigningauthorityreleasedate, distributionsourcereleasedate = EXCLUDED.distributionsourcereleasedate, sdocreatedate = EXCLUDED.sdocreatedate, lastrevisiondate = EXCLUDED.lastrevisiondate `
 	// run
-	logf(sqlstr, view.Oid, view.ID, view.Name, view.Definitiontext, view.Status, view.Version, view.Versiondescription, view.Assigningauthorityversionname, view.Distributionsourceversionname, view.Distributionsourceid, view.Assigningauthorityid, view.Codesystemcode, view.Sourceurl, view.Hl70396identifier, view.Legacyflag, view.Statusdate, view.Acquireddate, view.Effectivedate, view.Expirydate, view.Assigningauthorityreleasedate, view.Distributionsourcereleasedate, view.Sdocreatedate, view.Lastrevisiondate)
-	if _, err := db.ExecContext(ctx, sqlstr, view.Oid, view.ID, view.Name, view.Definitiontext, view.Status, view.Version, view.Versiondescription, view.Assigningauthorityversionname, view.Distributionsourceversionname, view.Distributionsourceid, view.Assigningauthorityid, view.Codesystemcode, view.Sourceurl, view.Hl70396identifier, view.Legacyflag, view.Statusdate, view.Acquireddate, view.Effectivedate, view.Expirydate, view.Assigningauthorityreleasedate, view.Distributionsourcereleasedate, view.Sdocreatedate, view.Lastrevisiondate); err != nil {
+	logf(sqlstr, cs.Oid, cs.ID, cs.Name, cs.Definitiontext, cs.Status, cs.Version, cs.Versiondescription, cs.Assigningauthorityversionname, cs.Distributionsourceversionname, cs.Distributionsourceid, cs.Assigningauthorityid, cs.Codesystemcode, cs.Sourceurl, cs.Hl70396identifier, cs.Legacyflag, cs.Statusdate, cs.Acquireddate, cs.Effectivedate, cs.Expirydate, cs.Assigningauthorityreleasedate, cs.Distributionsourcereleasedate, cs.Sdocreatedate, cs.Lastrevisiondate)
+	if _, err := db.ExecContext(ctx, sqlstr, cs.Oid, cs.ID, cs.Name, cs.Definitiontext, cs.Status, cs.Version, cs.Versiondescription, cs.Assigningauthorityversionname, cs.Distributionsourceversionname, cs.Distributionsourceid, cs.Assigningauthorityid, cs.Codesystemcode, cs.Sourceurl, cs.Hl70396identifier, cs.Legacyflag, cs.Statusdate, cs.Acquireddate, cs.Effectivedate, cs.Expirydate, cs.Assigningauthorityreleasedate, cs.Distributionsourcereleasedate, cs.Sdocreatedate, cs.Lastrevisiondate); err != nil {
 		return logerror(err)
 	}
 	// set exists
-	view._exists = true
+	cs._exists = true
 	return nil
 }
 
 // Delete deletes the [CodeSystem] from the database.
-func (view *CodeSystem) Delete(ctx context.Context, db DB) error {
+func (cs *CodeSystem) Delete(ctx context.Context, db DB) error {
 	switch {
-	case !view._exists: // doesn't exist
+	case !cs._exists: // doesn't exist
 		return nil
-	case view._deleted: // deleted
+	case cs._deleted: // deleted
 		return nil
 	}
 	// delete with single primary key
 	const sqlstr = `DELETE FROM public.code_system ` +
 		`WHERE oid = $1`
 	// run
-	logf(sqlstr, view.Oid)
-	if _, err := db.ExecContext(ctx, sqlstr, view.Oid); err != nil {
+	logf(sqlstr, cs.Oid)
+	if _, err := db.ExecContext(ctx, sqlstr, cs.Oid); err != nil {
 		return logerror(err)
 	}
 	// set deleted
-	view._deleted = true
+	cs._deleted = true
 	return nil
 }
 
@@ -158,13 +158,13 @@ func CodeSystemByID(ctx context.Context, db DB, id string) (*CodeSystem, error) 
 		`WHERE id = $1`
 	// run
 	logf(sqlstr, id)
-	view := CodeSystem{
+	cs := CodeSystem{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&view.Oid, &view.ID, &view.Name, &view.Definitiontext, &view.Status, &view.Version, &view.Versiondescription, &view.Assigningauthorityversionname, &view.Distributionsourceversionname, &view.Distributionsourceid, &view.Assigningauthorityid, &view.Codesystemcode, &view.Sourceurl, &view.Hl70396identifier, &view.Legacyflag, &view.Statusdate, &view.Acquireddate, &view.Effectivedate, &view.Expirydate, &view.Assigningauthorityreleasedate, &view.Distributionsourcereleasedate, &view.Sdocreatedate, &view.Lastrevisiondate); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&cs.Oid, &cs.ID, &cs.Name, &cs.Definitiontext, &cs.Status, &cs.Version, &cs.Versiondescription, &cs.Assigningauthorityversionname, &cs.Distributionsourceversionname, &cs.Distributionsourceid, &cs.Assigningauthorityid, &cs.Codesystemcode, &cs.Sourceurl, &cs.Hl70396identifier, &cs.Legacyflag, &cs.Statusdate, &cs.Acquireddate, &cs.Effectivedate, &cs.Expirydate, &cs.Assigningauthorityreleasedate, &cs.Distributionsourcereleasedate, &cs.Sdocreatedate, &cs.Lastrevisiondate); err != nil {
 		return nil, logerror(err)
 	}
-	return &view, nil
+	return &cs, nil
 }
 
 // CodeSystemByOid retrieves a row from 'public.code_system' as a [CodeSystem].
@@ -178,13 +178,13 @@ func CodeSystemByOid(ctx context.Context, db DB, oid string) (*CodeSystem, error
 		`WHERE oid = $1`
 	// run
 	logf(sqlstr, oid)
-	view := CodeSystem{
+	cs := CodeSystem{
 		_exists: true,
 	}
-	if err := db.QueryRowContext(ctx, sqlstr, oid).Scan(&view.Oid, &view.ID, &view.Name, &view.Definitiontext, &view.Status, &view.Version, &view.Versiondescription, &view.Assigningauthorityversionname, &view.Distributionsourceversionname, &view.Distributionsourceid, &view.Assigningauthorityid, &view.Codesystemcode, &view.Sourceurl, &view.Hl70396identifier, &view.Legacyflag, &view.Statusdate, &view.Acquireddate, &view.Effectivedate, &view.Expirydate, &view.Assigningauthorityreleasedate, &view.Distributionsourcereleasedate, &view.Sdocreatedate, &view.Lastrevisiondate); err != nil {
+	if err := db.QueryRowContext(ctx, sqlstr, oid).Scan(&cs.Oid, &cs.ID, &cs.Name, &cs.Definitiontext, &cs.Status, &cs.Version, &cs.Versiondescription, &cs.Assigningauthorityversionname, &cs.Distributionsourceversionname, &cs.Distributionsourceid, &cs.Assigningauthorityid, &cs.Codesystemcode, &cs.Sourceurl, &cs.Hl70396identifier, &cs.Legacyflag, &cs.Statusdate, &cs.Acquireddate, &cs.Effectivedate, &cs.Expirydate, &cs.Assigningauthorityreleasedate, &cs.Distributionsourcereleasedate, &cs.Sdocreatedate, &cs.Lastrevisiondate); err != nil {
 		return nil, logerror(err)
 	}
-	return &view, nil
+	return &cs, nil
 }
 
 // All retrieves all rows from 'public.code_system'
@@ -197,14 +197,14 @@ func GetAllCodeSystems(ctx context.Context, db DB) (*[]CodeSystem, error) {
 		return nil, logerror(err)
 	}
 	for rows.Next() {
-		view := CodeSystem{
+		cs := CodeSystem{
 			_exists: true,
 		}
-		err := rows.Scan(&view.Oid, &view.ID, &view.Name, &view.Definitiontext, &view.Status, &view.Version, &view.Versiondescription, &view.Assigningauthorityversionname, &view.Distributionsourceversionname, &view.Distributionsourceid, &view.Assigningauthorityid, &view.Codesystemcode, &view.Sourceurl, &view.Hl70396identifier, &view.Legacyflag, &view.Statusdate, &view.Acquireddate, &view.Effectivedate, &view.Expirydate, &view.Assigningauthorityreleasedate, &view.Distributionsourcereleasedate, &view.Sdocreatedate, &view.Lastrevisiondate)
+		err := rows.Scan(&cs.Oid, &cs.ID, &cs.Name, &cs.Definitiontext, &cs.Status, &cs.Version, &cs.Versiondescription, &cs.Assigningauthorityversionname, &cs.Distributionsourceversionname, &cs.Distributionsourceid, &cs.Assigningauthorityid, &cs.Codesystemcode, &cs.Sourceurl, &cs.Hl70396identifier, &cs.Legacyflag, &cs.Statusdate, &cs.Acquireddate, &cs.Effectivedate, &cs.Expirydate, &cs.Assigningauthorityreleasedate, &cs.Distributionsourcereleasedate, &cs.Sdocreatedate, &cs.Lastrevisiondate)
 		if err != nil {
 			return nil, logerror(err)
 		}
-		codeSystems = append(codeSystems, view)
+		codeSystems = append(codeSystems, cs)
 	}
 	return &codeSystems, nil
 }
