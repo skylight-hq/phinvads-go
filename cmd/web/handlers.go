@@ -59,7 +59,7 @@ func (app *application) getCodeSystemByOID(w http.ResponseWriter, r *http.Reques
 func (app *application) getAllCodeSystemConcepts(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 
-	codeConcepts, err := models.GetAllCodeSystemConcepts(ctx, app.db)
+	codeSystemConcepts, err := models.GetAllCodeSystemConcepts(ctx, app.db)
 	if err != nil {
 		if errors.Is(err, models.ErrDoesNotExist) {
 			http.NotFound(w, r)
@@ -71,20 +71,20 @@ func (app *application) getAllCodeSystemConcepts(w http.ResponseWriter, r *http.
 
 	w.Header().Set("Content-Type", "application/json")
 
-	json.NewEncoder(w).Encode(codeConcepts)
+	json.NewEncoder(w).Encode(codeSystemConcepts)
 }
 
-func (app *application) getCodeSystemConceptByOID(w http.ResponseWriter, r *http.Request) {
+func (app *application) getCodeSystemConceptByID(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 
-	oid := r.PathValue("oid")
+	id := r.PathValue("id")
 
-	codeConcepts, err := models.CodeSystemConceptByOid(ctx, app.db, oid)
+	codeSystemConcept, err := models.CodeSystemConceptByID(ctx, app.db, id)
 	if err != nil {
 		if errors.Is(err, models.ErrDoesNotExist) {
 			http.NotFound(w, r)
 		} else if errors.Is(err, sql.ErrNoRows) {
-			errorString := fmt.Sprintf("Error: Code System Concept %s not found", oid)
+			errorString := fmt.Sprintf("Error: Code System Concept%s not found", id)
 			http.Error(w, errorString, http.StatusNotFound)
 		} else {
 			app.serverError(w, r, err)
@@ -94,5 +94,5 @@ func (app *application) getCodeSystemConceptByOID(w http.ResponseWriter, r *http
 
 	w.Header().Set("Content-Type", "application/json")
 
-	json.NewEncoder(w).Encode(codeConcepts)
+	json.NewEncoder(w).Encode(codeSystemConcept)
 }

@@ -14,7 +14,7 @@ func (app *application) routes() http.Handler {
 	mux.HandleFunc("GET /api/code-systems", app.getAllCodeSystems)
 	mux.HandleFunc("GET /api/code-systems/{oid}", app.getCodeSystemByOID)
 	mux.HandleFunc("GET /api/code-system-concepts", app.getAllCodeSystemConcepts)
-	mux.HandleFunc("GET /api/code-system-concepts/{oid}", app.getCodeSystemConceptByOID)
+	mux.HandleFunc("GET /api/code-system-concepts/{id}", app.getCodeSystemConceptByID)
 
 	standard := alice.New(app.recoverPanic, app.logRequest, commonHeaders)
 
