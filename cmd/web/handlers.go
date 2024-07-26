@@ -15,6 +15,11 @@ func (app *application) healthcheck(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("status: OK"))
 }
 
+func (app *application) count(w http.ResponseWriter, r *http.Request) {
+	app.clickCount++
+	w.Write([]byte(fmt.Sprintf("<p id=\"click-counter\">Num clicks: %d</p>", app.clickCount)))
+}
+
 func (app *application) getAllCodeSystems(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 

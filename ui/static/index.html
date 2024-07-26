@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang='en'>
+    <head>
+        <meta charset='utf-8'>
+        <title>PHIN VADS</title>
+        <script src="https://unpkg.com/htmx.org@2.0.1" integrity="sha384-QWGpdj554B4ETpJJC9z+ZHJcA/i59TyjxEPXiiUgN2WmTyV5OEZWCD6gQhgkdpB/" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <header>
+            <h1><a href='/'>PHIN VADS</a></h1>
+        </header>
+        <main>
+          <p>Hello world!</p>
+          <button hx-post="/api/count" hx-target="#click-counter">Click me!</button>
+          <p id="click-counter">Num clicks: 0</p>
+        </main>
+    </body>
+</html>

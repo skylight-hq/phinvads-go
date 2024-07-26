@@ -12,8 +12,9 @@ import (
 )
 
 type application struct {
-	logger *slog.Logger
-	db     *sql.DB
+	logger     *slog.Logger
+	db         *sql.DB
+	clickCount int
 }
 
 func main() {
@@ -30,7 +31,7 @@ func main() {
 	}
 	defer db.Close()
 
-	app := &application{logger, db}
+	app := &application{logger, db, 0}
 
 	logger.Info("starting server", slog.String("addr", *addr))
 
