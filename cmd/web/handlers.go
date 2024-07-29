@@ -173,9 +173,7 @@ func (app *application) getCodeSystemConceptByID(w http.ResponseWriter, r *http.
 }
 
 func (app *application) getAllValueSets(w http.ResponseWriter, r *http.Request) {
-	ctx := context.Background()
-
-	codeSystems, err := models.GetAllValueSets(ctx, app.db)
+	codeSystems, err := models.GetAllValueSets(r.Context(), app.db)
 	if err != nil {
 		if errors.Is(err, models.ErrDoesNotExist) {
 			http.NotFound(w, r)
@@ -192,10 +190,8 @@ func (app *application) getAllValueSets(w http.ResponseWriter, r *http.Request) 
 
 // getValueSetByOid can handle either an ID or an OID; see helper method DetermineIdType in models/db.xo.go
 func (app *application) getValueSetByOID(w http.ResponseWriter, r *http.Request) {
-	ctx := context.Background()
-
 	id := r.PathValue("oid")
-	valueSet, err := models.ValueSetByOid(ctx, app.db, id)
+	valueSet, err := models.ValueSetByOid(r.Context(), app.db, id)
 
 	if err != nil {
 		if errors.Is(err, models.ErrDoesNotExist) {
