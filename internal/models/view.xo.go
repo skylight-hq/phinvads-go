@@ -148,3 +148,24 @@ func ViewByID(ctx context.Context, db DB, id string) (*View, error) {
 	}
 	return &v, nil
 }
+
+func GetAllViews(ctx context.Context, db DB) (*[]View, error) {
+	const sqlstr = `SELECT * FROM public.view`
+	logf(sqlstr)
+	codeSystems := []View{}
+	rows, err := db.QueryContext(ctx, sqlstr)
+	if err != nil {
+		return nil, logerror(err)
+	}
+	for rows.Next() {
+		v := View{
+			_exists: true,
+		}
+		err := rows.Scan(&v.Name, &v.ID, &v.Descriptiontext, &v.Status, &v.Viewnotes, &v.Statusdate)
+		if err != nil {
+			return nil, logerror(err)
+		}
+		codeSystems = append(codeSystems, v)
+	}
+	return &codeSystems, nil
+}

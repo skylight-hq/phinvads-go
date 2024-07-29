@@ -1,0 +1,29 @@
+GET http://localhost:4000/api/code-systems
+accept: application/json
+
+###
+
+GET http://localhost:4000/api/code-systems/2.16.840.1.113883.12.78
+accept: application/json
+
+###
+
+GET http://localhost:4000/api/views
+accept: application/json
+
+###
+
+GET http://localhost:4000/api/views/75CCFC2D-47AF-DD11-A7F5-00188B398520
+accept: application/json
+
+###
+
+GET http://localhost:4000/api/view-versions-by-view/75CCFC2D-47AF-DD11-A7F5-00188B398520
+accept: application/json
+
+###
+
+GET http://localhost:4000/api/view-versions/00CBA20C-E51F-DF11-B334-0015173D1785
+accept: application/json
+
+###
