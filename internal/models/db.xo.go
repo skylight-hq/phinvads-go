@@ -95,6 +95,8 @@ const (
 	ErrMarkedForDeletion Error = "marked for deletion"
 )
 
+var ErrBadRequest = fmt.Errorf("unrecognized identifier")
+
 // ErrInsertFailed is the insert failed error.
 type ErrInsertFailed struct {
 	Err error

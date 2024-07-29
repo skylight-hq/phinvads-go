@@ -5,6 +5,8 @@ package models
 import (
 	"context"
 	"database/sql"
+	"fmt"
+	"regexp"
 	"time"
 )
 
@@ -132,36 +134,22 @@ func (vs *ValueSet) Delete(ctx context.Context, db DB) error {
 	vs._deleted = true
 	return nil
 }
-
-// ValueSetByID retrieves a row from 'public.value_set' as a [ValueSet].
-//
-// Generated from index 'value_set_id_key'.
-func ValueSetByID(ctx context.Context, db DB, id string) (*ValueSet, error) {
-	// query
-	const sqlstr = `SELECT ` +
-		`oid, id, name, code, status, definitiontext, scopenotetext, assigningauthorityid, legacyflag, statusdate ` +
-		`FROM public.value_set ` +
-		`WHERE id = $1`
-	// run
-	logf(sqlstr, id)
-	vs := ValueSet{
-		_exists: true,
-	}
-	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&vs.Oid, &vs.ID, &vs.Name, &vs.Code, &vs.Status, &vs.Definitiontext, &vs.Scopenotetext, &vs.Assigningauthorityid, &vs.Legacyflag, &vs.Statusdate); err != nil {
-		return nil, logerror(err)
-	}
-	return &vs, nil
-}
-
 // ValueSetByOid retrieves a row from 'public.value_set' as a [ValueSet].
 //
 // Generated from index 'value_set_pkey'.
+//
+// ValueSetByOid
 func ValueSetByOid(ctx context.Context, db DB, oid string) (*ValueSet, error) {
+	fmt.Println("kcd", oid)
+	dbId, err := DetermineIdType(oid)
+	if err != nil {
+		return nil, logerror(err)
+	}
 	// query
-	const sqlstr = `SELECT ` +
+	var sqlstr = `SELECT ` + 
 		`oid, id, name, code, status, definitiontext, scopenotetext, assigningauthorityid, legacyflag, statusdate ` +
 		`FROM public.value_set ` +
-		`WHERE oid = $1`
+		`WHERE ` + dbId + ` = $1`
 	// run
 	logf(sqlstr, oid)
 	vs := ValueSet{
@@ -192,4 +180,19 @@ func GetAllValueSets(ctx context.Context, db DB) (*[]ValueSet, error) {
 		valueSets = append(valueSets, vs)
 	}
 	return &valueSets, nil
+}
+
+// DetermineIdType returns either "id", "oid", or an error, depending on the regex match
+func DetermineIdType(input string) (idType string, err error) {
+	validId, _ := regexp.MatchString("^[a-zA-Z0-9-]+$", input)
+	validOid, _ := regexp.MatchString("^[0-9.]+$",input)
+	
+	fmt.Println(validId, validOid)
+	if validId {
+		return "id", nil
+	} else if validOid {
+		return "oid", nil
+	} else {
+		return "", ErrBadRequest
+	}
 }

@@ -189,3 +189,29 @@ func (app *application) getAllValueSets(w http.ResponseWriter, r *http.Request) 
 
 	json.NewEncoder(w).Encode(codeSystems)
 }
+
+// getValueSetByOid can handle either an ID or an OID; see helper method DetermineIdType in models/db.xo.go
+func (app *application) getValueSetByOID(w http.ResponseWriter, r *http.Request) {
+	ctx := context.Background()
+
+	id := r.PathValue("oid")
+	valueSet, err := models.ValueSetByOid(ctx, app.db, id)
+
+	if err != nil {
+		if errors.Is(err, models.ErrDoesNotExist) {
+			http.NotFound(w, r)
+		} else if errors.Is(err, sql.ErrNoRows) {
+			errorString := fmt.Sprintf("Error: Value Set %s not found", id)
+			http.Error(w, errorString, http.StatusNotFound)
+		} else if errors.Is(err, models.ErrBadRequest) {
+			app.badRequest(w, r, err)
+		} else {
+			app.serverError(w, r, err)
+		}
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	json.NewEncoder(w).Encode(valueSet)
+}
