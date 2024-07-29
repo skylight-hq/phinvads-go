@@ -76,7 +76,7 @@ func (app *application) getViewByID(w http.ResponseWriter, r *http.Request) {
 		if errors.Is(err, models.ErrDoesNotExist) {
 			http.NotFound(w, r)
 		} else if errors.Is(err, sql.ErrNoRows) {
-			errorString := fmt.Sprintf("Error: View not found", id)
+			errorString := fmt.Sprintf("Error: View %s not found", id)
 			http.Error(w, errorString, http.StatusNotFound)
 		} else {
 			app.serverError(w, r, err)
