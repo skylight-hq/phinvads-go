@@ -199,7 +199,7 @@ func CodeSystemConceptByID(ctx context.Context, db DB, id string) (*CodeSystemCo
 func GetAllCodeSystemConcepts(ctx context.Context, db DB) (*[]CodeSystemConcept, error) {
 	const sqlstr = `SELECT * FROM public.code_system_concept`
 	logf(sqlstr)
-	codeSystems := []CodeSystemConcept{}
+	codeSystemConcepts := []CodeSystemConcept{}
 	rows, err := db.QueryContext(ctx, sqlstr)
 	if err != nil {
 		return nil, logerror(err)
@@ -208,13 +208,13 @@ func GetAllCodeSystemConcepts(ctx context.Context, db DB) (*[]CodeSystemConcept,
 		csc := CodeSystemConcept{
 			_exists: true,
 		}
-		err := rows.Scan(&csc.ID, &csc.Conceptcode, &csc.Name, &csc.Codesystemoid, &csc.Status, &csc.Statusdate)
+		err := rows.Scan(&csc.ID, &csc.Name, &csc.Codesystemoid, &csc.Conceptcode, &csc.Definitiontext, &csc.Status, &csc.Statusdate)
 		if err != nil {
 			return nil, logerror(err)
 		}
-		codeSystems = append(codeSystems, csc)
+		codeSystemConcepts = append(codeSystemConcepts, csc)
 	}
-	return &codeSystems, nil
+	return &codeSystemConcepts, nil
 }
 
 // CodeSystem returns the CodeSystem associated with the [CodeSystemConcept]'s (Codesystemoid).
