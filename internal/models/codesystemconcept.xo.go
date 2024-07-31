@@ -195,6 +195,28 @@ func CodeSystemConceptByID(ctx context.Context, db DB, id string) (*CodeSystemCo
 	return &csc, nil
 }
 
+// All retrieves all rows from 'public.code_system_concept'
+func GetAllCodeSystemConcepts(ctx context.Context, db DB) (*[]CodeSystemConcept, error) {
+	const sqlstr = `SELECT * FROM public.code_system_concept`
+	logf(sqlstr)
+	codeSystemConcepts := []CodeSystemConcept{}
+	rows, err := db.QueryContext(ctx, sqlstr)
+	if err != nil {
+		return nil, logerror(err)
+	}
+	for rows.Next() {
+		csc := CodeSystemConcept{
+			_exists: true,
+		}
+		err := rows.Scan(&csc.ID, &csc.Name, &csc.Codesystemoid, &csc.Conceptcode, &csc.Definitiontext, &csc.Status, &csc.Statusdate)
+		if err != nil {
+			return nil, logerror(err)
+		}
+		codeSystemConcepts = append(codeSystemConcepts, csc)
+	}
+	return &codeSystemConcepts, nil
+}
+
 // CodeSystem returns the CodeSystem associated with the [CodeSystemConcept]'s (Codesystemoid).
 //
 // Generated from foreign key 'code_system_concept_codesystemoid_fkey'.

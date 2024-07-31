@@ -129,3 +129,44 @@ func (app *application) getViewVersionsByViewID(w http.ResponseWriter, r *http.R
 
 	json.NewEncoder(w).Encode(viewVersions)
 }
+
+func (app *application) getAllCodeSystemConcepts(w http.ResponseWriter, r *http.Request) {
+	ctx := context.Background()
+
+	codeSystemConcepts, err := models.GetAllCodeSystemConcepts(ctx, app.db)
+	if err != nil {
+		if errors.Is(err, models.ErrDoesNotExist) {
+			http.NotFound(w, r)
+		} else {
+			app.serverError(w, r, err)
+		}
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	json.NewEncoder(w).Encode(codeSystemConcepts)
+}
+
+func (app *application) getCodeSystemConceptByID(w http.ResponseWriter, r *http.Request) {
+	ctx := context.Background()
+
+	id := r.PathValue("id")
+
+	codeSystemConcept, err := models.CodeSystemConceptByID(ctx, app.db, id)
+	if err != nil {
+		if errors.Is(err, models.ErrDoesNotExist) {
+			http.NotFound(w, r)
+		} else if errors.Is(err, sql.ErrNoRows) {
+			errorString := fmt.Sprintf("Error: Code System Concept%s not found", id)
+			http.Error(w, errorString, http.StatusNotFound)
+		} else {
+			app.serverError(w, r, err)
+		}
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	json.NewEncoder(w).Encode(codeSystemConcept)
+}
