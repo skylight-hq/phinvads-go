@@ -173,7 +173,7 @@ func (app *application) getCodeSystemConceptByID(w http.ResponseWriter, r *http.
 }
 
 func (app *application) getAllValueSets(w http.ResponseWriter, r *http.Request) {
-	codeSystems, err := models.GetAllValueSets(r.Context(), app.db)
+	valueSets, err := models.GetAllValueSets(r.Context(), app.db)
 	if err != nil {
 		if errors.Is(err, models.ErrDoesNotExist) {
 			http.NotFound(w, r)
@@ -185,7 +185,7 @@ func (app *application) getAllValueSets(w http.ResponseWriter, r *http.Request) 
 
 	w.Header().Set("Content-Type", "application/json")
 
-	json.NewEncoder(w).Encode(codeSystems)
+	json.NewEncoder(w).Encode(valueSets)
 }
 
 // getValueSetByOid can handle either an ID or an OID; see helper method DetermineIdType in models/db.xo.go

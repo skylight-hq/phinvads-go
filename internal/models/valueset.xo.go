@@ -135,14 +135,12 @@ func (vs *ValueSet) Delete(ctx context.Context, db DB) error {
 // ValueSetByOid retrieves a row from 'public.value_set' as a [ValueSet].
 //
 // Generated from index 'value_set_pkey'.
-//
-// ValueSetByOid
 func ValueSetByOid(ctx context.Context, db DB, oid string) (*ValueSet, error) {
 	// query
-	const sqlstr = (`SELECT ` + 
+	const sqlstr = `SELECT ` + 
 		`oid, id, name, code, status, definitiontext, scopenotetext, assigningauthorityid, legacyflag, statusdate ` +
 		`FROM public.value_set ` +
-		`WHERE id = $1 OR oid = $1`)
+		`WHERE id = $1 OR oid = $1`
 
 	// run
 	logf(sqlstr, oid)
