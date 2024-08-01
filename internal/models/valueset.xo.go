@@ -132,27 +132,6 @@ func (vs *ValueSet) Delete(ctx context.Context, db DB) error {
 	vs._deleted = true
 	return nil
 }
-
-// ValueSetByID retrieves a row from 'public.value_set' as a [ValueSet].
-//
-// Generated from index 'value_set_id_key'.
-func ValueSetByID(ctx context.Context, db DB, id string) (*ValueSet, error) {
-	// query
-	const sqlstr = `SELECT ` +
-		`oid, id, name, code, status, definitiontext, scopenotetext, assigningauthorityid, legacyflag, statusdate ` +
-		`FROM public.value_set ` +
-		`WHERE id = $1`
-	// run
-	logf(sqlstr, id)
-	vs := ValueSet{
-		_exists: true,
-	}
-	if err := db.QueryRowContext(ctx, sqlstr, id).Scan(&vs.Oid, &vs.ID, &vs.Name, &vs.Code, &vs.Status, &vs.Definitiontext, &vs.Scopenotetext, &vs.Assigningauthorityid, &vs.Legacyflag, &vs.Statusdate); err != nil {
-		return nil, logerror(err)
-	}
-	return &vs, nil
-}
-
 // ValueSetByOid retrieves a row from 'public.value_set' as a [ValueSet].
 //
 // Generated from index 'value_set_pkey'.
@@ -161,7 +140,8 @@ func ValueSetByOid(ctx context.Context, db DB, oid string) (*ValueSet, error) {
 	const sqlstr = `SELECT ` +
 		`oid, id, name, code, status, definitiontext, scopenotetext, assigningauthorityid, legacyflag, statusdate ` +
 		`FROM public.value_set ` +
-		`WHERE oid = $1`
+		`WHERE id = $1 OR oid = $1`
+
 	// run
 	logf(sqlstr, oid)
 	vs := ValueSet{
@@ -171,4 +151,25 @@ func ValueSetByOid(ctx context.Context, db DB, oid string) (*ValueSet, error) {
 		return nil, logerror(err)
 	}
 	return &vs, nil
+}
+// All retrieves all rows from 'public.value_set'
+func GetAllValueSets(ctx context.Context, db DB) (*[]ValueSet, error) {
+	const sqlstr = `SELECT * FROM public.value_set`
+	logf(sqlstr)
+	valueSets := []ValueSet{}
+	rows, err := db.QueryContext(ctx, sqlstr)
+	if err != nil {
+		return nil, logerror(err)
+	}
+	for rows.Next() {
+		vs := ValueSet{
+			_exists: true,
+		}
+		err := rows.Scan(&vs.Oid, &vs.ID, &vs.Name, &vs.Code, &vs.Status, &vs.Definitiontext, &vs.Scopenotetext, &vs.Assigningauthorityid, &vs.Legacyflag, &vs.Statusdate)
+		if err != nil {
+			return nil, logerror(err)
+		}
+		valueSets = append(valueSets, vs)
+	}
+	return &valueSets, nil
 }

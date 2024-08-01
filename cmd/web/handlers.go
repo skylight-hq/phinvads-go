@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"encoding/json"
 	"errors"
@@ -75,7 +76,7 @@ func (app *application) getViewByID(w http.ResponseWriter, r *http.Request) {
 		if errors.Is(err, models.ErrDoesNotExist) {
 			http.NotFound(w, r)
 		} else if errors.Is(err, sql.ErrNoRows) {
-			errorString := fmt.Sprintf("Error: View not found", id)
+			errorString := fmt.Sprintf("Error: View %s not found", id)
 			http.Error(w, errorString, http.StatusNotFound)
 		} else {
 			app.serverError(w, r, err)
@@ -169,4 +170,44 @@ func (app *application) getCodeSystemConceptByID(w http.ResponseWriter, r *http.
 	w.Header().Set("Content-Type", "application/json")
 
 	json.NewEncoder(w).Encode(codeSystemConcept)
+}
+
+func (app *application) getAllValueSets(w http.ResponseWriter, r *http.Request) {
+	valueSets, err := models.GetAllValueSets(r.Context(), app.db)
+	if err != nil {
+		if errors.Is(err, models.ErrDoesNotExist) {
+			http.NotFound(w, r)
+		} else {
+			app.serverError(w, r, err)
+		}
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	json.NewEncoder(w).Encode(valueSets)
+}
+
+// getValueSetByOid can retrieve a resource via either ID or an OID (see models/valueset.xo.go)
+func (app *application) getValueSetByOID(w http.ResponseWriter, r *http.Request) {
+	id := r.PathValue("oid")
+	valueSet, err := models.ValueSetByOid(r.Context(), app.db, id)
+
+	if err != nil {
+		if errors.Is(err, models.ErrDoesNotExist) {
+			http.NotFound(w, r)
+		} else if errors.Is(err, sql.ErrNoRows) {
+			errorString := fmt.Sprintf("Error: Value Set %s not found", id)
+			http.Error(w, errorString, http.StatusNotFound)
+		} else if errors.Is(err, models.ErrBadRequest) {
+			app.badRequest(w, r, err)
+		} else {
+			app.serverError(w, r, err)
+		}
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	json.NewEncoder(w).Encode(valueSet)
 }
