@@ -5,8 +5,6 @@ package models
 import (
 	"context"
 	"database/sql"
-	"fmt"
-	"regexp"
 	"time"
 )
 
@@ -140,16 +138,12 @@ func (vs *ValueSet) Delete(ctx context.Context, db DB) error {
 //
 // ValueSetByOid
 func ValueSetByOid(ctx context.Context, db DB, oid string) (*ValueSet, error) {
-	fmt.Println("kcd", oid)
-	dbId, err := DetermineIdType(oid)
-	if err != nil {
-		return nil, logerror(err)
-	}
 	// query
-	var sqlstr = `SELECT ` + 
+	var sqlstr = (`SELECT ` + 
 		`oid, id, name, code, status, definitiontext, scopenotetext, assigningauthorityid, legacyflag, statusdate ` +
 		`FROM public.value_set ` +
-		`WHERE ` + dbId + ` = $1`
+		`WHERE id = $1 OR oid = $1`)
+
 	// run
 	logf(sqlstr, oid)
 	vs := ValueSet{
@@ -180,19 +174,4 @@ func GetAllValueSets(ctx context.Context, db DB) (*[]ValueSet, error) {
 		valueSets = append(valueSets, vs)
 	}
 	return &valueSets, nil
-}
-
-// DetermineIdType returns either "id", "oid", or an error, depending on the regex match
-func DetermineIdType(input string) (idType string, err error) {
-	validId, _ := regexp.MatchString("^[a-zA-Z0-9-]+$", input)
-	validOid, _ := regexp.MatchString("^[0-9.]+$",input)
-	
-	fmt.Println(validId, validOid)
-	if validId {
-		return "id", nil
-	} else if validOid {
-		return "oid", nil
-	} else {
-		return "", ErrBadRequest
-	}
 }
