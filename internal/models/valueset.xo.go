@@ -137,7 +137,7 @@ func (vs *ValueSet) Delete(ctx context.Context, db DB) error {
 // Generated from index 'value_set_pkey'.
 func ValueSetByOid(ctx context.Context, db DB, oid string) (*ValueSet, error) {
 	// query
-	const sqlstr = `SELECT ` + 
+	const sqlstr = `SELECT ` +
 		`oid, id, name, code, status, definitiontext, scopenotetext, assigningauthorityid, legacyflag, statusdate ` +
 		`FROM public.value_set ` +
 		`WHERE id = $1 OR oid = $1`
