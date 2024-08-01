@@ -188,7 +188,7 @@ func (app *application) getAllValueSets(w http.ResponseWriter, r *http.Request) 
 	json.NewEncoder(w).Encode(valueSets)
 }
 
-// getValueSetByOid can handle either an ID or an OID; see helper method DetermineIdType in models/db.xo.go
+// getValueSetByOid can retrieve a resource via either ID or an OID (see models.valueset.xo.go)
 func (app *application) getValueSetByOID(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("oid")
 	valueSet, err := models.ValueSetByOid(r.Context(), app.db, id)
