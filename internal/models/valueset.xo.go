@@ -139,7 +139,7 @@ func (vs *ValueSet) Delete(ctx context.Context, db DB) error {
 // ValueSetByOid
 func ValueSetByOid(ctx context.Context, db DB, oid string) (*ValueSet, error) {
 	// query
-	var sqlstr = (`SELECT ` + 
+	const sqlstr = (`SELECT ` + 
 		`oid, id, name, code, status, definitiontext, scopenotetext, assigningauthorityid, legacyflag, statusdate ` +
 		`FROM public.value_set ` +
 		`WHERE id = $1 OR oid = $1`)
