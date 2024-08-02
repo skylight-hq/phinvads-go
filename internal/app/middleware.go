@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"fmt"
@@ -21,7 +21,7 @@ func commonHeaders(next http.Handler) http.Handler {
 	})
 }
 
-func (app *application) logRequest(next http.Handler) http.Handler {
+func (app *Application) logRequest(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var (
 			ip     = r.RemoteAddr
@@ -36,7 +36,7 @@ func (app *application) logRequest(next http.Handler) http.Handler {
 	})
 }
 
-func (app *application) recoverPanic(next http.Handler) http.Handler {
+func (app *Application) recoverPanic(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		defer func() {
 			if err := recover(); err != nil {

@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"net/http"
@@ -7,7 +7,7 @@ import (
 )
 
 // The routes() method returns a servemux containing our application routes.
-func (app *application) routes() http.Handler {
+func (app *Application) routes() http.Handler {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("GET /api", app.healthcheck)

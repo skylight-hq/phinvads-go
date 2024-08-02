@@ -1,11 +1,11 @@
-package main
+package app
 
 import (
 	"log/slog"
 	"net/http"
 )
 
-func (app *application) serverError(w http.ResponseWriter, r *http.Request, err error) {
+func (app *Application) serverError(w http.ResponseWriter, r *http.Request, err error) {
 	var (
 		method = r.Method
 		uri    = r.URL.RequestURI()
@@ -15,7 +15,7 @@ func (app *application) serverError(w http.ResponseWriter, r *http.Request, err 
 	http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 }
 
-func (app *application) badRequest(w http.ResponseWriter, r *http.Request, err error) {
+func (app *Application) badRequest(w http.ResponseWriter, r *http.Request, err error) {
 	var (
 		method = r.Method
 		uri    = r.URL.RequestURI()
@@ -25,6 +25,6 @@ func (app *application) badRequest(w http.ResponseWriter, r *http.Request, err e
 	http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 }
 
-// func (app *application) clientError(w http.ResponseWriter, status int) {
+// func (app *Application) clientError(w http.ResponseWriter, status int) {
 // 	http.Error(w, http.StatusText(status), status)
 // }
