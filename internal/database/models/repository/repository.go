@@ -59,11 +59,11 @@ func (r *Repository) GetAllValueSets(ctx context.Context, db xo.DB) (*[]xo.Value
 }
 
 func (r *Repository) GetValueSetByID(ctx context.Context, db xo.DB, id string) (*xo.ValueSet, error) {
-	return models.GetValueSetByID(ctx, db, id)
+	return xo.ValueSetByID(ctx, db, id)
 }
 
 func (r *Repository) GetValueSetByOID(ctx context.Context, db xo.DB, oid string) (*xo.ValueSet, error) {
-	return models.GetValueSetByOID(ctx, db, oid)
+	return xo.ValueSetByOid(ctx, db, oid)
 }
 
 func (r *Repository) GetValueSetByVersionOID(ctx context.Context, db xo.DB, vsv *xo.ValueSetVersion) (*xo.ValueSet, error) {

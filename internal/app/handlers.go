@@ -196,8 +196,10 @@ func (app *Application) getAllValueSets(w http.ResponseWriter, r *http.Request) 
 
 // getValueSetByOid can retrieve a resource via either ID or an OID (see models/valueset.xo.go)
 func (app *Application) getValueSetByOID(w http.ResponseWriter, r *http.Request) {
+	rp := app.repository
 	id := r.PathValue("oid")
-	valueSet, err := models.GetValueSetByOID(r.Context(), app.db, id)
+
+	valueSet, err := rp.GetValueSetByOID(r.Context(), app.db, id)
 
 	if err != nil {
 		if errors.Is(err, xo.ErrDoesNotExist) {

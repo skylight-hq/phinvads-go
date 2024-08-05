@@ -6,14 +6,6 @@ import (
 	"github.com/skylight-hq/phinvads-go/internal/database/models/xo"
 )
 
-func GetValueSetByID(ctx context.Context, db xo.DB, id string) (*xo.ValueSet, error) {
-	return xo.ValueSetByID(ctx, db, id)
-}
-
-func GetValueSetByOID(ctx context.Context, db xo.DB, oid string) (*xo.ValueSet, error) {
-	return xo.ValueSetByOid(ctx, db, oid)
-}
-
 // All retrieves all rows from 'public.value_set'
 func GetAllValueSets(ctx context.Context, db xo.DB) (*[]xo.ValueSet, error) {
 	const sqlstr = `SELECT * FROM public.value_set`
