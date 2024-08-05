@@ -40,11 +40,11 @@ func (r *Repository) GetAllCodeSystemConcepts(ctx context.Context, db xo.DB) (*[
 }
 
 func (r *Repository) GetCodeSystemConceptByID(ctx context.Context, db xo.DB, id string) (*xo.CodeSystemConcept, error) {
-	return models.GetCodeSystemConceptByID(ctx, db, id)
+	return xo.CodeSystemConceptByID(ctx, db, id)
 }
 
 func (r *Repository) GetCodeSystemConceptsByOID(ctx context.Context, db xo.DB, oid string) ([]*xo.CodeSystemConcept, error) {
-	return models.GetCodeSystemConceptsByOID(ctx, db, oid)
+	return xo.CodeSystemConceptByCodesystemoid(ctx, db, oid)
 }
 
 func (r *Repository) GetCodeSystemByValueSetConceptCsOid(ctx context.Context, db xo.DB, vsc *xo.ValueSetConcept) (*xo.CodeSystem, error) {

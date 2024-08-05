@@ -155,11 +155,12 @@ func (app *Application) getAllCodeSystemConcepts(w http.ResponseWriter, r *http.
 }
 
 func (app *Application) getCodeSystemConceptByID(w http.ResponseWriter, r *http.Request) {
+	rp := app.repository
 	ctx := context.Background()
 
 	id := r.PathValue("id")
 
-	codeSystemConcept, err := models.GetCodeSystemConceptByID(ctx, app.db, id)
+	codeSystemConcept, err := rp.GetCodeSystemConceptByID(ctx, app.db, id)
 	if err != nil {
 		if errors.Is(err, xo.ErrDoesNotExist) {
 			http.NotFound(w, r)

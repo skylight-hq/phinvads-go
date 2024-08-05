@@ -6,16 +6,6 @@ import (
 	"github.com/skylight-hq/phinvads-go/internal/database/models/xo"
 )
 
-// GetCodeSystemConceptsByID retrieves
-func GetCodeSystemConceptByID(ctx context.Context, db xo.DB, id string) (*xo.CodeSystemConcept, error) {
-	return xo.CodeSystemConceptByID(ctx, db, id)
-}
-
-// GetCodeSystemConceptByOID retrieves
-func GetCodeSystemConceptsByOID(ctx context.Context, db xo.DB, oid string) ([]*xo.CodeSystemConcept, error) {
-	return xo.CodeSystemConceptByCodesystemoid(ctx, db, oid)
-}
-
 // All retrieves all rows from 'public.code_system_concept'
 func GetAllCodeSystemConcepts(ctx context.Context, db xo.DB) (*[]xo.CodeSystemConcept, error) {
 	const sqlstr = `SELECT * FROM public.code_system_concept`
