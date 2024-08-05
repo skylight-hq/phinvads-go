@@ -48,7 +48,7 @@ func (r *Repository) GetCodeSystemConceptsByOID(ctx context.Context, db xo.DB, o
 }
 
 func (r *Repository) GetCodeSystemByValueSetConceptCsOid(ctx context.Context, db xo.DB, vsc *xo.ValueSetConcept) (*xo.CodeSystem, error) {
-	return models.GetCodeSystemByValueSetConceptCsOid(ctx, db, vsc)
+	return vsc.CodeSystem(ctx, db)
 }
 
 // =============================== //
@@ -111,15 +111,15 @@ func (r *Repository) GetViewVersionByVvsvVvId(ctx context.Context, db xo.DB, vvs
 // === ValueSetConcept methods === //
 // =============================== //
 func (r *Repository) GetValueSetConceptsByCodeSystemOID(ctx context.Context, db xo.DB, csOid string) ([]*xo.ValueSetConcept, error) {
-	return models.GetValueSetConceptsByCodeSystemOID(ctx, db, csOid)
+	return xo.ValueSetConceptByCodesystemoid(ctx, db, csOid)
 }
 
 func (r *Repository) GetValueSetConceptByID(ctx context.Context, db xo.DB, id string) (*xo.ValueSetConcept, error) {
-	return models.GetValueSetConceptByID(ctx, db, id)
+	return xo.ValueSetConceptByID(ctx, db, id)
 }
 
 func (r *Repository) GetValueSetConceptByValueSetVersionID(ctx context.Context, db xo.DB, vsvId string) ([]*xo.ValueSetConcept, error) {
-	return models.GetValueSetConceptByValueSetVersionID(ctx, db, vsvId)
+	return xo.ValueSetConceptByValuesetversionid(ctx, db, vsvId)
 }
 
 // =============================== //
@@ -142,7 +142,7 @@ func (r *Repository) GetValueSetVersionByValueSetOID(ctx context.Context, db xo.
 }
 
 func (r *Repository) GetValueSetVersionByVscVsvId(ctx context.Context, db xo.DB, vsc *xo.ValueSetConcept) (*xo.ValueSetVersion, error) {
-	return models.GetValueSetVersionByVscVsvId(ctx, db, vsc)
+	return vsc.ValueSetVersion(ctx, db)
 }
 
 func (r *Repository) GetValueSetVersionByVvsvVsvId(ctx context.Context, db xo.DB, vvsv *xo.ViewValueSetVersion) (*xo.ValueSetVersion, error) {
