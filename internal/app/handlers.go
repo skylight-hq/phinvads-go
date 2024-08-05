@@ -74,9 +74,10 @@ func (app *Application) getAllViews(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *Application) getViewByID(w http.ResponseWriter, r *http.Request) {
+	rp := app.repository
 	id := r.PathValue("id")
 
-	view, err := models.GetViewByID(r.Context(), app.db, id)
+	view, err := rp.GetViewByID(r.Context(), app.db, id)
 	if err != nil {
 		if errors.Is(err, xo.ErrDoesNotExist) {
 			http.NotFound(w, r)

@@ -78,7 +78,7 @@ func (r *Repository) GetAllViews(ctx context.Context, db xo.DB) (*[]xo.View, err
 }
 
 func (r *Repository) GetViewByID(ctx context.Context, db xo.DB, id string) (*xo.View, error) {
-	return models.GetViewByID(ctx, db, id)
+	return xo.ViewByID(ctx, db, id)
 }
 
 func (r *Repository) GetViewByViewVersionId(ctx context.Context, db xo.DB, vv *xo.ViewVersion) (*xo.View, error) {
