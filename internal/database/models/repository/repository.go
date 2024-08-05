@@ -25,11 +25,11 @@ func (r *Repository) GetAllCodeSystems(ctx context.Context, db xo.DB) (*[]xo.Cod
 }
 
 func (r *Repository) GetCodeSystemByID(ctx context.Context, db xo.DB, id string) (*xo.CodeSystem, error) {
-	return models.GetCodeSystemByID(ctx, db, id)
+	return xo.CodeSystemByID(ctx, db, id)
 }
 
 func (r *Repository) GetCodeSystemByOID(ctx context.Context, db xo.DB, oid string) (*xo.CodeSystem, error) {
-	return models.GetCodeSystemByOID(ctx, db, oid)
+	return xo.CodeSystemByOid(ctx, db, oid)
 }
 
 // =============================== //

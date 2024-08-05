@@ -36,11 +36,10 @@ func (app *Application) getAllCodeSystems(w http.ResponseWriter, r *http.Request
 }
 
 func (app *Application) getCodeSystemByOID(w http.ResponseWriter, r *http.Request) {
-
+	rp := app.repository
 	oid := r.PathValue("oid")
-	codeSystem, err := models.GetCodeSystemByOID(r.Context(), app.db, oid)
 
-	// codeSystem, err := models.CodeSystemByOid(r.Context(), app.db, oid)
+	codeSystem, err := rp.GetCodeSystemByOID(r.Context(), app.db, oid)
 	if err != nil {
 		if errors.Is(err, xo.ErrDoesNotExist) {
 			http.NotFound(w, r)
