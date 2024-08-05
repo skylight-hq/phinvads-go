@@ -67,7 +67,7 @@ func (r *Repository) GetValueSetByOID(ctx context.Context, db xo.DB, oid string)
 }
 
 func (r *Repository) GetValueSetByVersionOID(ctx context.Context, db xo.DB, vsv *xo.ValueSetVersion) (*xo.ValueSet, error) {
-	return models.GetValueSetByVersionOID(ctx, db, vsv)
+	return vsv.ValueSet(ctx, db)
 }
 
 // =============================== //
@@ -134,11 +134,11 @@ func (r *Repository) GetValueSetGroupByID(ctx context.Context, db xo.DB, id stri
 // =============================== //
 
 func (r *Repository) GetValueSetVersionByID(ctx context.Context, db xo.DB, id string) (*xo.ValueSetVersion, error) {
-	return models.GetValueSetVersionByID(ctx, db, id)
+	return xo.ValueSetVersionByID(ctx, db, id)
 }
 
 func (r *Repository) GetValueSetVersionByValueSetOID(ctx context.Context, db xo.DB, oid string) ([]*xo.ValueSetVersion, error) {
-	return models.GetValueSetVersionByValueSetOID(ctx, db, oid)
+	return xo.ValueSetVersionByValuesetoid(ctx, db, oid)
 }
 
 func (r *Repository) GetValueSetVersionByVscVsvId(ctx context.Context, db xo.DB, vsc *xo.ValueSetConcept) (*xo.ValueSetVersion, error) {
