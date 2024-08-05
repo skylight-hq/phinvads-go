@@ -32,6 +32,7 @@ func LoadConfig() *Config {
 
 	addr := flag.String("addr", addrString, "HTTP network address")
 	dsn := flag.String("dsn", dbString, "PostgreSQL data source name")
+	flag.Parse()
 
 	return &Config{
 		Addr: addr,

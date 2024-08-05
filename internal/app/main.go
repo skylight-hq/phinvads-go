@@ -60,7 +60,10 @@ func SetupApp(cfg *cfg.Config) *Application {
 func (app *Application) Run() {
 	app.logger.Info("starting server", slog.String("addr", app.server.Addr))
 
-	err := app.server.ListenAndServeTLS("./tls/localhost.pem", "./tls/localhost-key.pem")
+	tlsCert := os.Getenv("TLS_CERT")
+	tlsKey := os.Getenv("TLS_KEY")
+
+	err := app.server.ListenAndServeTLS(tlsCert, tlsKey)
 	app.logger.Error(err.Error())
 
 	defer app.db.Close()
