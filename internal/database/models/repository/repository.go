@@ -126,7 +126,7 @@ func (r *Repository) GetValueSetConceptByValueSetVersionID(ctx context.Context, 
 // ==== ValueSetGroup methods ==== //
 // =============================== //
 func (r *Repository) GetValueSetGroupByID(ctx context.Context, db xo.DB, id string) (*xo.ValueSetGroup, error) {
-	return models.GetValueSetGroupByID(ctx, db, id)
+	return xo.ValueSetGroupByID(ctx, db, id)
 }
 
 // =============================== //
