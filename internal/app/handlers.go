@@ -53,7 +53,7 @@ func (app *Application) getCodeSystemByOID(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	w.Header().Set("Content-Type", "Application/json")
+	w.Header().Set("Content-Type", "application/json")
 
 	json.NewEncoder(w).Encode(codeSystem)
 }
@@ -69,7 +69,7 @@ func (app *Application) getAllViews(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "Application/json")
+	w.Header().Set("Content-Type", "application/json")
 
 	json.NewEncoder(w).Encode(views)
 }
