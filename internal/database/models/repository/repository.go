@@ -82,29 +82,29 @@ func (r *Repository) GetViewByID(ctx context.Context, db xo.DB, id string) (*xo.
 }
 
 func (r *Repository) GetViewByViewVersionId(ctx context.Context, db xo.DB, vv *xo.ViewVersion) (*xo.View, error) {
-	return models.GetViewByViewVersionViewId(ctx, db, vv)
+	return vv.View(ctx, db)
 }
 
 // =============================== //
 // ===== ViewValueSet methods ==== //
 // =============================== //
 func (r *Repository) GetViewValueSetVersionByVvIdVsvId(ctx context.Context, db xo.DB, viewVersionId, valueSetVersionId string) (*xo.ViewValueSetVersion, error) {
-	return models.GetViewValueSetVersionByVvIdVsvId(ctx, db, viewVersionId, valueSetVersionId)
+	return xo.ViewValueSetVersionByViewversionidValuesetversionid(ctx, db, viewVersionId, valueSetVersionId)
 }
 
 // =============================== //
 // ===== ViewVersion methods ===== //
 // =============================== //
 func (r *Repository) GetViewVersionByID(ctx context.Context, db xo.DB, id string) (*xo.ViewVersion, error) {
-	return models.GetViewVersionByID(ctx, db, id)
+	return xo.ViewVersionByID(ctx, db, id)
 }
 
 func (r *Repository) GetViewVersionByViewId(ctx context.Context, db xo.DB, viewId string) ([]*xo.ViewVersion, error) {
-	return models.GetViewVersionByViewId(ctx, db, viewId)
+	return xo.ViewVersionByViewid(ctx, db, viewId)
 }
 
 func (r *Repository) GetViewVersionByVvsvVvId(ctx context.Context, db xo.DB, vvsv *xo.ViewValueSetVersion) (*xo.ViewVersion, error) {
-	return models.GetViewVersionByVvsvVvId(ctx, db, vvsv)
+	return vvsv.ViewVersion(ctx, db)
 }
 
 // =============================== //
@@ -146,5 +146,5 @@ func (r *Repository) GetValueSetVersionByVscVsvId(ctx context.Context, db xo.DB,
 }
 
 func (r *Repository) GetValueSetVersionByVvsvVsvId(ctx context.Context, db xo.DB, vvsv *xo.ViewValueSetVersion) (*xo.ValueSetVersion, error) {
-	return models.GetValueSetVersionByVvsvVsvId(ctx, db, vvsv)
+	return vvsv.ValueSetVersion(ctx, db)
 }

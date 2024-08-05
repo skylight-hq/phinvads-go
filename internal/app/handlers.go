@@ -96,9 +96,10 @@ func (app *Application) getViewByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *Application) getViewVersionByID(w http.ResponseWriter, r *http.Request) {
+	rp := app.repository
 	id := r.PathValue("id")
 
-	viewVersion, err := models.GetViewVersionByID(r.Context(), app.db, id)
+	viewVersion, err := rp.GetViewVersionByID(r.Context(), app.db, id)
 	if err != nil {
 		if errors.Is(err, xo.ErrDoesNotExist) {
 			http.NotFound(w, r)
@@ -117,9 +118,10 @@ func (app *Application) getViewVersionByID(w http.ResponseWriter, r *http.Reques
 }
 
 func (app *Application) getViewVersionsByViewID(w http.ResponseWriter, r *http.Request) {
+	rp := app.repository
 	viewId := r.PathValue("viewId")
 
-	viewVersions, err := models.GetViewVersionByViewId(r.Context(), app.db, viewId)
+	viewVersions, err := rp.GetViewVersionByViewId(r.Context(), app.db, viewId)
 	if err != nil {
 		if errors.Is(err, xo.ErrDoesNotExist) {
 			http.NotFound(w, r)
