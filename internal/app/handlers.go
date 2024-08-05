@@ -1,7 +1,6 @@
 package app
 
 import (
-	"context"
 	"database/sql"
 	"encoding/json"
 	"errors"
@@ -140,9 +139,7 @@ func (app *Application) getViewVersionsByViewID(w http.ResponseWriter, r *http.R
 }
 
 func (app *Application) getAllCodeSystemConcepts(w http.ResponseWriter, r *http.Request) {
-	ctx := context.Background()
-
-	codeSystemConcepts, err := models.GetAllCodeSystemConcepts(ctx, app.db)
+	codeSystemConcepts, err := models.GetAllCodeSystemConcepts(r.Context(), app.db)
 	if err != nil {
 		if errors.Is(err, xo.ErrDoesNotExist) {
 			http.NotFound(w, r)
@@ -159,11 +156,10 @@ func (app *Application) getAllCodeSystemConcepts(w http.ResponseWriter, r *http.
 
 func (app *Application) getCodeSystemConceptByID(w http.ResponseWriter, r *http.Request) {
 	rp := app.repository
-	ctx := context.Background()
 
 	id := r.PathValue("id")
 
-	codeSystemConcept, err := rp.GetCodeSystemConceptByID(ctx, app.db, id)
+	codeSystemConcept, err := rp.GetCodeSystemConceptByID(r.Context(), app.db, id)
 	if err != nil {
 		if errors.Is(err, xo.ErrDoesNotExist) {
 			http.NotFound(w, r)
