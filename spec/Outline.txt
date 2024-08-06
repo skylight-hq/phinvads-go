@@ -1,0 +1,32 @@
+Testing Pseudo~
+
+1. Describe (Outer function, explains whole feature/capability)
+2. Context (Explains the specifications of a certain situation)
+3. Given/When/Then (Describes the steps a user takes interacting with the application)
+
+Describe: Reading code systems from the application
+    Context 1:
+        Given the service is populated with data
+        AND the server is running
+
+        Context 1A:
+            Given a valid user
+            AND has access to the api
+        
+            Test:
+                When I get the code systems index endpoint
+                Then Status Code 200
+                AND Response body contains multiple code systems
+
+            Test:
+                When I GET an endpoint that does not exist
+                Then Status Code 400
+
+            Test:
+                When I get the code systems index by OID endpoint using a valid OID
+                Then Status Code 200
+                AND Response Body contains the desired code system
+
+            Test:
+                When I get the code systems index by OID endpoint using a invalid OID
+                Then Status Code 400
