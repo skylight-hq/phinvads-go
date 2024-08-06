@@ -60,8 +60,8 @@ func SetupApp(cfg *cfg.Config) *Application {
 func (app *Application) Run() {
 	app.logger.Info("starting server", slog.String("addr", app.server.Addr))
 
-	tlsCert := os.Getenv("TLS_CERT")
-	tlsKey := os.Getenv("TLS_KEY")
+	tlsCert := getEnvWithFallback("TLS_CERT", "./tls/localhost.pem")
+	tlsKey := getEnvWithFallback("TLS_KEY", "./tls/localhost-key.pem")
 
 	err := app.server.ListenAndServeTLS(tlsCert, tlsKey)
 	app.logger.Error(err.Error())
@@ -69,4 +69,13 @@ func (app *Application) Run() {
 	defer app.db.Close()
 
 	os.Exit(1)
+}
+
+// getEnvWithFallback retrieves the value of an environment variable by key;
+// if no value is found, the provided fallback value is returned
+func getEnvWithFallback(key, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return fallback
 }
