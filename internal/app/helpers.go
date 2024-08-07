@@ -1,30 +1,20 @@
 package app
 
 import (
-	"log/slog"
-	"net/http"
+	"regexp"
+
+	"github.com/skylight-hq/phinvads-go/internal/errors"
 )
 
-func (app *Application) serverError(w http.ResponseWriter, r *http.Request, err error) {
-	var (
-		method = r.Method
-		uri    = r.URL.RequestURI()
-	)
+func determineIdType(input string) (output string, err error) {
+	validId, _ := regexp.MatchString("^[a-zA-Z0-9-]+$", input)
+	validOid, _ := regexp.MatchString("^[0-9.]+$", input)
 
-	app.logger.Error(err.Error(), slog.String("method", method), slog.String("uri", uri))
-	http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+	if validId {
+		return "id", nil
+	} else if validOid {
+		return "oid", nil
+	} else {
+		return "", errors.ErrInvalidId
+	}
 }
-
-func (app *Application) badRequest(w http.ResponseWriter, r *http.Request, err error) {
-	var (
-		method = r.Method
-		uri    = r.URL.RequestURI()
-	)
-
-	app.logger.Error(err.Error(), slog.String("method", method), slog.String("uri", uri))
-	http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-}
-
-// func (app *Application) clientError(w http.ResponseWriter, status int) {
-// 	http.Error(w, http.StatusText(status), status)
-// }

@@ -13,14 +13,17 @@ func (app *Application) routes() http.Handler {
 	mux.HandleFunc("GET /api", app.healthcheck)
 
 	mux.HandleFunc("GET /api/code-systems", app.getAllCodeSystems)
-	mux.HandleFunc("GET /api/code-systems/{oid}", app.getCodeSystemByOID)
+	mux.HandleFunc("GET /api/code-systems/{id}", app.getCodeSystemByID)
+
 	mux.HandleFunc("GET /api/code-system-concepts", app.getAllCodeSystemConcepts)
 	mux.HandleFunc("GET /api/code-system-concepts/{id}", app.getCodeSystemConceptByID)
+
 	mux.HandleFunc("GET /api/value-sets", app.getAllValueSets)
-	mux.HandleFunc("GET /api/value-sets/{oid}", app.getValueSetByOID)
+	mux.HandleFunc("GET /api/value-sets/{id}", app.getValueSetByID)
 
 	mux.HandleFunc("GET /api/views", app.getAllViews)
 	mux.HandleFunc("GET /api/views/{id}", app.getViewByID)
+
 	mux.HandleFunc("GET /api/view-versions/{id}", app.getViewVersionByID)
 	mux.HandleFunc("GET /api/view-versions-by-view/{viewId}", app.getViewVersionsByViewID)
 
