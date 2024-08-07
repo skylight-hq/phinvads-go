@@ -25,3 +25,6 @@ tmp/
 bin/
 
 tls/*.pem
+
+# Exclude runtime configuration details from repo
+config/*.yml
