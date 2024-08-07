@@ -1,0 +1,6 @@
+postgres:
+    host: localhost
+    port: 5332
+    user: postgres
+    password: password
+    dbname: phinvads_dev
