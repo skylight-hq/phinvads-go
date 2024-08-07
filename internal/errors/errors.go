@@ -2,6 +2,7 @@ package errors
 
 import (
 	"fmt"
+	"log/slog"
 	"net/http"
 )
 
@@ -11,6 +12,7 @@ type RequestError struct {
 	Msg    string
 	Method string
 	Uri    string
+	Logger *slog.Logger
 }
 
 func (e *RequestError) Error() string {
@@ -19,13 +21,8 @@ func (e *RequestError) Error() string {
 
 var ErrInvalidId = fmt.Errorf("invalid identifier")
 
-func BadRequest(w http.ResponseWriter, r *http.Request, err error) {
-	// var (
-	// 	method = r.Method
-	// 	uri    = r.URL.RequestURI()
-	// )
-
-	// app.logger.Error(err.Error(), slog.String("method", method), slog.String("uri", uri))
+func BadRequest(w http.ResponseWriter, r *http.Request, err error, logger *slog.Logger) {
+	logger.Error(err.Error(), slog.String("method", r.Method), slog.String("uri", r.URL.RequestURI()))
 	http.Error(w, err.Error(), http.StatusBadRequest)
 }
 
@@ -41,23 +38,13 @@ func (e *DatabaseError) Error() string {
 	return fmt.Sprintf("Msg: %s. Err: %s", e.Msg, e.Err)
 }
 
-func (e *DatabaseError) NoRows(w http.ResponseWriter, r *http.Request, err error) {
-	// var (
-	// 	method = r.Method
-	// 	uri    = r.URL.RequestURI()
-	// )
-
-	// app.logger.Error(err.Error(), slog.String("method", method), slog.String("uri", uri))
+func (e *DatabaseError) NoRows(w http.ResponseWriter, r *http.Request, err error, logger *slog.Logger) {
+	logger.Error(err.Error(), slog.String("method", r.Method), slog.String("uri", r.URL.RequestURI()))
 	http.Error(w, e.Msg, http.StatusBadRequest)
 }
 
-func ServerError(w http.ResponseWriter, r *http.Request, err error) {
-	// var (
-	// 	method = r.Method
-	// 	uri    = r.URL.RequestURI()
-	// )
-
-	// app.logger.Error(err.Error(), slog.String("method", method), slog.String("uri", uri))
+func ServerError(w http.ResponseWriter, r *http.Request, err error, logger *slog.Logger) {
+	logger.Error(err.Error(), slog.String("method", r.Method), slog.String("uri", r.URL.RequestURI()))
 	http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 }
 

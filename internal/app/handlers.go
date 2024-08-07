@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log/slog"
 	"net/http"
 
 	"github.com/skylight-hq/phinvads-go/internal/database/models"
@@ -24,7 +25,7 @@ func (app *Application) getAllCodeSystems(w http.ResponseWriter, r *http.Request
 		if errors.Is(err, xo.ErrDoesNotExist) {
 			http.NotFound(w, r)
 		} else {
-			customErrors.ServerError(w, r, err)
+			customErrors.ServerError(w, r, err, app.logger)
 		}
 		return
 	}
@@ -40,7 +41,7 @@ func (app *Application) getCodeSystemByID(w http.ResponseWriter, r *http.Request
 	id := r.PathValue("id")
 	id_type, err := determineIdType(id)
 	if err != nil {
-		customErrors.BadRequest(w, r, err)
+		customErrors.BadRequest(w, r, err, app.logger)
 		return
 	}
 
@@ -50,7 +51,6 @@ func (app *Application) getCodeSystemByID(w http.ResponseWriter, r *http.Request
 	} else {
 		codeSystem, err = rp.GetCodeSystemByID(r.Context(), app.db, id)
 	}
-
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			errorString := fmt.Sprintf("Error: Code System %s not found", id)
@@ -60,9 +60,9 @@ func (app *Application) getCodeSystemByID(w http.ResponseWriter, r *http.Request
 				Method: "getCodeSystemById",
 				Id:     id,
 			}
-			dbErr.NoRows(w, r, err)
+			dbErr.NoRows(w, r, err, app.logger)
 		} else {
-			customErrors.ServerError(w, r, err)
+			customErrors.ServerError(w, r, err, app.logger)
 		}
 		return
 	}
@@ -75,7 +75,7 @@ func (app *Application) getCodeSystemByID(w http.ResponseWriter, r *http.Request
 func (app *Application) getAllViews(w http.ResponseWriter, r *http.Request) {
 	views, err := models.GetAllViews(r.Context(), app.db)
 	if err != nil {
-		customErrors.ServerError(w, r, err)
+		customErrors.ServerError(w, r, err, app.logger)
 		return
 	}
 
@@ -98,9 +98,9 @@ func (app *Application) getViewByID(w http.ResponseWriter, r *http.Request) {
 				Method: "getViewByID",
 				Id:     id,
 			}
-			dbErr.NoRows(w, r, err)
+			dbErr.NoRows(w, r, err, app.logger)
 		} else {
-			customErrors.ServerError(w, r, err)
+			customErrors.ServerError(w, r, err, app.logger)
 		}
 		return
 	}
@@ -124,9 +124,9 @@ func (app *Application) getViewVersionByID(w http.ResponseWriter, r *http.Reques
 				Method: "getViewVersionByID",
 				Id:     id,
 			}
-			dbErr.NoRows(w, r, err)
+			dbErr.NoRows(w, r, err, app.logger)
 		} else {
-			customErrors.ServerError(w, r, err)
+			customErrors.ServerError(w, r, err, app.logger)
 		}
 		return
 	}
@@ -150,9 +150,9 @@ func (app *Application) getViewVersionsByViewID(w http.ResponseWriter, r *http.R
 				Method: "getViewVersionsByViewID",
 				Id:     viewId,
 			}
-			dbErr.NoRows(w, r, err)
+			dbErr.NoRows(w, r, err, app.logger)
 		} else {
-			customErrors.ServerError(w, r, err)
+			customErrors.ServerError(w, r, err, app.logger)
 		}
 		return
 	}
@@ -165,7 +165,7 @@ func (app *Application) getViewVersionsByViewID(w http.ResponseWriter, r *http.R
 func (app *Application) getAllCodeSystemConcepts(w http.ResponseWriter, r *http.Request) {
 	codeSystemConcepts, err := models.GetAllCodeSystemConcepts(r.Context(), app.db)
 	if err != nil {
-		customErrors.ServerError(w, r, err)
+		customErrors.ServerError(w, r, err, app.logger)
 		return
 	}
 
@@ -189,9 +189,9 @@ func (app *Application) getCodeSystemConceptByID(w http.ResponseWriter, r *http.
 				Method: "getCodeSystemConceptByID",
 				Id:     id,
 			}
-			dbErr.NoRows(w, r, err)
+			dbErr.NoRows(w, r, err, app.logger)
 		} else {
-			customErrors.ServerError(w, r, err)
+			customErrors.ServerError(w, r, err, app.logger)
 		}
 		return
 	}
@@ -204,7 +204,7 @@ func (app *Application) getCodeSystemConceptByID(w http.ResponseWriter, r *http.
 func (app *Application) getAllValueSets(w http.ResponseWriter, r *http.Request) {
 	valueSets, err := models.GetAllValueSets(r.Context(), app.db)
 	if err != nil {
-		customErrors.ServerError(w, r, err)
+		customErrors.ServerError(w, r, err, app.logger)
 		return
 	}
 
@@ -219,7 +219,7 @@ func (app *Application) getValueSetByID(w http.ResponseWriter, r *http.Request) 
 	id := r.PathValue("id")
 	id_type, err := determineIdType(id)
 	if err != nil {
-		customErrors.BadRequest(w, r, err)
+		customErrors.BadRequest(w, r, err, app.logger)
 		return
 	}
 
@@ -231,6 +231,10 @@ func (app *Application) getValueSetByID(w http.ResponseWriter, r *http.Request) 
 	}
 
 	if err != nil {
+		var (
+			method = r.Method
+			uri    = r.URL.RequestURI()
+		)
 		if errors.Is(err, sql.ErrNoRows) {
 			errorString := fmt.Sprintf("Error: Value Set %s not found", id)
 			dbErr := &customErrors.DatabaseError{
@@ -239,10 +243,11 @@ func (app *Application) getValueSetByID(w http.ResponseWriter, r *http.Request) 
 				Method: "getValueSetByID",
 				Id:     id,
 			}
-			dbErr.NoRows(w, r, err)
+			dbErr.NoRows(w, r, err, app.logger)
 		} else {
-			customErrors.ServerError(w, r, err)
+			customErrors.ServerError(w, r, err, app.logger)
 		}
+		app.logger.Error(err.Error(), slog.String("method", method), slog.String("uri", uri))
 		return
 	}
 
