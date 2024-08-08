@@ -12,7 +12,6 @@ type RequestError struct {
 	Msg    string
 	Method string
 	Uri    string
-	Logger *slog.Logger
 }
 
 func (e *RequestError) Error() string {
