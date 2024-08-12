@@ -20,7 +20,7 @@ func (app *Application) healthcheck(w http.ResponseWriter, r *http.Request) {
 func (app *Application) getAllCodeSystems(w http.ResponseWriter, r *http.Request) {
 	rp := app.repository
 
-	codeSystems, err := rp.GetAllCodeSystems(r.Context(), app.db)
+	codeSystems, err := rp.GetAllCodeSystems(r.Context())
 	if err != nil {
 		if errors.Is(err, xo.ErrDoesNotExist) {
 			http.NotFound(w, r)
@@ -47,9 +47,9 @@ func (app *Application) getCodeSystemByID(w http.ResponseWriter, r *http.Request
 
 	var codeSystem *xo.CodeSystem
 	if id_type == "oid" {
-		codeSystem, err = rp.GetCodeSystemByOID(r.Context(), app.db, id)
+		codeSystem, err = rp.GetCodeSystemByOID(r.Context(), id)
 	} else {
-		codeSystem, err = rp.GetCodeSystemByID(r.Context(), app.db, id)
+		codeSystem, err = rp.GetCodeSystemByID(r.Context(), id)
 	}
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -88,7 +88,7 @@ func (app *Application) getViewByID(w http.ResponseWriter, r *http.Request) {
 	rp := app.repository
 	id := r.PathValue("id")
 
-	view, err := rp.GetViewByID(r.Context(), app.db, id)
+	view, err := rp.GetViewByID(r.Context(), id)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			errorString := fmt.Sprintf("Error: View %s not found", id)
@@ -114,7 +114,7 @@ func (app *Application) getViewVersionByID(w http.ResponseWriter, r *http.Reques
 	rp := app.repository
 	id := r.PathValue("id")
 
-	viewVersion, err := rp.GetViewVersionByID(r.Context(), app.db, id)
+	viewVersion, err := rp.GetViewVersionByID(r.Context(), id)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			errorString := fmt.Sprintf("Error: View Version %s not found", id)
@@ -140,7 +140,7 @@ func (app *Application) getViewVersionsByViewID(w http.ResponseWriter, r *http.R
 	rp := app.repository
 	viewId := r.PathValue("viewId")
 
-	viewVersions, err := rp.GetViewVersionByViewId(r.Context(), app.db, viewId)
+	viewVersions, err := rp.GetViewVersionByViewId(r.Context(), viewId)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			errorString := fmt.Sprintf("Error: View Version %s not found", viewId)
@@ -179,7 +179,7 @@ func (app *Application) getCodeSystemConceptByID(w http.ResponseWriter, r *http.
 
 	id := r.PathValue("id")
 
-	codeSystemConcept, err := rp.GetCodeSystemConceptByID(r.Context(), app.db, id)
+	codeSystemConcept, err := rp.GetCodeSystemConceptByID(r.Context(), id)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			errorString := fmt.Sprintf("Error: Code System Concept%s not found", id)
@@ -225,9 +225,9 @@ func (app *Application) getValueSetByID(w http.ResponseWriter, r *http.Request) 
 
 	var valueSet *xo.ValueSet
 	if id_type == "oid" {
-		valueSet, err = rp.GetValueSetByOID(r.Context(), app.db, id)
+		valueSet, err = rp.GetValueSetByOID(r.Context(), id)
 	} else {
-		valueSet, err = rp.GetValueSetByID(r.Context(), app.db, id)
+		valueSet, err = rp.GetValueSetByID(r.Context(), id)
 	}
 
 	if err != nil {

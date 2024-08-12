@@ -20,131 +20,131 @@ func NewRepository(db *sql.DB) *Repository {
 // =============================== //
 // ====== CodeSystem methods ===== //
 // =============================== //
-func (r *Repository) GetAllCodeSystems(ctx context.Context, db xo.DB) (*[]xo.CodeSystem, error) {
-	return models.GetAllCodeSystems(ctx, db)
+func (r *Repository) GetAllCodeSystems(ctx context.Context) (*[]xo.CodeSystem, error) {
+	return models.GetAllCodeSystems(ctx, r.database)
 }
 
-func (r *Repository) GetCodeSystemByID(ctx context.Context, db xo.DB, id string) (*xo.CodeSystem, error) {
-	return xo.CodeSystemByID(ctx, db, id)
+func (r *Repository) GetCodeSystemByID(ctx context.Context, id string) (*xo.CodeSystem, error) {
+	return xo.CodeSystemByID(ctx, r.database, id)
 }
 
-func (r *Repository) GetCodeSystemByOID(ctx context.Context, db xo.DB, oid string) (*xo.CodeSystem, error) {
-	return xo.CodeSystemByOid(ctx, db, oid)
+func (r *Repository) GetCodeSystemByOID(ctx context.Context, oid string) (*xo.CodeSystem, error) {
+	return xo.CodeSystemByOid(ctx, r.database, oid)
 }
 
 // =============================== //
 // == CodeSystemConcept methods == //
 // =============================== //
-func (r *Repository) GetAllCodeSystemConcepts(ctx context.Context, db xo.DB) (*[]xo.CodeSystemConcept, error) {
-	return models.GetAllCodeSystemConcepts(ctx, db)
+func (r *Repository) GetAllCodeSystemConcepts(ctx context.Context) (*[]xo.CodeSystemConcept, error) {
+	return models.GetAllCodeSystemConcepts(ctx, r.database)
 }
 
-func (r *Repository) GetCodeSystemConceptByID(ctx context.Context, db xo.DB, id string) (*xo.CodeSystemConcept, error) {
-	return xo.CodeSystemConceptByID(ctx, db, id)
+func (r *Repository) GetCodeSystemConceptByID(ctx context.Context, id string) (*xo.CodeSystemConcept, error) {
+	return xo.CodeSystemConceptByID(ctx, r.database, id)
 }
 
-func (r *Repository) GetCodeSystemConceptsByOID(ctx context.Context, db xo.DB, oid string) ([]*xo.CodeSystemConcept, error) {
-	return xo.CodeSystemConceptByCodesystemoid(ctx, db, oid)
+func (r *Repository) GetCodeSystemConceptsByOID(ctx context.Context, oid string) ([]*xo.CodeSystemConcept, error) {
+	return xo.CodeSystemConceptByCodesystemoid(ctx, r.database, oid)
 }
 
-func (r *Repository) GetCodeSystemByValueSetConceptCsOid(ctx context.Context, db xo.DB, vsc *xo.ValueSetConcept) (*xo.CodeSystem, error) {
-	return vsc.CodeSystem(ctx, db)
+func (r *Repository) GetCodeSystemByValueSetConceptCsOid(ctx context.Context, vsc *xo.ValueSetConcept) (*xo.CodeSystem, error) {
+	return vsc.CodeSystem(ctx, r.database)
 }
 
 // =============================== //
 // ====== ValueSet methods ======= //
 // =============================== //
-func (r *Repository) GetAllValueSets(ctx context.Context, db xo.DB) (*[]xo.ValueSet, error) {
-	return models.GetAllValueSets(ctx, db)
+func (r *Repository) GetAllValueSets(ctx context.Context) (*[]xo.ValueSet, error) {
+	return models.GetAllValueSets(ctx, r.database)
 }
 
-func (r *Repository) GetValueSetByID(ctx context.Context, db xo.DB, id string) (*xo.ValueSet, error) {
-	return xo.ValueSetByID(ctx, db, id)
+func (r *Repository) GetValueSetByID(ctx context.Context, id string) (*xo.ValueSet, error) {
+	return xo.ValueSetByID(ctx, r.database, id)
 }
 
-func (r *Repository) GetValueSetByOID(ctx context.Context, db xo.DB, oid string) (*xo.ValueSet, error) {
-	return xo.ValueSetByOid(ctx, db, oid)
+func (r *Repository) GetValueSetByOID(ctx context.Context, oid string) (*xo.ValueSet, error) {
+	return xo.ValueSetByOid(ctx, r.database, oid)
 }
 
-func (r *Repository) GetValueSetByVersionOID(ctx context.Context, db xo.DB, vsv *xo.ValueSetVersion) (*xo.ValueSet, error) {
-	return vsv.ValueSet(ctx, db)
+func (r *Repository) GetValueSetByVersionOID(ctx context.Context, vsv *xo.ValueSetVersion) (*xo.ValueSet, error) {
+	return vsv.ValueSet(ctx, r.database)
 }
 
 // =============================== //
 // ========= View methods ======== //
 // =============================== //
-func (r *Repository) GetAllViews(ctx context.Context, db xo.DB) (*[]xo.View, error) {
-	return models.GetAllViews(ctx, db)
+func (r *Repository) GetAllViews(ctx context.Context) (*[]xo.View, error) {
+	return models.GetAllViews(ctx, r.database)
 }
 
-func (r *Repository) GetViewByID(ctx context.Context, db xo.DB, id string) (*xo.View, error) {
-	return xo.ViewByID(ctx, db, id)
+func (r *Repository) GetViewByID(ctx context.Context, id string) (*xo.View, error) {
+	return xo.ViewByID(ctx, r.database, id)
 }
 
-func (r *Repository) GetViewByViewVersionId(ctx context.Context, db xo.DB, vv *xo.ViewVersion) (*xo.View, error) {
-	return vv.View(ctx, db)
+func (r *Repository) GetViewByViewVersionId(ctx context.Context, vv *xo.ViewVersion) (*xo.View, error) {
+	return vv.View(ctx, r.database)
 }
 
 // =============================== //
 // ===== ViewValueSet methods ==== //
 // =============================== //
-func (r *Repository) GetViewValueSetVersionByVvIdVsvId(ctx context.Context, db xo.DB, viewVersionId, valueSetVersionId string) (*xo.ViewValueSetVersion, error) {
-	return xo.ViewValueSetVersionByViewversionidValuesetversionid(ctx, db, viewVersionId, valueSetVersionId)
+func (r *Repository) GetViewValueSetVersionByVvIdVsvId(ctx context.Context, viewVersionId, valueSetVersionId string) (*xo.ViewValueSetVersion, error) {
+	return xo.ViewValueSetVersionByViewversionidValuesetversionid(ctx, r.database, viewVersionId, valueSetVersionId)
 }
 
 // =============================== //
 // ===== ViewVersion methods ===== //
 // =============================== //
-func (r *Repository) GetViewVersionByID(ctx context.Context, db xo.DB, id string) (*xo.ViewVersion, error) {
-	return xo.ViewVersionByID(ctx, db, id)
+func (r *Repository) GetViewVersionByID(ctx context.Context, id string) (*xo.ViewVersion, error) {
+	return xo.ViewVersionByID(ctx, r.database, id)
 }
 
-func (r *Repository) GetViewVersionByViewId(ctx context.Context, db xo.DB, viewId string) ([]*xo.ViewVersion, error) {
-	return xo.ViewVersionByViewid(ctx, db, viewId)
+func (r *Repository) GetViewVersionByViewId(ctx context.Context, viewId string) ([]*xo.ViewVersion, error) {
+	return xo.ViewVersionByViewid(ctx, r.database, viewId)
 }
 
-func (r *Repository) GetViewVersionByVvsvVvId(ctx context.Context, db xo.DB, vvsv *xo.ViewValueSetVersion) (*xo.ViewVersion, error) {
-	return vvsv.ViewVersion(ctx, db)
+func (r *Repository) GetViewVersionByVvsvVvId(ctx context.Context, vvsv *xo.ViewValueSetVersion) (*xo.ViewVersion, error) {
+	return vvsv.ViewVersion(ctx, r.database)
 }
 
 // =============================== //
 // === ValueSetConcept methods === //
 // =============================== //
-func (r *Repository) GetValueSetConceptsByCodeSystemOID(ctx context.Context, db xo.DB, csOid string) ([]*xo.ValueSetConcept, error) {
-	return xo.ValueSetConceptByCodesystemoid(ctx, db, csOid)
+func (r *Repository) GetValueSetConceptsByCodeSystemOID(ctx context.Context, csOid string) ([]*xo.ValueSetConcept, error) {
+	return xo.ValueSetConceptByCodesystemoid(ctx, r.database, csOid)
 }
 
-func (r *Repository) GetValueSetConceptByID(ctx context.Context, db xo.DB, id string) (*xo.ValueSetConcept, error) {
-	return xo.ValueSetConceptByID(ctx, db, id)
+func (r *Repository) GetValueSetConceptByID(ctx context.Context, id string) (*xo.ValueSetConcept, error) {
+	return xo.ValueSetConceptByID(ctx, r.database, id)
 }
 
-func (r *Repository) GetValueSetConceptByValueSetVersionID(ctx context.Context, db xo.DB, vsvId string) ([]*xo.ValueSetConcept, error) {
-	return xo.ValueSetConceptByValuesetversionid(ctx, db, vsvId)
+func (r *Repository) GetValueSetConceptByValueSetVersionID(ctx context.Context, vsvId string) ([]*xo.ValueSetConcept, error) {
+	return xo.ValueSetConceptByValuesetversionid(ctx, r.database, vsvId)
 }
 
 // =============================== //
 // ==== ValueSetGroup methods ==== //
 // =============================== //
-func (r *Repository) GetValueSetGroupByID(ctx context.Context, db xo.DB, id string) (*xo.ValueSetGroup, error) {
-	return xo.ValueSetGroupByID(ctx, db, id)
+func (r *Repository) GetValueSetGroupByID(ctx context.Context, id string) (*xo.ValueSetGroup, error) {
+	return xo.ValueSetGroupByID(ctx, r.database, id)
 }
 
 // =============================== //
 // === ValueSetVersion methods === //
 // =============================== //
 
-func (r *Repository) GetValueSetVersionByID(ctx context.Context, db xo.DB, id string) (*xo.ValueSetVersion, error) {
-	return xo.ValueSetVersionByID(ctx, db, id)
+func (r *Repository) GetValueSetVersionByID(ctx context.Context, id string) (*xo.ValueSetVersion, error) {
+	return xo.ValueSetVersionByID(ctx, r.database, id)
 }
 
-func (r *Repository) GetValueSetVersionByValueSetOID(ctx context.Context, db xo.DB, oid string) ([]*xo.ValueSetVersion, error) {
-	return xo.ValueSetVersionByValuesetoid(ctx, db, oid)
+func (r *Repository) GetValueSetVersionByValueSetOID(ctx context.Context, oid string) ([]*xo.ValueSetVersion, error) {
+	return xo.ValueSetVersionByValuesetoid(ctx, r.database, oid)
 }
 
-func (r *Repository) GetValueSetVersionByVscVsvId(ctx context.Context, db xo.DB, vsc *xo.ValueSetConcept) (*xo.ValueSetVersion, error) {
-	return vsc.ValueSetVersion(ctx, db)
+func (r *Repository) GetValueSetVersionByVscVsvId(ctx context.Context, vsc *xo.ValueSetConcept) (*xo.ValueSetVersion, error) {
+	return vsc.ValueSetVersion(ctx, r.database)
 }
 
-func (r *Repository) GetValueSetVersionByVvsvVsvId(ctx context.Context, db xo.DB, vvsv *xo.ViewValueSetVersion) (*xo.ValueSetVersion, error) {
-	return vvsv.ValueSetVersion(ctx, db)
+func (r *Repository) GetValueSetVersionByVvsvVsvId(ctx context.Context, vvsv *xo.ViewValueSetVersion) (*xo.ValueSetVersion, error) {
+	return vvsv.ValueSetVersion(ctx, r.database)
 }
