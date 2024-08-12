@@ -20,6 +20,9 @@ func (app *Application) routes() http.Handler {
 
 	mux.HandleFunc("GET /api/value-sets", app.getAllValueSets)
 	mux.HandleFunc("GET /api/value-sets/{id}", app.getValueSetByID)
+	mux.HandleFunc("GET /api/value-sets/{oid}/versions", app.getValueSetVersionsByValueSetOID)
+
+	mux.HandleFunc("GET /api/value-set-versions/{id}", app.getValueSetVersionByID)
 
 	mux.HandleFunc("GET /api/views", app.getAllViews)
 	mux.HandleFunc("GET /api/views/{id}", app.getViewByID)
