@@ -1,8 +1,10 @@
-package main
+package app
 
 import (
 	"fmt"
 	"net/http"
+
+	customErrors "github.com/skylight-hq/phinvads-go/internal/errors"
 )
 
 func commonHeaders(next http.Handler) http.Handler {
@@ -21,7 +23,7 @@ func commonHeaders(next http.Handler) http.Handler {
 	})
 }
 
-func (app *application) logRequest(next http.Handler) http.Handler {
+func (app *Application) logRequest(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var (
 			ip     = r.RemoteAddr
@@ -36,12 +38,12 @@ func (app *application) logRequest(next http.Handler) http.Handler {
 	})
 }
 
-func (app *application) recoverPanic(next http.Handler) http.Handler {
+func (app *Application) recoverPanic(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		defer func() {
 			if err := recover(); err != nil {
 				w.Header().Set("Connection", "close")
-				app.serverError(w, r, fmt.Errorf("%s", err))
+				customErrors.ServerError(w, r, fmt.Errorf("%s", err), app.logger)
 			}
 		}()
 
