@@ -255,3 +255,67 @@ func (app *Application) getValueSetByID(w http.ResponseWriter, r *http.Request) 
 
 	json.NewEncoder(w).Encode(valueSet)
 }
+
+func (app *Application) getValueSetVersionsByValueSetOID(w http.ResponseWriter, r *http.Request) {
+	rp := app.repository
+
+	oid := r.PathValue("oid")
+
+	valueSetVersions, err := rp.GetValueSetVersionByValueSetOID(r.Context(), oid)
+	if err != nil {
+		var (
+			method = r.Method
+			uri    = r.URL.RequestURI()
+		)
+		if errors.Is(err, sql.ErrNoRows) {
+			errorString := fmt.Sprintf("Error: Value Set Versions with Value Set OID %s not found", oid)
+			dbErr := &customErrors.DatabaseError{
+				Err:    err,
+				Msg:    errorString,
+				Method: "getValueSetVersionsByValueSetOID",
+				Id:     oid,
+			}
+			dbErr.NoRows(w, r, err, app.logger)
+		} else {
+			customErrors.ServerError(w, r, err, app.logger)
+		}
+		app.logger.Error(err.Error(), slog.String("method", method), slog.String("uri", uri))
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	json.NewEncoder(w).Encode(valueSetVersions)
+}
+
+func (app *Application) getValueSetVersionByID(w http.ResponseWriter, r *http.Request) {
+	rp := app.repository
+
+	id := r.PathValue("id")
+
+	valueSetVersion, err := rp.GetValueSetVersionByID(r.Context(), id)
+	if err != nil {
+		var (
+			method = r.Method
+			uri    = r.URL.RequestURI()
+		)
+		if errors.Is(err, sql.ErrNoRows) {
+			errorString := fmt.Sprintf("Error: Value Set Version %s not found", id)
+			dbErr := &customErrors.DatabaseError{
+				Err:    err,
+				Msg:    errorString,
+				Method: "getValueSetVersionsByValueSetOID",
+				Id:     id,
+			}
+			dbErr.NoRows(w, r, err, app.logger)
+		} else {
+			customErrors.ServerError(w, r, err, app.logger)
+		}
+		app.logger.Error(err.Error(), slog.String("method", method), slog.String("uri", uri))
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	json.NewEncoder(w).Encode(valueSetVersion)
+}
