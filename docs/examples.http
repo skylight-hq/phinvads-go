@@ -42,3 +42,8 @@ GET https://localhost:4000/api/value-sets/2.16.840.1.114222.4.11.4151/versions
 accept: application/json
 
 ###
+
+GET https://localhost:4000/api/value-set-versions/54B04798-55CC-E911-8180-005056ABE2F0
+accept: application/json
+
+###
