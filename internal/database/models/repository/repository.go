@@ -44,7 +44,11 @@ func (r *Repository) GetCodeSystemConceptByID(ctx context.Context, id string) (*
 }
 
 func (r *Repository) GetCodeSystemConceptsByOID(ctx context.Context, oid string) ([]*xo.CodeSystemConcept, error) {
-	return xo.CodeSystemConceptByCodesystemoid(ctx, r.database, oid)
+	result, err := xo.CodeSystemConceptByCodesystemoid(ctx, r.database, oid)
+	if len(result) == 0 {
+		err = sql.ErrNoRows
+	}
+	return result, err
 }
 
 func (r *Repository) GetCodeSystemByValueSetConceptCsOid(ctx context.Context, vsc *xo.ValueSetConcept) (*xo.CodeSystem, error) {
@@ -100,7 +104,11 @@ func (r *Repository) GetViewVersionByID(ctx context.Context, id string) (*xo.Vie
 }
 
 func (r *Repository) GetViewVersionByViewId(ctx context.Context, viewId string) ([]*xo.ViewVersion, error) {
-	return xo.ViewVersionByViewid(ctx, r.database, viewId)
+	result, err := xo.ViewVersionByViewid(ctx, r.database, viewId)
+	if len(result) == 0 {
+		err = sql.ErrNoRows
+	}
+	return result, err
 }
 
 func (r *Repository) GetViewVersionByVvsvVvId(ctx context.Context, vvsv *xo.ViewValueSetVersion) (*xo.ViewVersion, error) {
@@ -146,7 +154,11 @@ func (r *Repository) GetValueSetVersionByID(ctx context.Context, id string) (*xo
 }
 
 func (r *Repository) GetValueSetVersionByValueSetOID(ctx context.Context, oid string) ([]*xo.ValueSetVersion, error) {
-	return xo.ValueSetVersionByValuesetoid(ctx, r.database, oid)
+	result, err := xo.ValueSetVersionByValuesetoid(ctx, r.database, oid)
+	if len(result) == 0 {
+		err = sql.ErrNoRows
+	}
+	return result, err
 }
 
 func (r *Repository) GetValueSetVersionByVscVsvId(ctx context.Context, vsc *xo.ValueSetConcept) (*xo.ValueSetVersion, error) {
