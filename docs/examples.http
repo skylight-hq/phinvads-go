@@ -47,3 +47,18 @@ GET https://localhost:4000/api/value-set-versions/54B04798-55CC-E911-8180-005056
 accept: application/json
 
 ###
+
+GET https://localhost:4000/api/value-set-concepts/4C074C07-FEA4-DD11-BB1F-00188B398520
+accept: application/json
+
+###
+
+GET https://localhost:4000/api/value-set-concepts/value-set-version/B7D34BBC-617F-DD11-B38D-00188B398520
+accept: application/json
+
+###
+
+GET https://localhost:4000/api/value-set-concepts/code-system/1.0.3166.1
+accept: application/json
+
+###
