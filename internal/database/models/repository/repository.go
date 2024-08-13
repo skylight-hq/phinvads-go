@@ -111,7 +111,11 @@ func (r *Repository) GetViewVersionByVvsvVvId(ctx context.Context, vvsv *xo.View
 // === ValueSetConcept methods === //
 // =============================== //
 func (r *Repository) GetValueSetConceptsByCodeSystemOID(ctx context.Context, csOid string) ([]*xo.ValueSetConcept, error) {
-	return xo.ValueSetConceptByCodesystemoid(ctx, r.database, csOid)
+	result, err := xo.ValueSetConceptByCodesystemoid(ctx, r.database, csOid)
+	if len(result) == 0 {
+		err = sql.ErrNoRows
+	}
+	return result, err
 }
 
 func (r *Repository) GetValueSetConceptByID(ctx context.Context, id string) (*xo.ValueSetConcept, error) {
@@ -119,7 +123,11 @@ func (r *Repository) GetValueSetConceptByID(ctx context.Context, id string) (*xo
 }
 
 func (r *Repository) GetValueSetConceptByValueSetVersionID(ctx context.Context, vsvId string) ([]*xo.ValueSetConcept, error) {
-	return xo.ValueSetConceptByValuesetversionid(ctx, r.database, vsvId)
+	result, err := xo.ValueSetConceptByValuesetversionid(ctx, r.database, vsvId)
+	if len(result) == 0 {
+		err = sql.ErrNoRows
+	}
+	return result, err
 }
 
 // =============================== //
