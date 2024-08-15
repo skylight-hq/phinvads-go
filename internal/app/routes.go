@@ -4,11 +4,18 @@ import (
 	"net/http"
 
 	"github.com/justinas/alice"
+	"github.com/skylight-hq/phinvads-go/internal/ui"
+	"github.com/vearutop/statigz"
+	"github.com/vearutop/statigz/brotli"
 )
 
 // The routes() method returns a servemux containing our application routes.
 func (app *Application) routes() http.Handler {
 	mux := http.NewServeMux()
+
+	mux.Handle("GET /assets/", statigz.FileServer(ui.Files, brotli.AddEncoding, statigz.EncodeOnInit))
+
+	mux.HandleFunc("GET /", app.home)
 
 	mux.HandleFunc("GET /api", app.healthcheck)
 
