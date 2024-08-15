@@ -11,6 +11,7 @@ import (
 	"github.com/skylight-hq/phinvads-go/internal/database/models"
 	"github.com/skylight-hq/phinvads-go/internal/database/models/xo"
 	customErrors "github.com/skylight-hq/phinvads-go/internal/errors"
+	"github.com/skylight-hq/phinvads-go/internal/ui/components"
 )
 
 func (app *Application) healthcheck(w http.ResponseWriter, r *http.Request) {
@@ -412,4 +413,9 @@ func (app *Application) getValueSetConceptsByCodeSystemOID(w http.ResponseWriter
 	w.Header().Set("Content-Type", "application/json")
 
 	json.NewEncoder(w).Encode(valueSetConcepts)
+}
+
+func (app *Application) home(w http.ResponseWriter, r *http.Request) {
+	component := components.Home()
+	component.Render(r.Context(), w)
 }

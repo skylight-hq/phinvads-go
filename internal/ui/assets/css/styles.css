@@ -1,0 +1,57 @@
+.usa-banner {
+  background-color: #fff;
+}
+
+.usa-banner__header {
+  font-size: 12px;
+  border-bottom: 1px solid #FBFCFD;
+  border-left: none;
+  border-right: none;
+  padding: 10px 0;
+  font-family: 'Poppins',sans-serif;
+  font-weight: 300;
+  color: #565c65;
+  background-color: #fff;
+  z-index: 11;
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.usa-banner #gov-banner-default {
+  font-family: 'Poppins',sans-serif;
+}
+
+.usa-banner__lock-image {
+  margin-right: 4px;
+}
+
+header.cdc-header .cdc-header__cdc-logo a img {
+  height: 60px;
+  margin-top: -7px;
+  padding-left: 48px;
+}
+
+.cdc-header__body {
+  display: flex;
+}
+
+header.cdc-header .header-nav {
+  padding-left: 2rem;
+  padding-top: 10px;
+}
+
+header.cdc-header .header-nav a {
+  color: #fff;
+  font-size: 16;
+  text-decoration: none;
+  padding: 26px;
+}
+
+header.cdc-header .header-nav a.dropdown::after {
+  content: "\f0d7";
+}
+
+header.cdc-header .header-search {
+  padding-top: 6px;
+}
