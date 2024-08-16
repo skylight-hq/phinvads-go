@@ -30,6 +30,10 @@ func (app *Application) routes() http.Handler {
 	mux.HandleFunc("GET /api/view-versions/{id}", app.getViewVersionByID)
 	mux.HandleFunc("GET /api/view-versions-by-view/{viewId}", app.getViewVersionsByViewID)
 
+	mux.HandleFunc("GET /api/value-set-concepts/{id}", app.getValueSetConceptByID)
+	mux.HandleFunc("GET /api/value-set-concepts/value-set-version/{valueSetVersionId}", app.getValueSetConceptsByVersionID)
+	mux.HandleFunc("GET /api/value-set-concepts/code-system/{codeSystemOid}", app.getValueSetConceptsByCodeSystemOID)
+
 	standard := alice.New(app.recoverPanic, app.logRequest, commonHeaders)
 
 	return standard.Then(mux)

@@ -319,3 +319,97 @@ func (app *Application) getValueSetVersionByID(w http.ResponseWriter, r *http.Re
 
 	json.NewEncoder(w).Encode(valueSetVersion)
 }
+
+func (app *Application) getValueSetConceptByID(w http.ResponseWriter, r *http.Request) {
+	rp := app.repository
+	id := r.PathValue("id")
+
+	valueSetConcept, err := rp.GetValueSetConceptByID(r.Context(), id)
+	if err != nil {
+		var (
+			method = r.Method
+			uri    = r.URL.RequestURI()
+		)
+		if errors.Is(err, sql.ErrNoRows) {
+			errorString := fmt.Sprintf("Error: Value Set Concept %s not found", id)
+			dbErr := &customErrors.DatabaseError{
+				Err:    err,
+				Msg:    errorString,
+				Method: "getValueSetConceptByID",
+				Id:     id,
+			}
+			dbErr.NoRows(w, r, err, app.logger)
+		} else {
+			customErrors.ServerError(w, r, err, app.logger)
+		}
+		app.logger.Error(err.Error(), slog.String("method", method), slog.String("uri", uri))
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	json.NewEncoder(w).Encode(valueSetConcept)
+}
+
+func (app *Application) getValueSetConceptsByVersionID(w http.ResponseWriter, r *http.Request) {
+	rp := app.repository
+	id := r.PathValue("valueSetVersionId")
+
+	valueSetConcepts, err := rp.GetValueSetConceptByValueSetVersionID(r.Context(), id)
+	if err != nil {
+		var (
+			method = r.Method
+			uri    = r.URL.RequestURI()
+		)
+		if errors.Is(err, sql.ErrNoRows) {
+			errorString := fmt.Sprintf("Error: No Value Set Concepts found for version %s", id)
+			dbErr := &customErrors.DatabaseError{
+				Err:    err,
+				Msg:    errorString,
+				Method: "getValueSetConceptsByVersionID",
+				Id:     id,
+			}
+			dbErr.NoRows(w, r, err, app.logger)
+		} else {
+			customErrors.ServerError(w, r, err, app.logger)
+		}
+
+		app.logger.Error(err.Error(), slog.String("method", method), slog.String("uri", uri))
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	json.NewEncoder(w).Encode(valueSetConcepts)
+}
+
+func (app *Application) getValueSetConceptsByCodeSystemOID(w http.ResponseWriter, r *http.Request) {
+	rp := app.repository
+	oid := r.PathValue("codeSystemOid")
+
+	valueSetConcepts, err := rp.GetValueSetConceptsByCodeSystemOID(r.Context(), oid)
+	if err != nil {
+		var (
+			method = r.Method
+			uri    = r.URL.RequestURI()
+		)
+		if errors.Is(err, sql.ErrNoRows) {
+			errorString := fmt.Sprintf("Error: No Value Set Concepts found for CodeSystem %s", oid)
+			dbErr := &customErrors.DatabaseError{
+				Err:    err,
+				Msg:    errorString,
+				Method: "getValueSetConceptsByCodeSystemOID",
+				Id:     oid,
+			}
+			dbErr.NoRows(w, r, err, app.logger)
+		} else {
+			customErrors.ServerError(w, r, err, app.logger)
+		}
+
+		app.logger.Error(err.Error(), slog.String("method", method), slog.String("uri", uri))
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+
+	json.NewEncoder(w).Encode(valueSetConcepts)
+}
