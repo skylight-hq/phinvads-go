@@ -50,5 +50,5 @@ PHIN VADS written in Go. Load `phinvads.dump` into a PostgreSQL database using `
 1. Air will also work for the frontend, but you will have to refresh your browser every time you make a change. To get automatic browser reloads, run the app this way:
 
     ```bash
-    templ generate --watch --proxy="http://localhost:4000" --cmd="go run ./cmd/phinvads-go -tls=false"
+    templ generate --watch --proxy="http://localhost:4000" --cmd="air -c .air-with-proxy.toml"
     ```
