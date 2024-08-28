@@ -60,6 +60,31 @@ header.cdc-header .header-search {
   height: 50vh;
 }
 
+.accordion {
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 10px;
+  width: fixed 914px;
+  height: 2324px;
+  text-align: left;
+  border-top: 456px;
+  border-left: 266px;
+  outline: none;
+  transition: 0.4s;
+}
+
+.active, .accordion:hover {
+  background-color: #ccc;
+}
+
+.panel {
+  padding: 0 10px;
+  background-color: white;
+  display: none;
+  overflow: hidden;
+}
+
 footer .row {
   margin: 0;
 }
