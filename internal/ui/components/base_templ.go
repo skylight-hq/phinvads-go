@@ -26,7 +26,7 @@ func Base() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\"><head><title>PHIN VADS</title><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><meta charset=\"UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"><link rel=\"apple-touch-icon\" sizes=\"180x180\" href=\"/assets/img/apple-touch-icon.png\"><link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/assets/img/favicon-32x32.png\"><link rel=\"icon\" type=\"image/png\" sizes=\"16x16\" href=\"/assets/img/favicon-16x16.png\"><link rel=\"stylesheet\" href=\"/assets/css/uswds.min.css\"><link rel=\"stylesheet\" href=\"/assets/css/cdc.min.css\"><link rel=\"stylesheet\" href=\"/assets/css/styles.css\"><script src=\"/assets/js/htmx.min.js\"></script><script src=\"/assets/js/uswds-init.min.js\"></script></head><body>")
+		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 1)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -34,7 +34,7 @@ func Base() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<header class=\"container cdc-header noindex\" role=\"banner\"><div class=\"cdc-header__desktop\"><div class=\"cdc-page-offset\"><div class=\"cdc-header__cdc-logo\"><a href=\"https://www.cdc.gov\"><img src=\"/assets/img/logo-notext.svg\" alt=\"Centers for Disease Control and Prevention. CDC twenty four seven. Saving Lives, Protecting People\"></a></div><div class=\"cdc-header__body grid-row flex-row\"><div class=\"cdc-header__title grid-col flex-auto\"><a href=\"/\">PHIN VADS</a></div><div class=\"header-nav grid-col\"><a href=\"#\">Home</a> <a href=\"#\">Documentation  <svg class=\"usa-icon\" aria-hidden=\"true\" focusable=\"false\" role=\"img\"><use xlink:href=\"/assets/img/sprite.svg#arrow_drop_down\"></use></svg></a> <a href=\"#\">Browse  <svg class=\"usa-icon\" aria-hidden=\"true\" focusable=\"false\" role=\"img\"><use xlink:href=\"/assets/img/sprite.svg#arrow_drop_down\"></use></svg></a></div><section class=\"header-search grid-col flex-1\" aria-label=\"Small search component\"><form class=\"usa-search usa-search--small\" role=\"search\"><label class=\"usa-sr-only\" for=\"search-field-en-small\">Search</label> <input class=\"usa-input\" id=\"search-field-en-small\" type=\"search\" name=\"search\"> <button class=\"usa-button\" type=\"submit\"><img src=\"/assets/img/usa-icons-bg/search--white.svg\" class=\"usa-search__submit-icon\" alt=\"Search\"></button></form></section></div></div></div></header><main class=\"cdc-page-offset\">")
+		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 2)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -42,7 +42,7 @@ func Base() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</main>")
+		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 3)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -50,7 +50,7 @@ func Base() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<script src=\"/assets/js/uswds.min.js\"></script></body></html>")
+		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 4)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
