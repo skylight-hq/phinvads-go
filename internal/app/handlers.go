@@ -425,9 +425,9 @@ func (app *Application) handleBannerToggle(w http.ResponseWriter, r *http.Reques
 	action := r.PathValue("action")
 	var component templ.Component
 	if action == "close" {
-		component = components.UsaBanner()
+		component = components.UsaBanner("close")
 	} else {
-		component = components.UsaBannerContents()
+		component = components.UsaBanner("open")
 	}
 
 	component.Render(r.Context(), w)

@@ -1,6 +1,6 @@
 package components
 
-templ UsaBanner() {
+templ UsaBanner(action string) {
 	<div id="usa-banner" class="cdc-page-banner container noindex" aria-label="Official website of the United States government">
 		<div class="row cdc-site-gov-notice noindex noprint">
 			<div class="col-lg-11">
@@ -10,7 +10,11 @@ templ UsaBanner() {
 				</div>
 				<span>
 					<button
-						hx-get="/toggle-banner/open"
+						if action == "close" {
+							hx-get="/toggle-banner/open"
+						} else {
+							hx-get="/toggle-banner/close"
+						}
 						hx-trigger="click"
 						hx-target="#usa-banner"
 						hx-swap="outerHTML"
@@ -22,7 +26,14 @@ templ UsaBanner() {
 					</button>
 				</span>
 			</div>
-			<div class="collapse hide usa-accordion__content" id="gov-notice">
+			<div
+				if action == "close" {
+					class="collapse hide usa-accordion__content"
+				} else {
+					class="collapse show usa-accordion__content"
+				}
+				id="gov-notice"
+			>
 				<div class="row">
 					<div class="col-12 col-lg-6">
 						<img src="/assets/img/icon-dot-gov.svg" alt="" aria-hidden="true"/>
