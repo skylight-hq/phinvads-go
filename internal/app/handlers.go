@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
-	"text/template"
 
+	"github.com/a-h/templ"
 	"github.com/skylight-hq/phinvads-go/internal/database/models"
 	"github.com/skylight-hq/phinvads-go/internal/database/models/xo"
 	customErrors "github.com/skylight-hq/phinvads-go/internal/errors"
@@ -423,21 +423,12 @@ func (app *Application) home(w http.ResponseWriter, r *http.Request) {
 
 func (app *Application) handleBannerToggle(w http.ResponseWriter, r *http.Request) {
 	action := r.PathValue("action")
-	var path string
+	var component templ.Component
 	if action == "close" {
-		path = "internal/ui/components/banner-closed.html"
-
+		component = components.UsaBanner()
 	} else {
-		path = "internal/ui/components/banner-open.html"
+		component = components.UsaBannerContents()
 	}
 
-	tmpl, err := template.ParseFiles(path)
-	if err != nil {
-		fmt.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	if err := tmpl.Execute(w, nil); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
+	component.Render(r.Context(), w)
 }
