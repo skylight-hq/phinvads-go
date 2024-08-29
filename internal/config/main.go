@@ -5,13 +5,15 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/joho/godotenv"
 )
 
 type Config struct {
-	Addr *string
-	Dsn  *string
+	Addr       *string
+	Dsn        *string
+	TlsEnabled *bool
 }
 
 func init() {
@@ -30,12 +32,20 @@ func LoadConfig() *Config {
 	port := os.Getenv("PORT")
 	addrString := fmt.Sprintf(`%s:%s`, host, port)
 
+	tlsEnabledString := os.Getenv("TLS_ENABLED")
+	tlsEnabled, err := strconv.ParseBool(tlsEnabledString)
+	if err != nil {
+		tlsEnabled = true
+	}
+
 	addr := flag.String("addr", addrString, "HTTP network address")
 	dsn := flag.String("dsn", dbString, "PostgreSQL data source name")
+	tls := flag.Bool("tls", tlsEnabled, "Enable TLS")
 	flag.Parse()
 
 	return &Config{
-		Addr: addr,
-		Dsn:  dsn,
+		Addr:       addr,
+		Dsn:        dsn,
+		TlsEnabled: tls,
 	}
 }

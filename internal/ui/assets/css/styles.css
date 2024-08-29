@@ -58,6 +58,7 @@ header.cdc-header .header-search {
 
 .vh {
   height: 50vh;
+  background-color: orange;
 }
 
 footer .row {

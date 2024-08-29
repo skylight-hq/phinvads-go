@@ -20,6 +20,7 @@ type Application struct {
 	db         *sql.DB
 	server     *http.Server
 	repository *rp.Repository
+	tlsEnabled bool
 }
 
 func SetupApp(cfg *cfg.Config) *Application {
@@ -41,6 +42,7 @@ func SetupApp(cfg *cfg.Config) *Application {
 		logger:     logger,
 		db:         db,
 		repository: rp,
+		tlsEnabled: *cfg.TlsEnabled,
 	}
 
 	srv := &http.Server{
@@ -52,6 +54,7 @@ func SetupApp(cfg *cfg.Config) *Application {
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
 	}
+
 	app.server = srv
 	return app
 }
@@ -60,10 +63,16 @@ func SetupApp(cfg *cfg.Config) *Application {
 func (app *Application) Run() {
 	app.logger.Info("starting server", slog.String("addr", app.server.Addr))
 
-	tlsCert := getEnvWithFallback("TLS_CERT", "./tls/localhost.pem")
-	tlsKey := getEnvWithFallback("TLS_KEY", "./tls/localhost-key.pem")
+	var err error
+	if app.tlsEnabled {
+		tlsCert := getEnvWithFallback("TLS_CERT", "./tls/localhost.pem")
+		tlsKey := getEnvWithFallback("TLS_KEY", "./tls/localhost-key.pem")
 
-	err := app.server.ListenAndServeTLS(tlsCert, tlsKey)
+		err = app.server.ListenAndServeTLS(tlsCert, tlsKey)
+	} else {
+		err = app.server.ListenAndServe()
+	}
+
 	app.logger.Error(err.Error())
 
 	defer app.db.Close()
