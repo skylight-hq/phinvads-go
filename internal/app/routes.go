@@ -1,9 +1,7 @@
 package app
 
 import (
-	"fmt"
 	"net/http"
-	"text/template"
 
 	"github.com/justinas/alice"
 	"github.com/skylight-hq/phinvads-go/internal/ui"
@@ -43,27 +41,7 @@ func (app *Application) routes() http.Handler {
 	mux.HandleFunc("GET /api/value-set-concepts/value-set-version/{valueSetVersionId}", app.getValueSetConceptsByVersionID)
 	mux.HandleFunc("GET /api/value-set-concepts/code-system/{codeSystemOid}", app.getValueSetConceptsByCodeSystemOID)
 
-	mux.HandleFunc("GET /toggle-banner/{action}", func(w http.ResponseWriter, r *http.Request) {
-		action := r.PathValue("action")
-		var path string
-		if action == "close" {
-			path = "internal/ui/components/banner-closed.html"
-
-		} else {
-			path = "internal/ui/components/banner-open.html"
-		}
-
-		tmpl, err := template.ParseFiles(path)
-		if err != nil {
-			fmt.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		if err := tmpl.Execute(w, nil); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
-
-	})
+	mux.HandleFunc("GET /toggle-banner/{action}", app.handleBannerToggle)
 
 	standard := alice.New(app.recoverPanic, app.logRequest, commonHeaders)
 
