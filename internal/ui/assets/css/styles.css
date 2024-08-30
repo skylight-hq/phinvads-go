@@ -45,7 +45,7 @@ header.cdc-header .header-nav a {
   color: #fff;
   font-size: 16;
   text-decoration: none;
-  padding: 26px;
+  padding: 20px;
 }
 
 header.cdc-header .header-nav a.dropdown::after {
