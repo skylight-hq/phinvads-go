@@ -56,23 +56,13 @@ header.cdc-header .header-search {
   padding-top: 6px;
 }
 
-.accordion {
+home .usa-accordion {
   background-color: #eee;
-  color: #444;
-  cursor: pointer;
-  padding: 10px;
-  width: fixed 200px;
-  height: 25px;
-  text-align: left;
-  border-top: 6px;
-  border-left: 6px;
-  outline: none;
-  transition: 0.4s;
 }
 
-.active, .accordion:hover {
+.active, .usa-accordion:hover {
   background-color: #ccc;
-}
+} 
 
 .panel {
   padding: 0 10px;
