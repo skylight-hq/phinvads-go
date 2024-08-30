@@ -8,7 +8,6 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/a-h/templ"
 	"github.com/skylight-hq/phinvads-go/internal/database/models"
 	"github.com/skylight-hq/phinvads-go/internal/database/models/xo"
 	customErrors "github.com/skylight-hq/phinvads-go/internal/errors"
@@ -423,12 +422,6 @@ func (app *Application) home(w http.ResponseWriter, r *http.Request) {
 
 func (app *Application) handleBannerToggle(w http.ResponseWriter, r *http.Request) {
 	action := r.PathValue("action")
-	var component templ.Component
-	if action == "close" {
-		component = components.UsaBanner("close")
-	} else {
-		component = components.UsaBanner("open")
-	}
-
+	component := components.UsaBanner(action)
 	component.Render(r.Context(), w)
 }
