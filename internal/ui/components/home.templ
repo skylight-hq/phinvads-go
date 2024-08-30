@@ -5,9 +5,18 @@ templ Home() {
 		<h1>PHIN VADS Home</h1>
 		<div class="search">
 			<p>Search PHIN VADS</p>
-			<div class="search-input">
-				<button>Search</button>
-			</div>
+			<section class="header-search grid-col flex-1" aria-label="Small search component">
+				<form class="usa-search usa-search--small" role="search">
+					<label class="usa-sr-only" for="search-field-en-small">Search</label>
+					<input
+						class="usa-input"
+						id="search-field-en-small"
+						type="search"
+						name="search"
+					/>
+					<button class="usa-button" type="submit">Search</button>
+				</form>
+			</section>
 		</div>
 		<h2>Hot Topics</h2>
 		<div class="usa-accordion usa-accordion--multiselectable" data-allow-multiple>
