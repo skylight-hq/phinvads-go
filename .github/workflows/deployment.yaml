@@ -14,8 +14,11 @@ jobs:
     runs-on: ubuntu-latest
     environment: main
     steps:
-      - name: Check out changes
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.23.0"
 
       - name: Azure CLI Login
         uses: azure/login@v2
