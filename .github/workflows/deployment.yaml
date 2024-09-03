@@ -47,6 +47,8 @@ jobs:
           AZURE_VM_IP: ${{ secrets.AZURE_VM_IP }}
           AZURE_VM_SSH_KEY: ${{ secrets.AZURE_VM_SSH_KEY }}
         run: |
+          go mod tidy
+          templ generate
           go build -o phinvads-go ./cmd/phinvads-go
           scp -i <(echo "$AZURE_VM_SSH_KEY") ./phinvads-go azureuser@${AZURE_VM_IP}:/home/azureuser/phinvads-go
 
