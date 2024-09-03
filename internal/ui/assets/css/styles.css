@@ -54,7 +54,7 @@
 }
 
 .cdc-site-gov-notice .col-lg-11 {
-  height: 1rem;
+  height: auto;
 }
 
 .cdc-site-gov-notice .col-lg-11 button {
@@ -79,6 +79,16 @@
   .cdc-site-gov-notice .col-lg-11 {
     display: flex;
     justify-content: flex-end;
+  }
+}
+
+@media screen and (max-width: 385px) {
+  .cdc-site-gov-notice .col-lg-11 button {
+    margin-left: 0;
+  }
+
+  .cdc-site-gov-notice .col-lg-11 div + span {
+    margin-left: 0;
   }
 }
 
