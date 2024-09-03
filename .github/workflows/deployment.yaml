@@ -24,32 +24,23 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Azure CLI script
-        uses: azure/cli@v2
-        with:
-          azcliversion: latest
-          inlineScript: |
-            az account show
-
       - name: Allow GitHub Runner IP
-        uses: azure/cli@v2
-        with:
-          inlineScript: |
-            set -eu
-            agentIP=$(curl -s https://api.ipify.org/)
-            az network nsg rule create \
-              --resource-group phinvads-go \
-              --nsg-name phinvads-go-nsg \
-              --name AllowSSHFromGitHubActions \
-              --priority 200 \
-              --direction Inbound \
-              --access Allow \
-              --protocol Tcp \
-              --destination-port-ranges 22 \
-              --source-address-prefixes $agentIP \
-              --destination-address-prefixes '*' \
-              --description "Allow SSH from GitHub Actions"
-            sleep 30
+        run: |
+          set -eu
+          agentIP=$(curl -s https://api.ipify.org/)
+          az network nsg rule create \
+            --resource-group phinvads-go \
+            --nsg-name phinvads-go-nsg \
+            --name AllowSSHFromGitHubActions \
+            --priority 200 \
+            --direction Inbound \
+            --access Allow \
+            --protocol Tcp \
+            --destination-port-ranges 22 \
+            --source-address-prefixes $agentIP \
+            --destination-address-prefixes '*' \
+            --description "Allow SSH from GitHub Actions"
+          sleep 30
 
       - name: Deploy phinvads-go to VM
         env:
@@ -60,12 +51,10 @@ jobs:
           scp -i <(echo "$AZURE_VM_SSH_KEY") ./phinvads-go azureuser@${AZURE_VM_IP}:/home/azureuser/phinvads-go
 
       - name: Disallow GitHub Runner IP
-        uses: azure/cli@v2
-        with:
-          inlineScript: |
-            set -eu
-            agentIP=$(curl -s https://api.ipify.org/)
-            az network nsg rule remove \
-              --resource-group phinvads-go \
-              --nsg-name phinvads-go-nsg \
-              --name AllowSSHFromGitHubActions
+        run: |
+          set -eu
+          agentIP=$(curl -s https://api.ipify.org/)
+          az network nsg rule remove \
+            --resource-group phinvads-go \
+            --nsg-name phinvads-go-nsg \
+            --name AllowSSHFromGitHubActions
