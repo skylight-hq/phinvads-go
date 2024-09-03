@@ -41,6 +41,8 @@ func (app *Application) routes() http.Handler {
 	mux.HandleFunc("GET /api/value-set-concepts/value-set-version/{valueSetVersionId}", app.getValueSetConceptsByVersionID)
 	mux.HandleFunc("GET /api/value-set-concepts/code-system/{codeSystemOid}", app.getValueSetConceptsByCodeSystemOID)
 
+	mux.HandleFunc("GET /toggle-banner/{action}", app.handleBannerToggle)
+
 	standard := alice.New(app.recoverPanic, app.logRequest, commonHeaders)
 
 	return standard.Then(mux)
