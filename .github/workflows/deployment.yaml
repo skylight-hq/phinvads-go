@@ -40,14 +40,14 @@ jobs:
             --source-address-prefixes $agentIP \
             --destination-address-prefixes '*' \
             --description "Allow SSH from GitHub Actions"
-          sleep 30
+          sleep 3
 
       - name: Deploy phinvads-go to VM
         env:
           AZURE_VM_IP: ${{ secrets.AZURE_VM_IP }}
           AZURE_VM_SSH_KEY: ${{ secrets.AZURE_VM_SSH_KEY }}
         run: |
-          go mod tidy
+          go install github.com/a-h/templ/cmd/templ@latest
           templ generate
           go build -o phinvads-go ./cmd/phinvads-go
           scp -i <(echo "$AZURE_VM_SSH_KEY") ./phinvads-go azureuser@${AZURE_VM_IP}:/home/azureuser/phinvads-go
