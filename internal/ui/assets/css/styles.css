@@ -1,29 +1,95 @@
-.usa-banner {
-  background-color: #fff;
+.usa-banner__content {
+  padding-right: calc(var(--bs-gutter-x) * 0.5) !important;
+  padding-left: calc(var(--bs-gutter-x) * 0.5) !important;
+}
+
+.usa-banner__content-text {
+  color: var(--colors-gray-cool-60);
 }
 
 .usa-banner__header {
-  font-size: 12px;
-  border-bottom: 1px solid #fbfcfd;
-  border-left: none;
-  border-right: none;
-  padding: 10px 0;
-  font-family: "Poppins", sans-serif;
-  font-weight: 300;
-  color: #565c65;
-  background-color: #fff;
-  z-index: 11;
+  padding-top: 0;
+  padding-bottom: 0;
+  font-size: 0.8rem;
+  font-weight: 400;
+  min-height: 1rem !important;
   position: relative;
-  max-width: 1400px;
-  margin: 0 auto;
+  border: none;
 }
 
-.usa-banner #gov-banner-default {
-  font-family: "Poppins", sans-serif;
+.lock-img {
+  margin: 0px 2.5px 6px 2.5px !important;
+  max-height: 16px;
+  max-width: 16px;
+}
+.usa-banner__header-action {
+  display: inline;
+  margin-top: 0;
+}
+
+.usa-banner__header-action::after {
+  background-image: url(../img/material-icons/keyboard_arrow_down_wt200.svg);
+  margin: 0 0 2px 0;
+  height: 12px;
+  width: 10.48px;
+}
+
+.usa-banner__toggle {
+  position: relative;
+  z-index: 1;
+}
+
+@supports ((-webkit-mask: url()) or (mask: url())) {
+  .usa-banner__header-action::after {
+    mask-image: url(../img/material-icons/keyboard_arrow_down_wt200.svg), linear-gradient(transparent, transparent);
+  }
+}
+
+.usa-banner__header-flag {
+  float: none;
 }
 
 .usa-banner__lock-image {
   margin-right: 4px;
+}
+
+.cdc-site-gov-notice .col-lg-11 {
+  height: auto;
+}
+
+.cdc-site-gov-notice .col-lg-11 button {
+  margin-left: 6px;
+  margin-right: 6px;
+  color: var(--colors-primary-link);
+  text-decoration: none;
+  display: inline;
+  margin-top: 0;
+  margin-bottom: 0;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  font-weight: 300;
+}
+
+.cdc-site-gov-notice .col-lg-11 .d-flex {
+  align-items: center;
+}
+
+@media screen and (min-width: 992px) {
+  .cdc-site-gov-notice .col-lg-11 {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+@media screen and (max-width: 385px) {
+  .cdc-site-gov-notice .col-lg-11 button {
+    margin-left: 0;
+  }
+
+  .cdc-site-gov-notice .col-lg-11 div + span {
+    margin-left: 0;
+  }
 }
 
 header.cdc-header .cdc-header__cdc-logo a img {
@@ -45,7 +111,7 @@ header.cdc-header .header-nav a {
   color: #fff;
   font-size: 16;
   text-decoration: none;
-  padding: 26px;
+  padding: 20px;
 }
 
 header.cdc-header .header-nav a.dropdown::after {

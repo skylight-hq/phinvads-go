@@ -41,8 +41,16 @@ PHIN VADS written in Go. Load `phinvads.dump` into a PostgreSQL database using `
     cd ..
     ```
 
-1. Run the app!
+1. Run the app! If you are only working on backend code, you can just run a simple live reload with air:
 
     ```bash
     air
+    ```
+
+1. Air will also work for the frontend, but you will have to refresh your browser every time you make a change. To get automatic browser reloads, run the app this way:
+
+    ```bash
+    templ generate --watch --proxy="http://localhost:4000"
+    # Then, in a separate terminal window, run air:
+    air -c .air-with-proxy.toml
     ```
