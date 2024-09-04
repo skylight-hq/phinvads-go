@@ -63,8 +63,8 @@ jobs:
         env:
           AZURE_VM_IP: ${{ secrets.AZURE_VM_IP }}
         run: |
-          ssh azureuser@${AZURE_VM_IP} "sudo systemctl stop phinvads-go"
-          scp -o StrictHostKeyChecking=accept-new ./phinvads-go azureuser@${AZURE_VM_IP}:/home/azureuser/phinvads-go
+          ssh -o StrictHostKeyChecking=accept-new azureuser@${AZURE_VM_IP} "sudo systemctl stop phinvads-go"
+          scp ./phinvads-go azureuser@${AZURE_VM_IP}:/home/azureuser/phinvads-go
           scp ./remote/production/phinvads-go.service azureuser@${AZURE_VM_IP}:/home/azureuser/phinvads-go.service
           ssh azureuser@${AZURE_VM_IP} "sudo mv phinvads-go.service /etc/systemd/system/phinvads-go.service && sudo systemctl enable phinvads-go && sudo systemctl restart phinvads-go"
 
