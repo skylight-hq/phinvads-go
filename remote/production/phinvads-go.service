@@ -12,12 +12,7 @@ StartLimitIntervalSec=600
 StartLimitBurst=5
 
 [Service]
-# Execute the API binary as the azureuser user, loading the environment variables from
-# /etc/environment and using the working directory /home/azureuser.
 Type=exec
-User=azureuser
-Group=azureuser
-EnvironmentFile=/home/azureuser/.env
 WorkingDirectory=/home/azureuser
 ExecStart=/home/azureuser/phinvads-go
 
