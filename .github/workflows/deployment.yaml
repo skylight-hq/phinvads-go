@@ -50,10 +50,8 @@ jobs:
           AZURE_VM_SSH_KEY: ${{ secrets.AZURE_VM_SSH_KEY }}
         run: |
           install -m 600 -D /dev/null ~/.ssh/phinvads-go
-          whoami
-          ls /home -lah
           echo "${{ secrets.AZURE_VM_SSH_KEY }}" > ~/.ssh/phinvads-go
-          echo "IdentityFile /home/azureuser/.ssh/phinvads-go" >> ~/.ssh/config
+          echo "IdentityFile /home/runner/.ssh/phinvads-go" >> ~/.ssh/config
 
       - name: Build phinvads-go
         run: |
