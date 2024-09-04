@@ -68,6 +68,7 @@ jobs:
           ssh azureuser@${AZURE_VM_IP} "sudo mv phinvads-go.service /etc/systemd/system/phinvads-go.service && sudo systemctl enable phinvads-go && sudo systemctl restart phinvads-go"
 
       - name: Disallow GitHub Runner IP
+        if: always()
         run: |
           set -eu
           agentIP=$(curl -s https://api.ipify.org/)
