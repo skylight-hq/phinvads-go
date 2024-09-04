@@ -126,6 +126,13 @@ header.cdc-header .header-search {
   margin-bottom: 12px;
 }
 
+.dropdown-search {
+  display: inline-flex;
+}
+
+.advanced-search-link {
+  display: inline;
+}
 .panel {
   padding: 0 10px;
   background-color: white;
