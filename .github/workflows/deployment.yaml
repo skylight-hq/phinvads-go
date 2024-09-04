@@ -50,10 +50,13 @@ jobs:
           AZURE_VM_IP: ${{ secrets.AZURE_VM_IP }}
           AZURE_VM_SSH_KEY: ${{ secrets.AZURE_VM_SSH_KEY }}
         run: |
+          install -m 600 -D /dev/null ~/.ssh/phinvads-go
+          echo "${{ secrets.AZURE_VM_SSH_KEY }}" > ~/.ssh/phinvads-go
+          ssh-keyscan -H $AZURE_VM_IP > ~/.ssh/known_hosts
           go install github.com/a-h/templ/cmd/templ@latest
           templ generate
           go build -o phinvads-go ./cmd/phinvads-go
-          scp -i <(echo "$AZURE_VM_SSH_KEY") ./phinvads-go azureuser@${AZURE_VM_IP}:/home/azureuser/phinvads-go
+          scp -i ~/.ssh/phinvads-go ./phinvads-go azureuser@${AZURE_VM_IP}:/home/azureuser/phinvads-go
 
       - name: Disallow GitHub Runner IP
         run: |
