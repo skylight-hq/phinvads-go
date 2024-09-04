@@ -17,7 +17,7 @@ StartLimitBurst=5
 Type=exec
 User=azureuser
 Group=azureuser
-EnvironmentFile=/etc/environment
+EnvironmentFile=/home/azureuser/.env
 WorkingDirectory=/home/azureuser
 ExecStart=/home/azureuser/phinvads-go
 
