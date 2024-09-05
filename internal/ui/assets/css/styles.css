@@ -128,24 +128,21 @@ header.cdc-header .header-search {
 
 .usa-button {
   height: 3rem;
+  max-width: 20rem;
 }
 
 .usa-input {
-  height: 3rem;
-  margin-top: 0;
+  max-width: 100%;
 }
 
 .usa-select {
   height: 3rem;
   margin-top: 0;
+  max-width: 100%;
 }
 
-.usa-search usa-search--big {
-  height: 3rem;
-}
-
-.usa-search__input {
-  height: 3rem;
+ .advanced-search-link {
+  justify-content: flex-end;
 }
 
 .panel {
