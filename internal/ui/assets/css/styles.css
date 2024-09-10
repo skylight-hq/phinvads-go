@@ -122,9 +122,34 @@ header.cdc-header .header-search {
   padding-top: 6px;
 }
 
-.vh {
-  height: 50vh;
-  background-color: orange;
+.usa-accordion__button {
+  margin-bottom: 12px;
+}
+
+.usa-button {
+  height: 3rem;
+  max-width: 20rem;
+}
+
+.usa-input {
+  max-width: 100%;
+}
+
+.usa-select {
+  height: 3rem;
+  margin-top: 0;
+  max-width: 100%;
+}
+
+ .advanced-search-link {
+  justify-content: flex-end;
+}
+
+.panel {
+  padding: 0 10px;
+  background-color: white;
+  display: none;
+  overflow: hidden;
 }
 
 footer .row {
