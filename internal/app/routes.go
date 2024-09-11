@@ -43,6 +43,7 @@ func (app *Application) routes() http.Handler {
 
 	mux.HandleFunc("GET /toggle-banner/{action}", app.handleBannerToggle)
 
+	mux.HandleFunc("GET /search-results", app.searchResults)
 	standard := alice.New(app.recoverPanic, app.logRequest, commonHeaders)
 
 	return standard.Then(mux)

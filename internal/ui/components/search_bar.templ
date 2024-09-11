@@ -1,0 +1,41 @@
+package components
+
+templ SearchBar() {
+    <div class="search">
+        <p>Search PHIN VADS</p>
+        <div class="grid-row">
+            <form class="usa-form">
+                <section class="grid-col-auto">
+                    <select class="usa-select" name="options" id="options">
+                        <option value> All Vocabulary </option>
+                        <option value="value1">Option A</option>
+                        <option value="value2">Option B</option>
+                        <option value="value3">Option C</option>
+                    </select>
+                </section>
+            </form>
+            <section class="grid-col-fill" aria-label="Big search component">
+                <form class="usa-search usa-search--big" role="search">
+                    <label class="usa-sr-only" for="search-field-en-big">Search</label>
+                    <input
+                        class="usa-input"
+                        id="search-field-en-big"
+                        type="search"
+                        name="search"
+                    />
+                    <button class="usa-button" type="submit">
+                    <span class="usa-search__submit-text">Search </span>
+                    <img
+                        src="/assets/img/usa-icons-bg/search--white.svg"
+                        class="usa-search__submit-icon"
+                        alt="Search"
+                    />
+                    </button>
+                </form>
+            </section>
+        </div>
+        <div class="grid-row advanced-search-link">
+            <p><a href="#">Advanced Search</a></p>
+        </div>
+    </div>
+}

@@ -420,6 +420,11 @@ func (app *Application) home(w http.ResponseWriter, r *http.Request) {
 	component.Render(r.Context(), w)
 }
 
+func (app *Application) searchResults(w http.ResponseWriter, r *http.Request) {
+	component := components.SearchResults("Search", "Hepatitis")
+	component.Render(r.Context(), w)
+}
+
 func (app *Application) handleBannerToggle(w http.ResponseWriter, r *http.Request) {
 	action := r.PathValue("action")
 	component := components.UsaBanner(action)
