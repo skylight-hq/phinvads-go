@@ -10,7 +10,10 @@ templ ResultRow(conceptCode, conceptName, prefName, codeSystem, valueSet string,
      >
         <div class="col check">
             <div role="cell">
-                <input type="checkbox">
+                <input 
+                    type="checkbox" 
+                    value={conceptCode}
+                >
             </div>
         </div>
         <div class="col">

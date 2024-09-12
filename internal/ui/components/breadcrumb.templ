@@ -1,15 +1,15 @@
 package components
 
 templ Breadcrumb(currentPage string) {
-<div>
-    <div class="cdc-breadcrumb">
-        <div class="cdc-breadcrumb__content cdc-page-offset">
-            if currentPage == "Home" {
-                <a href="/">PHIN VADS Home</a>
-            } else {
+    <div>
+    if currentPage == "Home" {
+        <br>
+    } else {     
+        <div class="cdc-breadcrumb">
+            <div class="cdc-breadcrumb__content cdc-page-offset">
                 <a href="/">PHIN VADS Home</a> <img src="/assets/img/usa-icons/chevron_right.svg" /> {currentPage}
-            } 
+            </div>
         </div>
+    } 
     </div>
-</div>
 }

@@ -398,9 +398,19 @@ footer .row {
   color: white;
 }
 
+.page-buttons button:not(.active, .button-next button):hover {
+  background-color: #005ea2;
+  color: white;
+}
+
 .button-next button {
   border: none;
   font-weight: 600;
+}
+
+.button-next button:hover {
+  background-color: transparent;
+  text-decoration: underline;
 }
 
 .button-next :after {
@@ -415,4 +425,9 @@ footer .row {
   padding: 0.5rem 1rem 0.5rem 0.75rem;
   color: white;
   border-radius: 6px;
+}
+
+.download-button button:hover {
+  background-color: #0b4778;
+  color: white;
 }
