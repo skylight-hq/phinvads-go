@@ -207,6 +207,7 @@ footer .row {
 .site-footer {
   padding: 2rem 0;
 }
+
 .site-footer .row {
   justify-content: space-between;
   padding-left: 0;
@@ -217,9 +218,11 @@ footer .row {
   font-size: 24px;
   padding: 0 1rem;
 }
+
 .site-footer-section-list {
   padding: 0 1rem;
 }
+
 .site-footer-section-list ul {
   line-height: 1.75rem;
   padding: 0;

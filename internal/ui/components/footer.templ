@@ -75,23 +75,32 @@ templ Footer() {
 			<nav class="cdc-footer__nav">
 				<div class="row cdc-footer__inner">
 					<div class="col">
-						<a class="cdc-footer__heading" data-bs-toggle="collapse" href="#mobile-footer-contactUs" role="button" aria-expanded="false" aria-controls="mobile-footer-contactUs">
+						<a id="contactUs-btn" class="cdc-footer__nav-link collapsed" data-bs-toggle="collapse" href="#contactUs" role="button" aria-expanded="false" aria-controls="contactUs">
 							Contact Us
-							<img class="cdc-fa-angle-down" src="/assets/img/usa-icons-bg/expand_more--white.svg"/>
+							<span class="cdc-fa-angle-down"></span>						
 						</a>
-						<a class="cdc-footer__heading" data-bs-toggle="collapse" href="#mobile-footer-aboutCDC" role="button" aria-expanded="false" aria-controls="mobile-footer-aboutCDC">
+						<div class="cdc-footer__subnav collapse" id="contactUs" data-bs-parent="#cdc-footer-nav" aria-labelledby="contactUs-btn" tabindex="-1" aria-hidden="true" data-height="189" style="visibility: hidden;">
+							<div class="cdc-footer__subnav-inner">
+								<a class="cdc-footer__nav-heading" href="https://www.cdc.gov/cdc-info/index.html">Contact Us <span class="cdc-fa-angle-right"></span></a>
+								<ul>
+									<li><a class="cdc-footer__subnav-link" href="tel:800-232-4636">Call 800-232-4636</a></li>
+									<li><a class="cdc-footer__subnav-link" href="https://www.cdc.gov/cdc-info/index.html">Contact CDC</a></li>
+								</ul>
+							</div>
+						</div>
+						<a class="cdc-footer__nav-link collapsed" data-bs-toggle="collapse" href="#mobile-footer-aboutCDC" role="button" aria-expanded="false" aria-controls="mobile-footer-aboutCDC">
 							About CDC
 							<img class="cdc-fa-angle-down" src="/assets/img/usa-icons-bg/expand_more--white.svg"/>
 						</a>
-						<a class="cdc-footer__heading" data-bs-toggle="collapse" href="#mobile-footer-policies" role="button" aria-expanded="false" aria-controls="mobile-footer-policies">
+						<a class="cdc-footer__nav-link" data-bs-toggle="collapse" href="#mobile-footer-policies" role="button" aria-expanded="false" aria-controls="mobile-footer-policies">
 							Policies
 							<img class="cdc-fa-angle-down" src="/assets/img/usa-icons-bg/expand_more--white.svg"/>
 						</a>
-						<a class="cdc-footer__heading" data-bs-toggle="collapse" href="#mobile-footer-languages" role="button" aria-expanded="false" aria-controls="mobile-footer-languages">
+						<a class="cdc-footer__nav-link" data-bs-toggle="collapse" href="#mobile-footer-languages" role="button" aria-expanded="false" aria-controls="mobile-footer-languages">
 							Languages
 							<img class="cdc-fa-angle-down" src="/assets/img/usa-icons-bg/expand_more--white.svg"/>
 						</a>
-						<a class="cdc-footer__heading" data-bs-toggle="collapse" href="#mobile-footer-archive" role="button" aria-expanded="false" aria-controls="mobile-footer-archive">
+						<a class="cdc-footer__nav-link" data-bs-toggle="collapse" href="#mobile-footer-archive" role="button" aria-expanded="false" aria-controls="mobile-footer-archive">
 							Archive
 							<img class="cdc-fa-angle-down" src="/assets/img/usa-icons-bg/expand_more--white.svg"/>
 						</a>
