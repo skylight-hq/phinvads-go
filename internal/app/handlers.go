@@ -418,7 +418,6 @@ func (app *Application) getValueSetConceptsByCodeSystemOID(w http.ResponseWriter
 
 func (app *Application) getAllHotTopics(w http.ResponseWriter, r *http.Request) {
 	rp := app.repository
-	fmt.Println(rp)
 
 	hotTopics, err := rp.GetAllHotTopics(r.Context())
 
