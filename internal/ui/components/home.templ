@@ -41,55 +41,12 @@ templ Home() {
 			</div>
 		</div>
 		<h2>Hot Topics</h2>
-		<div class="usa-accordion usa-accordion--multiselectable" data-allow-multiple>
-			<button type="button" class="usa-accordion__button" aria-expanded="false" aria-controls="m-a1">PHIN VADS Feedback</button>
-				<div id="m-a1" class="usa-accordion__content usa-prose">
-					<p>Lorem ipsum...</p>
-				</div>
-			<button type="button" class="usa-accordion__button" aria-expanded="false" aria-controls="m-a2">New CDCREC Code System Status Upate</button>
-				<div id="m-a2" class="usa-accordion__content usa-prose">
-					<p>Lorem ipsum...</p>
-				</div>
-			<button type="button" class="usa-accordion__button" aria-expanded="false" aria-controls="m-a3">CDC Race Category and Ethnicity Group</button>
-				<div id="m-a3" class="usa-accordion__content usa-prose">
-					<p>Lorem ipsum...</p>
-				</div>
-			<button type="button" class="usa-accordion__button" aria-expanded="false" aria-controls="m-a4">COVID-19 Information Management Response (VADS)</button>
-				<div id="m-a4" class="usa-accordion__content usa-prose">
-					<p>Lorem ipsum...</p>
-				</div>
-			<button type="button" class="usa-accordion__button" aria-expanded="false" aria-controls="m-a5">1.1 General COVID-19 Information Management Response</button>
-				<div id="m-a5" class="usa-accordion__content usa-prose">
-					<p>Lorem ipsum...</p>
-				</div>
-			<button type="button" class="usa-accordion__button" aria-expanded="false" aria-controls="m-a6">1.2 Representing Health Care Data for Emergency Medical Services</button>
-				<div id="m-a6" class="usa-accordion__content usa-prose">
-					<p>Lorem ipsum...</p>
-				</div>
-			<button type="button" class="usa-accordion__button" aria-expanded="false" aria-controls="m-a7">1.3 Patient's Clinical Encounter</button>
-				<div id="m-a7" class="usa-accordion__content usa-prose">
-					<p>Lorem ipsum...</p>
-				</div>
-			<button type="button" class="usa-accordion__button" aria-expanded="false" aria-controls="m-a8">1.4 COVID-19 Public Health Reporting</button>
-				<div id="m-a8" class="usa-accordion__content usa-prose">
-					<p>Lorem ipsum...</p>
-				</div>
-			<button type="button" class="usa-accordion__button" aria-expanded="false" aria-controls="m-a9">1.5 Labratory Data Exchange and Labratory Surveillance</button>
-				<div id="m-a9" class="usa-accordion__content usa-prose">
-					<p>Lorem ipsum...</p>
-				</div>
-			<button type="button" class="usa-accordion__button" aria-expanded="false" aria-controls="m-a10">1.6 Geospatial Data Set and Tools</button>
-				<div id="m-a10" class="usa-accordion__content usa-prose">
-					<p>Lorem ipsum...</p>
-				</div>
-			<button type="button" class="usa-accordion__button" aria-expanded="false" aria-controls="m-a11">1.7 COVID-19 Immunization</button>
-				<div id="m-a11" class="usa-accordion__content usa-prose">
-					<p>Lorem ipsum...</p>
-				</div>
-			<button type="button" class="usa-accordion__button" aria-expanded="false" aria-controls="m-a12">1.8 Community Resilience and Social Determinants of Health (SDOH)</button>
-				<div id="m-a12" class="usa-accordion__content usa-prose">
-					<p>Lorem ipsum...</p>
-				</div>
+		<div 
+			hx-trigger="load"
+			hx-get="/load-hot-topics"
+			class="usa-accordion usa-accordion--multiselectable" 
+			data-allow-multiple
+		>
 		</div>
 		<div class="grid-row">
 			<br><section><br><br><br><br></section></br>

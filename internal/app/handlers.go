@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
+	"strconv"
 
 	"github.com/skylight-hq/phinvads-go/internal/database/models"
 	"github.com/skylight-hq/phinvads-go/internal/database/models/xo"
@@ -413,6 +414,45 @@ func (app *Application) getValueSetConceptsByCodeSystemOID(w http.ResponseWriter
 	w.Header().Set("Content-Type", "application/json")
 
 	json.NewEncoder(w).Encode(valueSetConcepts)
+}
+
+func (app *Application) getAllHotTopics(w http.ResponseWriter, r *http.Request) {
+	rp := app.repository
+
+	hotTopics, err := rp.GetAllHotTopics(r.Context())
+
+	if err != nil {
+		var (
+			method = r.Method
+			uri    = r.URL.RequestURI()
+		)
+		if errors.Is(err, sql.ErrNoRows) {
+			errorString := "Error: No Hot Topics found"
+			dbErr := &customErrors.DatabaseError{
+				Err:    err,
+				Msg:    errorString,
+				Method: "home: Get Hot Topics",
+			}
+			dbErr.NoRows(w, r, err, app.logger)
+		} else {
+			customErrors.ServerError(w, r, err, app.logger)
+		}
+
+		app.logger.Error(err.Error(), slog.String("method", method), slog.String("uri", uri))
+		return
+	}
+
+	for _, t := range *hotTopics {
+		// skip sending system config to the frontend
+		if t.HotTopicName == "SYSTEM CONFIG" {
+			continue
+		}
+		// format the sequence id to align with the uswds js controls
+		divId := fmt.Sprintf("m-a%s", strconv.Itoa(t.Seq))
+
+		component := components.HotTopic(t.HotTopicName, t.HotTopicDescription, divId, t.HotTopicID.String())
+		component.Render(r.Context(), w)
+	}
 }
 
 func (app *Application) home(w http.ResponseWriter, r *http.Request) {

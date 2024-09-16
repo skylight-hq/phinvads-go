@@ -168,3 +168,12 @@ func (r *Repository) GetValueSetVersionByVscVsvId(ctx context.Context, vsc *xo.V
 func (r *Repository) GetValueSetVersionByVvsvVsvId(ctx context.Context, vvsv *xo.ViewValueSetVersion) (*xo.ValueSetVersion, error) {
 	return vvsv.ValueSetVersion(ctx, r.database)
 }
+
+// =============================== //
+// ==== Other resource methods === //
+// =============================== //
+
+func (r *Repository) GetAllHotTopics(ctx context.Context) (*[]xo.HotTopic, error) {
+	return models.GetAllHotTopics(ctx, r.database)
+
+}
