@@ -1,6 +1,6 @@
 package components
 
-templ NavBar() {
+templ NavBar(currentPage string) {
 	<header class="container cdc-header noindex" role="banner">
 		<div class="cdc-header__desktop">
 			<div class="cdc-page-offset">
@@ -91,5 +91,6 @@ templ NavBar() {
 				</a>
 			</div>
 		</div>
+		@Breadcrumb(currentPage)
 	</header>
 }

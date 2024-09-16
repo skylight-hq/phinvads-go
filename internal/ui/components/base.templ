@@ -1,6 +1,6 @@
 package components
 
-templ Base() {
+templ Base(currentPage string) {
 	<!DOCTYPE html>
 	<html lang="en">
 		<head>
@@ -19,7 +19,7 @@ templ Base() {
 		</head>
 		<body>
 			@UsaBanner("close")
-			@NavBar()
+			@NavBar(currentPage)
 			<main class="cdc-page-offset">
 				{ children... }
 			</main>

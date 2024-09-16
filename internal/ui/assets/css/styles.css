@@ -141,8 +141,9 @@ header.cdc-header .header-search {
   max-width: 100%;
 }
 
- .advanced-search-link {
+.advanced-search-link {
   justify-content: flex-end;
+  padding: 0.5rem;
 }
 
 .panel {
@@ -281,4 +282,152 @@ footer .row {
   .site-footer-section-name .cdc-fa-angle-down {
     display: inline;
   }
+}
+
+.cdc-breadcrumb {
+  background-color: #e5f4ff;
+  color: #495057;
+  padding: 0.25rem 0;
+}
+
+.cdc-breadcrumb__content {
+  font-size: smaller;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  line-height: 24px;
+}
+
+.search-results__table {
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.search-results__tabs {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+}
+
+.tab-item {
+  font-weight: bold;
+  padding: 0.25rem;
+}
+
+.tab-item.active {
+  border-bottom: 10px solid #0b4778;
+}
+
+.search-results__table .rowgroup {
+  padding: 1rem;
+}
+
+.cdc-header.header-row {
+  align-items: center;
+  padding: 1rem 1rem 1rem 1rem;
+  border-bottom: 1px solid darkgrey;
+}
+
+.search-results__table .row {
+  padding: 1rem;
+  --bs-gutter-x: 0;
+}
+
+.cdc-header.header-row p {
+  font-weight: bold;
+}
+
+.search-results__table .content-row {
+  display: flex;
+  align-items: center;
+}
+
+.content-row.alternate-bg {
+  background-color: #e2e3e5;
+}
+.search-results__table .check {
+  flex-grow: 0;
+}
+
+.search-results__table .row p {
+  margin: 0;
+  padding: 0.5rem;
+}
+
+.cdc-header.top-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid lightgrey;
+  padding: 0.75rem;
+}
+
+.col.search-results {
+  max-width: fit-content;
+}
+
+.page-buttons .button-next {
+  display: inline-flex;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+}
+
+.pagination .col {
+  padding: 1rem 0.5rem 1rem 0rem;
+}
+
+.pagination .page-buttons {
+  padding-left: 1rem;
+}
+
+.page-buttons button {
+  padding: 0.25rem 0.75rem;
+  border: 1px solid lightgrey;
+  background-color: transparent;
+  color: #0b4778;
+  border-radius: 6px;
+  width: auto;
+  height: auto;
+}
+
+.page-buttons button.active {
+  background-color: #0b4778;
+  color: white;
+}
+
+.page-buttons button:not(.active, .button-next button):hover {
+  background-color: #005ea2;
+  color: white;
+}
+
+.button-next button {
+  border: none;
+  font-weight: 600;
+}
+
+.button-next button:hover {
+  background-color: transparent;
+  text-decoration: underline;
+}
+
+.button-next :after {
+  content: url(../img/usa-icons/chevron_right.svg);
+  margin: 2px 0 0 0;
+  position: absolute;
+}
+
+.download-button button {
+  border: none;
+  background-color: #005ea2;
+  padding: 0.5rem 1rem 0.5rem 0.75rem;
+  color: white;
+  border-radius: 6px;
+}
+
+.download-button button:hover {
+  background-color: #0b4778;
+  color: white;
 }
