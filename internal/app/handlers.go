@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"log"
 	"log/slog"
 	"net/http"
 	"strconv"
@@ -462,10 +461,7 @@ func (app *Application) home(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *Application) search(w http.ResponseWriter, r *http.Request) {
-	err := r.ParseForm()
-	if err != nil {
-		log.Fatal(err)
-	}
+	r.ParseForm()
 
 	var result = &models.CodeSystemResultRow{}
 
@@ -475,31 +471,25 @@ func (app *Application) search(w http.ResponseWriter, r *http.Request) {
 	rp := app.repository
 
 	// retrieve code system
-	codeSystem, _ := rp.GetCodeSystemByOID(r.Context(), input)
+	codeSystem, err := rp.GetCodeSystemByOID(r.Context(), input)
+	if err != nil {
+		handleError(err, input, app.logger, w, r)
+	}
 	result.CodeSystems = append(result.CodeSystems, codeSystem)
 	result.CodeSystemsCount = strconv.Itoa(len(result.CodeSystems))
 
 	// retrieve concepts that are part of that code system
 	concepts, err := rp.GetCodeSystemConceptsByCodeSystemOID(r.Context(), app.db, codeSystem)
+	if err != nil {
+		handleError(err, input, app.logger, w, r)
+	}
 	result.CodeSystemConcepts = concepts
 	result.CodeSystemConceptsCount = strconv.Itoa(len(concepts))
 
 	// for now
 	result.ValueSetsCount = strconv.Itoa(0)
-
 	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			errorString := fmt.Sprintf("Error: Code System %s not found", input)
-			dbErr := &customErrors.DatabaseError{
-				Err:    err,
-				Msg:    errorString,
-				Method: "getCodeSystemById",
-				Id:     input,
-			}
-			dbErr.NoRows(w, r, err, app.logger)
-		} else {
-			customErrors.ServerError(w, r, err, app.logger)
-		}
+		handleError(err, input, app.logger, w, r)
 		return
 	}
 
@@ -553,4 +543,23 @@ func (app *Application) handleBannerToggle(w http.ResponseWriter, r *http.Reques
 	action := r.PathValue("action")
 	component := components.UsaBanner(action)
 	component.Render(r.Context(), w)
+}
+
+func handleError(err error, input string, logger *slog.Logger, w http.ResponseWriter, r *http.Request) {
+	if errors.Is(err, sql.ErrNoRows) {
+		errorString := fmt.Sprintf("Error: Code System %s not found", input)
+		dbErr := &customErrors.DatabaseError{
+			Err:    err,
+			Msg:    errorString,
+			Method: "getCodeSystemById",
+			Id:     input,
+		}
+		component := components.Error("Search", dbErr.Msg)
+		component.Render(r.Context(), w)
+		dbErr.NoRows(w, r, err, logger)
+	} else {
+		customErrors.ServerError(w, r, err, logger)
+		component := components.Error("search", err.Error())
+		component.Render(r.Context(), w)
+	}
 }
