@@ -507,14 +507,22 @@ func (app *Application) directSearch(w http.ResponseWriter, r *http.Request) {
 	rp := app.repository
 
 	// retrieve code system
-	codeSystem, _ := rp.GetCodeSystemByOID(r.Context(), searchTerm)
-	result.CodeSystems = append(result.CodeSystems, codeSystem)
+	codeSystem, err := rp.GetCodeSystemsByLikeOID(r.Context(), searchTerm)
+	fmt.Println(err)
+	for _, cs := range *codeSystem {
+		result.CodeSystems = append(result.CodeSystems, &cs)
+	}
 	result.CodeSystemsCount = strconv.Itoa(len(result.CodeSystems))
 
-	// retrieve concepts that are part of that code system
-	concepts, err := rp.GetCodeSystemConceptsByCodeSystemOID(r.Context(), app.db, codeSystem)
-	result.CodeSystemConcepts = concepts
-	result.CodeSystemConceptsCount = strconv.Itoa(len(concepts))
+	// // retrieve concepts that are part of that code system
+	// concepts, err := rp.GetCodeSystemConceptsByCodeSystemOID(r.Context(), app.db, codeSystem)
+	// for _, csc := range *concepts {
+	// 	result.CodeSystems = append(result.CodeSystems, &csc)
+	// }
+	// result.CodeSystemConcepts = concepts
+
+	// for now
+	result.CodeSystemConceptsCount = strconv.Itoa(0)
 
 	// for now
 	result.ValueSetsCount = strconv.Itoa(0)

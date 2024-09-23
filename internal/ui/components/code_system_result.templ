@@ -34,7 +34,9 @@ templ CodeSystemResult(searchTerm string, searchResults *models.CodeSystemResult
                @CodeSystemTableHeader()
             </div>
             <div role="rowgroup">
-                @CodeSystemResultRow(true, searchResults.CodeSystems[0])
+                for _, item := range searchResults.CodeSystems {
+                    @CodeSystemResultRow(true, item)
+                }
             </div>
         </div>
     </div>

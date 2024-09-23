@@ -32,6 +32,10 @@ func (r *Repository) GetCodeSystemByOID(ctx context.Context, oid string) (*xo.Co
 	return xo.CodeSystemByOid(ctx, r.database, oid)
 }
 
+func (r *Repository) GetCodeSystemsByLikeOID(ctx context.Context, oid string) (*[]xo.CodeSystem, error) {
+	return models.GetCodeSystemByLikeOID(ctx, r.database, oid)
+}
+
 // =============================== //
 // == CodeSystemConcept methods == //
 // =============================== //
