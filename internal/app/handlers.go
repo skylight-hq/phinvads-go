@@ -505,7 +505,7 @@ func (app *Application) search(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("HX-Push-Url", fmt.Sprintf("/search?type=%s&input=%s", searchType, input))
 
-	component := components.SearchResults("Search", input, result)
+	component := components.SearchResults(false, "Search", input, result)
 	component.Render(r.Context(), w)
 }
 
@@ -545,7 +545,7 @@ func (app *Application) directSearch(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	component := components.SearchResults("Search", searchTerm, result)
+	component := components.SearchResults(true, "Search", searchTerm, result)
 	component.Render(r.Context(), w)
 }
 
