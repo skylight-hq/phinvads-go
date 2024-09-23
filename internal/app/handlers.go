@@ -10,6 +10,7 @@ import (
 	"strconv"
 
 	"github.com/skylight-hq/phinvads-go/internal/database/models"
+	"github.com/skylight-hq/phinvads-go/internal/database/models/repository"
 	"github.com/skylight-hq/phinvads-go/internal/database/models/xo"
 	customErrors "github.com/skylight-hq/phinvads-go/internal/errors"
 	"github.com/skylight-hq/phinvads-go/internal/ui/components"
@@ -460,55 +461,28 @@ func (app *Application) home(w http.ResponseWriter, r *http.Request) {
 	component.Render(r.Context(), w)
 }
 
-func (app *Application) search(w http.ResponseWriter, r *http.Request) {
+func (app *Application) formSearch(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
-	var result = &models.CodeSystemResultRow{}
-
-	input := r.Form["search"][0]
+	searchTerm := r.Form["search"][0]
 	searchType := r.Form["options"][0]
 
-	rp := app.repository
-
-	// retrieve code system
-	codeSystem, err := rp.GetCodeSystemByOID(r.Context(), input)
-	if err != nil {
-		handleError(err, input, app.logger, w, r)
-	}
-	result.CodeSystems = append(result.CodeSystems, codeSystem)
-	result.CodeSystemsCount = strconv.Itoa(len(result.CodeSystems))
-
-	// retrieve concepts that are part of that code system
-	concepts, err := rp.GetCodeSystemConceptsByCodeSystemOID(r.Context(), app.db, codeSystem)
-	if err != nil {
-		handleError(err, input, app.logger, w, r)
-	}
-	result.CodeSystemConcepts = concepts
-	result.CodeSystemConceptsCount = strconv.Itoa(len(concepts))
-
-	// for now
-	result.ValueSetsCount = strconv.Itoa(0)
-	if err != nil {
-		handleError(err, input, app.logger, w, r)
-		return
-	}
-
-	w.Header().Set("HX-Push-Url", fmt.Sprintf("/search?type=%s&input=%s", searchType, input))
-
-	component := components.SearchResults(false, "Search", input, result)
-	component.Render(r.Context(), w)
+	search(w, r, app.repository, searchTerm, searchType, app.logger)
 }
 
-func (app *Application) directSearch(w http.ResponseWriter, r *http.Request) {
-	searchTerm := r.URL.Query().Get("input")
-	fmt.Println("searchTerm", searchTerm)
+func search(w http.ResponseWriter, r *http.Request, rp *repository.Repository, searchTerm, searchType string, logger *slog.Logger) {
 	var result = &models.CodeSystemResultRow{}
-
-	rp := app.repository
 
 	// retrieve code system
 	codeSystem, err := rp.GetCodeSystemsByLikeOID(r.Context(), searchTerm)
-	fmt.Println(err)
+	fmt.Println(codeSystem, err)
+	if err != nil || len(*codeSystem) < 1 {
+		if err == nil {
+			err = sql.ErrNoRows
+		}
+		handleError(err, searchTerm, logger, w, r)
+	}
+
 	for _, cs := range *codeSystem {
 		result.CodeSystems = append(result.CodeSystems, &cs)
 	}
@@ -527,24 +501,16 @@ func (app *Application) directSearch(w http.ResponseWriter, r *http.Request) {
 	// for now
 	result.ValueSetsCount = strconv.Itoa(0)
 
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			errorString := fmt.Sprintf("Error: Code System %s not found", searchTerm)
-			dbErr := &customErrors.DatabaseError{
-				Err:    err,
-				Msg:    errorString,
-				Method: "getCodeSystemById",
-				Id:     searchTerm,
-			}
-			dbErr.NoRows(w, r, err, app.logger)
-		} else {
-			customErrors.ServerError(w, r, err, app.logger)
-		}
-		return
-	}
+	w.Header().Set("HX-Push-Url", fmt.Sprintf("/search?type=%s&input=%s", searchType, searchTerm))
 
 	component := components.SearchResults(true, "Search", searchTerm, result)
 	component.Render(r.Context(), w)
+}
+
+func (app *Application) directSearch(w http.ResponseWriter, r *http.Request) {
+	searchType := r.URL.Query().Get("type")
+	searchTerm := r.URL.Query().Get("input")
+	search(w, r, app.repository, searchTerm, searchType, app.logger)
 }
 
 func (app *Application) handleBannerToggle(w http.ResponseWriter, r *http.Request) {
