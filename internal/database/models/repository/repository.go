@@ -51,6 +51,10 @@ func (r *Repository) GetCodeSystemConceptsByOID(ctx context.Context, oid string)
 	return result, err
 }
 
+func (r *Repository) GetCodeSystemConceptsByCodeSystemOID(ctx context.Context, db xo.DB, cs *xo.CodeSystem) ([]*xo.CodeSystemConcept, error) {
+	return xo.CodeSystemConceptByCodesystemoid(ctx, db, cs.Oid)
+}
+
 func (r *Repository) GetCodeSystemByValueSetConceptCsOid(ctx context.Context, vsc *xo.ValueSetConcept) (*xo.CodeSystem, error) {
 	return vsc.CodeSystem(ctx, r.database)
 }

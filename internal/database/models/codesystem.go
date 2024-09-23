@@ -24,3 +24,13 @@ func GetAllCodeSystems(ctx context.Context, db xo.DB) (*[]xo.CodeSystem, error) 
 	}
 	return &codeSystems, nil
 }
+
+type CodeSystemResultRow struct {
+	CodeSystemsCount        string
+	CodeSystemConceptsCount string
+	ValueSetsCount          string
+	CodeSystems             []*xo.CodeSystem
+	CodeSystemConcepts      []*xo.CodeSystemConcept
+	ValueSets               []*xo.ValueSet
+	URL                     string
+}

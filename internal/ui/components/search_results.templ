@@ -1,7 +1,10 @@
 package components
 
-templ SearchResults(currentPage, searchTerm string) {
-    @Base(currentPage) {
+import "github.com/skylight-hq/phinvads-go/internal/database/models"
+
+
+templ SearchResults(currentPage, searchTerm string, searchResults *models.CodeSystemResultRow) {
+    // @Base(currentPage) {
         <h1>
             Search
         </h1>
@@ -9,78 +12,7 @@ templ SearchResults(currentPage, searchTerm string) {
         <h2>
             Results: "{searchTerm}"
         </h2>
-        <div class="search-results__tabs">
-            <div class="tab-item">Views (Msg. Guides) (2)</div>
-            <div class="tab-item active">Value Sets (62)</div>
-            <div class="tab-item">Value Set Concepts (4487)</div>
-            <div class="tab-item">Code System Concepts (951)</div>
-        </div>
-        <div class="search-results__table" role="table" aria-label="table">
-            <div role="rowgroup">
-                <div class="cdc-header top-header">
-                    <div class="pagination">
-                        <div class="col search-results page-count">Showing 10 of 62 concepts</div>
-                        <div class="col search-results page-buttons">
-                            <button class="active page-button">1</button>
-                            <button class="page-button">2</button>
-                            <button class="page-button">3</button>
-                            <button class="page-button">4</button>
-                            <button class="page-button">5</button>
-                            <div class="button-next">
-                                <button class="page-button">Next</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col search-results download-button">
-                        <button>
-                            <img src="/assets/img/material-icons/file_download.svg">
-                            Download Value Set
-                        </button>
-                    </div>
-                </div>
-                <div class="row cdc-header header-row" role="row">
-                    <div class="col check">
-                        <div role="cell">
-                            <input type="checkbox">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div role="cell">   
-                            <p>Concept Code</p>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div role="cell">
-                            <p>Concept Name</p>
-                        </div>
-                    </div>
-                        <div class="col">
-                        <div role="cell">
-                            <p>Preferred Name</p>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div role="cell">
-                            <p>Code System</p>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div role="cell">
-                            <p>Value Set</p>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div role="rowgroup">
-                @ResultRow("Table Cell","Table Cell","Table Cell","Table Cell","Table Cell",true)
-                @ResultRow("Table Cell","Table Cell","Table Cell","Table Cell","Table Cell",false)
-                @ResultRow("Table Cell","Table Cell","Table Cell","Table Cell","Table Cell",true)
-                @ResultRow("Table Cell","Table Cell","Table Cell","Table Cell","Table Cell",false)
-            </div>
-        </div>
+        @CodeSystemResult(searchTerm, searchResults)
         <div><br></div>
     }
-}
+// }

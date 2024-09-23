@@ -1,0 +1,41 @@
+package components
+
+import (
+"github.com/skylight-hq/phinvads-go/internal/database/models"
+
+)
+
+templ CodeSystemResult(searchTerm string, searchResults *models.CodeSystemResultRow) {
+    <div>
+       @CodeSystemResultsCount(searchResults)
+        <div class="search-results__table" role="table" aria-label="table">
+            <div role="rowgroup">
+                <div class="cdc-header top-header">
+                    <div class="pagination">
+                        <div class="col search-results page-count">Showing 1 of {searchResults.CodeSystemsCount} Code Systems</div>
+                        <div class="col search-results page-buttons">
+                            <button class="active page-button">1</button>
+                            <button class="page-button">2</button>
+                            <button class="page-button">3</button>
+                            <button class="page-button">4</button>
+                            <button class="page-button">5</button>
+                            <div class="button-next">
+                                <button class="page-button">Next</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col search-results download-button">
+                        <button>
+                            <img src="/assets/img/material-icons/file_download.svg">
+                            Download Value Set
+                        </button>
+                    </div>
+                </div>
+               @CodeSystemTableHeader()
+            </div>
+            <div role="rowgroup">
+                @CodeSystemResultRow(true, searchResults.CodeSystems[0])
+            </div>
+        </div>
+    </div>
+}

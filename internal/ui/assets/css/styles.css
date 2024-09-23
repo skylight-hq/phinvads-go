@@ -298,6 +298,12 @@ footer .row {
   line-height: 24px;
 }
 
+.usa-form {
+  display: inline-flex;
+  max-width: 100%;
+  width: 100%;
+}
+
 .search-results__table {
   border-radius: 6px;
   border: 1px solid rgba(0, 0, 0, 0.1);

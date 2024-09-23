@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"log/slog"
 	"net/http"
 	"strconv"
@@ -460,8 +461,91 @@ func (app *Application) home(w http.ResponseWriter, r *http.Request) {
 	component.Render(r.Context(), w)
 }
 
-func (app *Application) searchResults(w http.ResponseWriter, r *http.Request) {
-	component := components.SearchResults("Search", "Hepatitis")
+func (app *Application) search(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var result = &models.CodeSystemResultRow{}
+
+	input := r.Form["search"][0]
+	searchType := r.Form["options"][0]
+
+	rp := app.repository
+
+	// retrieve code system
+	codeSystem, _ := rp.GetCodeSystemByOID(r.Context(), input)
+	result.CodeSystems = append(result.CodeSystems, codeSystem)
+	result.CodeSystemsCount = strconv.Itoa(len(result.CodeSystems))
+
+	// retrieve concepts that are part of that code system
+	concepts, err := rp.GetCodeSystemConceptsByCodeSystemOID(r.Context(), app.db, codeSystem)
+	result.CodeSystemConcepts = concepts
+	result.CodeSystemConceptsCount = strconv.Itoa(len(concepts))
+
+	// for now
+	result.ValueSetsCount = strconv.Itoa(0)
+
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			errorString := fmt.Sprintf("Error: Code System %s not found", input)
+			dbErr := &customErrors.DatabaseError{
+				Err:    err,
+				Msg:    errorString,
+				Method: "getCodeSystemById",
+				Id:     input,
+			}
+			dbErr.NoRows(w, r, err, app.logger)
+		} else {
+			customErrors.ServerError(w, r, err, app.logger)
+		}
+		return
+	}
+
+	w.Header().Set("HX-Push-Url", fmt.Sprintf("/search?type=%s&input=%s", searchType, input))
+
+	component := components.SearchResults("Search", input, result)
+	component.Render(r.Context(), w)
+}
+
+func (app *Application) directSearch(w http.ResponseWriter, r *http.Request) {
+	searchTerm := r.URL.Query().Get("input")
+	fmt.Println("searchTerm", searchTerm)
+	var result = &models.CodeSystemResultRow{}
+
+	rp := app.repository
+
+	// retrieve code system
+	codeSystem, _ := rp.GetCodeSystemByOID(r.Context(), searchTerm)
+	result.CodeSystems = append(result.CodeSystems, codeSystem)
+	result.CodeSystemsCount = strconv.Itoa(len(result.CodeSystems))
+
+	// retrieve concepts that are part of that code system
+	concepts, err := rp.GetCodeSystemConceptsByCodeSystemOID(r.Context(), app.db, codeSystem)
+	result.CodeSystemConcepts = concepts
+	result.CodeSystemConceptsCount = strconv.Itoa(len(concepts))
+
+	// for now
+	result.ValueSetsCount = strconv.Itoa(0)
+
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			errorString := fmt.Sprintf("Error: Code System %s not found", searchTerm)
+			dbErr := &customErrors.DatabaseError{
+				Err:    err,
+				Msg:    errorString,
+				Method: "getCodeSystemById",
+				Id:     searchTerm,
+			}
+			dbErr.NoRows(w, r, err, app.logger)
+		} else {
+			customErrors.ServerError(w, r, err, app.logger)
+		}
+		return
+	}
+
+	component := components.SearchResults("Search", searchTerm, result)
 	component.Render(r.Context(), w)
 }
 
