@@ -346,6 +346,11 @@ footer .row {
 .search-results__table .content-row {
   display: flex;
   align-items: center;
+  word-wrap: break-word;
+}
+
+.search-results__table div.col:not(.check) {
+  overflow: auto;
 }
 
 .content-row.alternate-bg {
@@ -353,6 +358,7 @@ footer .row {
 }
 .search-results__table .check {
   flex-grow: 0;
+  padding-right: 0.5rem;
 }
 
 .search-results__table .row p {
