@@ -53,4 +53,5 @@ type CodeSystemResultRow struct {
 	CodeSystemConcepts      []*xo.CodeSystemConcept
 	ValueSets               []*xo.ValueSet
 	URL                     string
+	PageCount               int
 }

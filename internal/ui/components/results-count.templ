@@ -5,14 +5,6 @@ import "github.com/skylight-hq/phinvads-go/internal/database/models"
 templ CodeSystemResultsCount(result *models.CodeSystemResultRow) {
     <div class="search-results__tabs">
         <div 
-            if result.ValueSetsCount == "0" {
-               class="tab-item"
-            } else {
-                class="tab-item active"
-            }
-        >
-            Value Sets ({result.ValueSetsCount})</div>
-        <div 
             if result.ValueSetsCount == "0" && result.CodeSystemsCount != "0" {
                 class="tab-item active"
             } else {
@@ -28,7 +20,16 @@ templ CodeSystemResultsCount(result *models.CodeSystemResultRow) {
             }
         >
         Code System Concepts ({result.CodeSystemConceptsCount})</div>
+        <div 
+            if result.ValueSetsCount == "0" {
+               class="tab-item"
+            } else {
+                class="tab-item active"
+            }
+        >
+        Value Sets ({result.ValueSetsCount})</div>
     </div>
+    
 }
 
 

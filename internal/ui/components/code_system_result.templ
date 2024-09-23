@@ -1,8 +1,8 @@
 package components
 
 import (
-"github.com/skylight-hq/phinvads-go/internal/database/models"
-
+    "strconv"
+    "github.com/skylight-hq/phinvads-go/internal/database/models"
 )
 
 templ CodeSystemResult(searchTerm string, searchResults *models.CodeSystemResultRow) {
@@ -11,8 +11,15 @@ templ CodeSystemResult(searchTerm string, searchResults *models.CodeSystemResult
         <div class="search-results__table" role="table" aria-label="table">
             <div role="rowgroup">
                 <div class="cdc-header top-header">
-                    <div class="pagination">
-                        <div class="col search-results page-count">Showing 1 of {searchResults.CodeSystemsCount} Code Systems</div>
+                                        <div class="col search-results page-count">Showing {strconv.Itoa(searchResults.PageCount)} of {searchResults.CodeSystemsCount} Code Systems</div>
+                    <div 
+                        if searchResults.PageCount >=5 {
+                            class="pagination"
+                        } else {
+                            class="pagination"
+                            hidden
+                        }
+                    >
                         <div class="col search-results page-buttons">
                             <button class="active page-button">1</button>
                             <button class="page-button">2</button>
@@ -25,17 +32,27 @@ templ CodeSystemResult(searchTerm string, searchResults *models.CodeSystemResult
                         </div>
                     </div>
                     <div class="col search-results download-button">
-                        <button>
-                            <img src="/assets/img/material-icons/file_download.svg">
-                            Download Value Set
-                        </button>
+                        if searchResults.ValueSetsCount == "0" {
+                            <button disabled aria-disabled="true">
+                                <img src="/assets/img/material-icons/file_download_off.svg">
+                                Download Value Set
+                            </button>         
+                        } else {
+                            <button disabled aria-disabled="true">
+                                <img src="/assets/img/material-icons/file_download_off.svg">
+                                Download Value Set
+                            </button>
+                        }
                     </div>
                 </div>
                @CodeSystemTableHeader()
             </div>
             <div role="rowgroup">
-                for _, item := range searchResults.CodeSystems {
-                    @CodeSystemResultRow(true, item)
+                for idx, item := range searchResults.CodeSystems  {
+                    if idx <= 4 {
+                        // modulo check allows alternating background color
+                        @CodeSystemResultRow(idx % 2 != 0, item)
+                    }
                 }
             </div>
         </div>

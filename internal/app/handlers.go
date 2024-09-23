@@ -472,6 +472,7 @@ func (app *Application) formSearch(w http.ResponseWriter, r *http.Request) {
 
 func search(w http.ResponseWriter, r *http.Request, rp *repository.Repository, searchTerm, searchType string, logger *slog.Logger) {
 	var result = &models.CodeSystemResultRow{}
+	defaultPageCount := 5
 
 	// retrieve code system
 	codeSystem, err := rp.GetCodeSystemsByLikeOID(r.Context(), searchTerm)
@@ -486,6 +487,12 @@ func search(w http.ResponseWriter, r *http.Request, rp *repository.Repository, s
 	for _, cs := range *codeSystem {
 		result.CodeSystems = append(result.CodeSystems, &cs)
 	}
+
+	if len(result.CodeSystems) <= defaultPageCount {
+		defaultPageCount = len(result.CodeSystems)
+	}
+
+	result.PageCount = defaultPageCount
 	result.CodeSystemsCount = strconv.Itoa(len(result.CodeSystems))
 
 	// // retrieve concepts that are part of that code system
