@@ -2,7 +2,7 @@
 
 PHIN VADS written in Go. Load `phinvads.dump` into a PostgreSQL database using `pg_restore`, run the app with [air](https://github.com/air-verse/air), and go!
 
-### Dev setup
+## Dev setup
 
 1. Clone this repo:
 
@@ -29,6 +29,12 @@ PHIN VADS written in Go. Load `phinvads.dump` into a PostgreSQL database using `
 
     ```bash
     go install github.com/air-verse/air@latest
+    ```
+
+1. Install [templ](https://github.com/a-h/templ)
+
+    ```bash
+    go install github.com/a-h/templ/cmd/templ@latest
     ```
 
 1. Install [mkcert](https://github.com/FiloSottile/mkcert)
