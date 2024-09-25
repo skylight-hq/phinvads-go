@@ -38,13 +38,17 @@ func (e *DatabaseError) Error() string {
 }
 
 func (e *DatabaseError) NoRows(w http.ResponseWriter, r *http.Request, err error, logger *slog.Logger) {
-	logger.Error(err.Error(), slog.String("method", r.Method), slog.String("uri", r.URL.RequestURI()))
+	LogError(w, r, err, e.Msg, logger)
 	http.Error(w, e.Msg, http.StatusBadRequest)
 }
 
 func ServerError(w http.ResponseWriter, r *http.Request, err error, logger *slog.Logger) {
-	logger.Error(err.Error(), slog.String("method", r.Method), slog.String("uri", r.URL.RequestURI()))
+	LogError(w, r, err, "Server Error", logger)
 	http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+}
+
+func LogError(w http.ResponseWriter, r *http.Request, err error, errrorText string, logger *slog.Logger) {
+	logger.Error(err.Error(), slog.String("method", r.Method), slog.String("uri", r.URL.RequestURI()))
 }
 
 // func (app *Application) clientError(w http.ResponseWriter, status int) {

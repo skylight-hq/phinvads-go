@@ -205,6 +205,11 @@ footer .row {
   display: inline;
 }
 
+.cdc-footer__body-logo {
+  display: flex;
+  align-items: center;
+}
+
 .site-footer {
   padding: 2rem 0;
 }

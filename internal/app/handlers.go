@@ -463,10 +463,14 @@ func (app *Application) home(w http.ResponseWriter, r *http.Request) {
 
 func (app *Application) formSearch(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-
 	searchTerm := r.Form["search"][0]
 	searchType := r.Form["options"][0]
+	search(w, r, app.repository, searchTerm, searchType, app.logger)
+}
 
+func (app *Application) directSearch(w http.ResponseWriter, r *http.Request) {
+	searchType := r.URL.Query().Get("type")
+	searchTerm := r.URL.Query().Get("input")
 	search(w, r, app.repository, searchTerm, searchType, app.logger)
 }
 
@@ -476,12 +480,12 @@ func search(w http.ResponseWriter, r *http.Request, rp *repository.Repository, s
 
 	// retrieve code system
 	codeSystem, err := rp.GetCodeSystemsByLikeOID(r.Context(), searchTerm)
-	fmt.Println(codeSystem, err)
 	if err != nil || len(*codeSystem) < 1 {
 		if err == nil {
 			err = sql.ErrNoRows
 		}
 		handleError(err, searchTerm, logger, w, r)
+		return
 	}
 
 	for _, cs := range *codeSystem {
@@ -514,12 +518,6 @@ func search(w http.ResponseWriter, r *http.Request, rp *repository.Repository, s
 	component.Render(r.Context(), w)
 }
 
-func (app *Application) directSearch(w http.ResponseWriter, r *http.Request) {
-	searchType := r.URL.Query().Get("type")
-	searchTerm := r.URL.Query().Get("input")
-	search(w, r, app.repository, searchTerm, searchType, app.logger)
-}
-
 func (app *Application) handleBannerToggle(w http.ResponseWriter, r *http.Request) {
 	action := r.PathValue("action")
 	component := components.UsaBanner(action)
@@ -535,11 +533,15 @@ func handleError(err error, input string, logger *slog.Logger, w http.ResponseWr
 			Method: "getCodeSystemById",
 			Id:     input,
 		}
+
+		msg := fmt.Sprintf("Method %s returned an error for ID %s: %s", dbErr.Method, dbErr.Id, dbErr.Msg)
+		customErrors.LogError(w, r, dbErr.Err, msg, logger)
+
 		component := components.Error("Search", dbErr.Msg)
 		component.Render(r.Context(), w)
-		dbErr.NoRows(w, r, err, logger)
 	} else {
-		customErrors.ServerError(w, r, err, logger)
+		customErrors.LogError(w, r, err, http.StatusText(http.StatusInternalServerError), logger)
+
 		component := components.Error("search", err.Error())
 		component.Render(r.Context(), w)
 	}
