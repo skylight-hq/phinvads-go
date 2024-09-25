@@ -44,7 +44,9 @@ func (app *Application) routes() http.Handler {
 	mux.HandleFunc("GET /toggle-banner/{action}", app.handleBannerToggle)
 	mux.HandleFunc("GET /load-hot-topics", app.getAllHotTopics)
 
-	mux.HandleFunc("GET /search-results", app.searchResults)
+	mux.HandleFunc("POST /api/search", app.formSearch)
+	mux.HandleFunc("GET /search", app.directSearch)
+
 	standard := alice.New(app.recoverPanic, app.logRequest, commonHeaders)
 
 	return standard.Then(mux)

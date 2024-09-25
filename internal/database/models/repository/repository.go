@@ -32,6 +32,10 @@ func (r *Repository) GetCodeSystemByOID(ctx context.Context, oid string) (*xo.Co
 	return xo.CodeSystemByOid(ctx, r.database, oid)
 }
 
+func (r *Repository) GetCodeSystemsByLikeOID(ctx context.Context, oid string) (*[]xo.CodeSystem, error) {
+	return models.GetCodeSystemByLikeOID(ctx, r.database, oid)
+}
+
 // =============================== //
 // == CodeSystemConcept methods == //
 // =============================== //
@@ -49,6 +53,10 @@ func (r *Repository) GetCodeSystemConceptsByOID(ctx context.Context, oid string)
 		err = sql.ErrNoRows
 	}
 	return result, err
+}
+
+func (r *Repository) GetCodeSystemConceptsByCodeSystemOID(ctx context.Context, db xo.DB, cs *xo.CodeSystem) ([]*xo.CodeSystemConcept, error) {
+	return xo.CodeSystemConceptByCodesystemoid(ctx, db, cs.Oid)
 }
 
 func (r *Repository) GetCodeSystemByValueSetConceptCsOid(ctx context.Context, vsc *xo.ValueSetConcept) (*xo.CodeSystem, error) {

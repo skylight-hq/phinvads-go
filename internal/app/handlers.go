@@ -460,8 +460,63 @@ func (app *Application) home(w http.ResponseWriter, r *http.Request) {
 	component.Render(r.Context(), w)
 }
 
-func (app *Application) searchResults(w http.ResponseWriter, r *http.Request) {
-	component := components.SearchResults("Search", "Hepatitis")
+func (app *Application) formSearch(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	searchTerm := r.Form["search"][0]
+	searchType := r.Form["options"][0]
+	app.search(w, r, searchTerm, searchType)
+}
+
+func (app *Application) directSearch(w http.ResponseWriter, r *http.Request) {
+	searchType := r.URL.Query().Get("type")
+	searchTerm := r.URL.Query().Get("input")
+	app.search(w, r, searchTerm, searchType)
+}
+
+func (app *Application) search(w http.ResponseWriter, r *http.Request, searchTerm, searchType string) {
+	rp := app.repository
+	logger := app.logger
+
+	var result = &models.CodeSystemResultRow{}
+	defaultPageCount := 5
+
+	// retrieve code system
+	codeSystem, err := rp.GetCodeSystemsByLikeOID(r.Context(), searchTerm)
+	if err != nil || len(*codeSystem) < 1 {
+		if err == nil {
+			err = sql.ErrNoRows
+		}
+		customErrors.SearchError(w, r, err, searchTerm, logger)
+		return
+	}
+
+	for _, cs := range *codeSystem {
+		result.CodeSystems = append(result.CodeSystems, &cs)
+	}
+
+	if len(result.CodeSystems) <= defaultPageCount {
+		defaultPageCount = len(result.CodeSystems)
+	}
+
+	result.PageCount = defaultPageCount
+	result.CodeSystemsCount = strconv.Itoa(len(result.CodeSystems))
+
+	// // retrieve concepts that are part of that code system
+	// concepts, err := rp.GetCodeSystemConceptsByCodeSystemOID(r.Context(), app.db, codeSystem)
+	// for _, csc := range *concepts {
+	// 	result.CodeSystems = append(result.CodeSystems, &csc)
+	// }
+	// result.CodeSystemConcepts = concepts
+
+	// for now
+	result.CodeSystemConceptsCount = strconv.Itoa(0)
+
+	// for now
+	result.ValueSetsCount = strconv.Itoa(0)
+
+	w.Header().Set("HX-Push-Url", fmt.Sprintf("/search?type=%s&input=%s", searchType, searchTerm))
+
+	component := components.SearchResults(true, "Search", searchTerm, result)
 	component.Render(r.Context(), w)
 }
 

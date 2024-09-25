@@ -205,6 +205,11 @@ footer .row {
   display: inline;
 }
 
+.cdc-footer__body-logo {
+  display: flex;
+  align-items: center;
+}
+
 .site-footer {
   padding: 2rem 0;
 }
@@ -298,6 +303,12 @@ footer .row {
   line-height: 24px;
 }
 
+.usa-form {
+  display: inline-flex;
+  max-width: 100%;
+  width: 100%;
+}
+
 .search-results__table {
   border-radius: 6px;
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -340,6 +351,11 @@ footer .row {
 .search-results__table .content-row {
   display: flex;
   align-items: center;
+  word-wrap: break-word;
+}
+
+.search-results__table div.col:not(.check) {
+  overflow: auto;
 }
 
 .content-row.alternate-bg {
@@ -347,6 +363,7 @@ footer .row {
 }
 .search-results__table .check {
   flex-grow: 0;
+  padding-right: 0.5rem;
 }
 
 .search-results__table .row p {
@@ -377,10 +394,6 @@ footer .row {
 
 .pagination .col {
   padding: 1rem 0.5rem 1rem 0rem;
-}
-
-.pagination .page-buttons {
-  padding-left: 1rem;
 }
 
 .page-buttons button {
@@ -419,7 +432,18 @@ footer .row {
   position: absolute;
 }
 
-.download-button button {
+.download-button button:disabled {
+  border: none;
+  padding: 0.5rem 1rem 0.5rem 0.75rem;
+  border-radius: 6px;
+
+  color: #454545;
+  background-color: #c9c9c9;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.download-button button:not(:disabled) {
   border: none;
   background-color: #005ea2;
   padding: 0.5rem 1rem 0.5rem 0.75rem;
@@ -427,7 +451,7 @@ footer .row {
   border-radius: 6px;
 }
 
-.download-button button:hover {
+.download-button button:not(:disabled):hover {
   background-color: #0b4778;
   color: white;
 }
