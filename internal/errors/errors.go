@@ -1,9 +1,13 @@
 package errors
 
 import (
+	"database/sql"
+	"errors"
 	"fmt"
 	"log/slog"
 	"net/http"
+
+	"github.com/skylight-hq/phinvads-go/internal/ui/components"
 )
 
 // Request Errors
@@ -49,6 +53,29 @@ func ServerError(w http.ResponseWriter, r *http.Request, err error, logger *slog
 
 func LogError(w http.ResponseWriter, r *http.Request, err error, errrorText string, logger *slog.Logger) {
 	logger.Error(err.Error(), slog.String("method", r.Method), slog.String("uri", r.URL.RequestURI()))
+}
+
+func SearchError(w http.ResponseWriter, r *http.Request, err error, searchTerm string, logger *slog.Logger) {
+	if errors.Is(err, sql.ErrNoRows) {
+		errorString := fmt.Sprintf("Error: Code System %s not found", searchTerm)
+		dbErr := &DatabaseError{
+			Err:    err,
+			Msg:    errorString,
+			Method: "getCodeSystemById",
+			Id:     searchTerm,
+		}
+
+		msg := fmt.Sprintf("Method %s returned an error while retrieving %s: %s", dbErr.Method, dbErr.Id, dbErr.Msg)
+		LogError(w, r, dbErr.Err, msg, logger)
+
+		component := components.Error("Search", dbErr.Msg)
+		component.Render(r.Context(), w)
+	} else {
+		LogError(w, r, err, http.StatusText(http.StatusInternalServerError), logger)
+
+		component := components.Error("search", err.Error())
+		component.Render(r.Context(), w)
+	}
 }
 
 // func (app *Application) clientError(w http.ResponseWriter, status int) {

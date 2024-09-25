@@ -10,7 +10,6 @@ import (
 	"strconv"
 
 	"github.com/skylight-hq/phinvads-go/internal/database/models"
-	"github.com/skylight-hq/phinvads-go/internal/database/models/repository"
 	"github.com/skylight-hq/phinvads-go/internal/database/models/xo"
 	customErrors "github.com/skylight-hq/phinvads-go/internal/errors"
 	"github.com/skylight-hq/phinvads-go/internal/ui/components"
@@ -465,16 +464,19 @@ func (app *Application) formSearch(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	searchTerm := r.Form["search"][0]
 	searchType := r.Form["options"][0]
-	search(w, r, app.repository, searchTerm, searchType, app.logger)
+	app.search(w, r, searchTerm, searchType)
 }
 
 func (app *Application) directSearch(w http.ResponseWriter, r *http.Request) {
 	searchType := r.URL.Query().Get("type")
 	searchTerm := r.URL.Query().Get("input")
-	search(w, r, app.repository, searchTerm, searchType, app.logger)
+	app.search(w, r, searchTerm, searchType)
 }
 
-func search(w http.ResponseWriter, r *http.Request, rp *repository.Repository, searchTerm, searchType string, logger *slog.Logger) {
+func (app *Application) search(w http.ResponseWriter, r *http.Request, searchTerm, searchType string) {
+	rp := app.repository
+	logger := app.logger
+
 	var result = &models.CodeSystemResultRow{}
 	defaultPageCount := 5
 
@@ -484,7 +486,7 @@ func search(w http.ResponseWriter, r *http.Request, rp *repository.Repository, s
 		if err == nil {
 			err = sql.ErrNoRows
 		}
-		handleError(err, searchTerm, logger, w, r)
+		customErrors.SearchError(w, r, err, searchTerm, logger)
 		return
 	}
 
@@ -522,27 +524,4 @@ func (app *Application) handleBannerToggle(w http.ResponseWriter, r *http.Reques
 	action := r.PathValue("action")
 	component := components.UsaBanner(action)
 	component.Render(r.Context(), w)
-}
-
-func handleError(err error, input string, logger *slog.Logger, w http.ResponseWriter, r *http.Request) {
-	if errors.Is(err, sql.ErrNoRows) {
-		errorString := fmt.Sprintf("Error: Code System %s not found", input)
-		dbErr := &customErrors.DatabaseError{
-			Err:    err,
-			Msg:    errorString,
-			Method: "getCodeSystemById",
-			Id:     input,
-		}
-
-		msg := fmt.Sprintf("Method %s returned an error for ID %s: %s", dbErr.Method, dbErr.Id, dbErr.Msg)
-		customErrors.LogError(w, r, dbErr.Err, msg, logger)
-
-		component := components.Error("Search", dbErr.Msg)
-		component.Render(r.Context(), w)
-	} else {
-		customErrors.LogError(w, r, err, http.StatusText(http.StatusInternalServerError), logger)
-
-		component := components.Error("search", err.Error())
-		component.Render(r.Context(), w)
-	}
 }
