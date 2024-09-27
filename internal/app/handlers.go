@@ -9,6 +9,9 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/google/fhir/go/fhirversion"
+	"github.com/google/fhir/go/jsonformat"
+	"github.com/skylight-hq/phinvads-go/internal/app/fhir/r5"
 	"github.com/skylight-hq/phinvads-go/internal/database/models"
 	"github.com/skylight-hq/phinvads-go/internal/database/models/xo"
 	customErrors "github.com/skylight-hq/phinvads-go/internal/errors"
@@ -72,6 +75,58 @@ func (app *Application) getCodeSystemByID(w http.ResponseWriter, r *http.Request
 	w.Header().Set("Content-Type", "application/json")
 
 	json.NewEncoder(w).Encode(codeSystem)
+}
+
+func (app *Application) getFHIRCodeSystemByID(w http.ResponseWriter, r *http.Request) {
+	rp := app.repository
+
+	id := r.PathValue("id")
+	id_type, err := determineIdType(id)
+	if err != nil {
+		customErrors.BadRequest(w, r, err, app.logger)
+		return
+	}
+
+	var codeSystem *xo.CodeSystem
+	if id_type == "oid" {
+		codeSystem, err = rp.GetCodeSystemByOID(r.Context(), id)
+	} else {
+		codeSystem, err = rp.GetCodeSystemByID(r.Context(), id)
+	}
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			errorString := fmt.Sprintf("Error: Code System %s not found", id)
+			dbErr := &customErrors.DatabaseError{
+				Err:    err,
+				Msg:    errorString,
+				Method: "getCodeSystemById",
+				Id:     id,
+			}
+			dbErr.NoRows(w, r, err, app.logger)
+		} else {
+			customErrors.ServerError(w, r, err, app.logger)
+		}
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	fhirCodeSystem, err := r5.SerializeCodeSystemToFhir(codeSystem)
+	if err != nil {
+		customErrors.ServerError(w, r, err, app.logger)
+	}
+
+	marshaller, err := jsonformat.NewMarshaller(false, "", "", fhirversion.R4)
+	if err != nil {
+		customErrors.ServerError(w, r, err, app.logger)
+	}
+
+	fhirJson, err := marshaller.MarshalResource(fhirCodeSystem)
+	if err != nil {
+		customErrors.ServerError(w, r, err, app.logger)
+	}
+
+	w.Write(fhirJson)
 }
 
 func (app *Application) getAllViews(w http.ResponseWriter, r *http.Request) {
@@ -420,7 +475,6 @@ func (app *Application) getAllHotTopics(w http.ResponseWriter, r *http.Request) 
 	rp := app.repository
 
 	hotTopics, err := rp.GetAllHotTopics(r.Context())
-
 	if err != nil {
 		var (
 			method = r.Method
@@ -477,7 +531,7 @@ func (app *Application) search(w http.ResponseWriter, r *http.Request, searchTer
 	rp := app.repository
 	logger := app.logger
 
-	var result = &models.CodeSystemResultRow{}
+	result := &models.CodeSystemResultRow{}
 	defaultPageCount := 5
 
 	// retrieve code system
