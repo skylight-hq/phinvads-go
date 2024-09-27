@@ -3,7 +3,6 @@ module github.com/skylight-hq/phinvads-go
 go 1.23.1
 
 require (
-	github.com/CDCgov/phinvads-fhir v0.0.0-20240925171804-b61370f4cab1
 	github.com/a-h/templ v0.2.771
 	github.com/google/fhir/go v0.7.4
 	github.com/google/uuid v1.6.0
